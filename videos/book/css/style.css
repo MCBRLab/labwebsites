@@ -1,0 +1,374 @@
+
+body {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  background-color: #eee;
+  overflow: hidden;
+}
+
+.container {
+  max-width: 1120px;
+  width: 80%;
+  display: block;
+  margin: 0 auto;
+}
+
+.container .row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 30px;
+}
+
+.container .row .youtube_video {
+  width: 60%;
+  background-color: #000;
+  position: relative;
+  padding-bottom: 33.25%;
+  height: 0;
+}
+
+.container .row .youtube_video iframe {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.container .row .details {
+  width: 38%;
+  margin-left: 2%;
+  padding-left: 20px;
+}
+
+.container .row .details span {
+  font-size: 25px;
+  font-family: sans-serif;
+}
+
+.container .row .details p {
+  font-size: 35px;
+  font-family: "Arvo";
+}
+
+.container .gallery {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.container .gallery .item {
+  width: calc(96% / 4);
+  position: relative;
+}
+
+.container .gallery .item img {
+  width: 100%;
+  display: block;
+}
+
+.container .gallery .item .youtube_icon {
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.8);
+  position: absolute;
+  top: 0;
+  left: 0;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  cursor: pointer;
+  -webkit-transition: all .3s ease-in-out;
+  transition: all .3s ease-in-out;
+}
+
+.container .gallery .item .youtube_icon:hover {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.container .gallery .item .youtube_icon.active {
+  background-color: rgba(0, 0, 0, 0);
+  -webkit-box-shadow: 5px 5px 10px;
+          box-shadow: 5px 5px 10px;
+}
+
+.container .gallery .item .youtube_icon.active img {
+  opacity: 0;
+}
+
+.container .gallery .item .youtube_icon img {
+  width: 50px;
+}
+/*# sourceMappingURL=style.css.map */
+
+section{
+  display:block
+}
+.designation{
+  text-align: center;
+}
+
+h2 {
+  font-size: 16px;
+  font-weight: bold;
+  padding: 8px;
+  padding-right: 0%;
+  background: #1e9dd8;
+  border-left: 18px solid rgb(94, 209, 123);
+  color: rgb(0, 0, 0);
+  margin: 24px 0;
+  height: 50%;
+  width: 100%;
+  text-align: center;
+}
+
+h3 {
+  font-size: 32px;
+  font-weight: bold;
+  padding: 8px;
+  padding-right: 0%;
+  background: #1e9dd8;
+  border-left: 18px solid rgb(94, 209, 123);
+  color: rgb(0, 0, 0);
+  margin: 24px 0;
+  height: 100%;
+  width: 90%;
+}
+
+.person-container {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.person {
+  width: 300px;
+  height: 300px;
+  position: relative;
+  perspective: 400px;
+}
+
+.person img {
+  max-width: 100%;
+}
+
+.person .front {
+  border-radius: 50%;
+  height: 100%;
+  overflow: hidden;
+  backface-visibility: hidden;
+
+  transition: all 0.8s;
+}
+
+.person .back {
+  position: absolute;
+  top: 0;
+  height: 300px;
+  width: 300px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: 0 0 50px 2px rgba(0, 0, 0, 0.1);
+
+  transform: rotateY(-180deg);
+  backface-visibility: hidden;
+  transition: 0.8s;
+}
+
+.person:hover .front {
+  transform: rotateY(180deg);
+}
+
+.person:hover .back {
+  transform: rotateY(0deg);
+}
+
+.social img {
+  margin: 8px;
+  height: 24px;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+}
+
+/* Create two equal columns that sits next to each other */
+.column {
+  flex: 50%;
+  padding: 10px;
+  /*height: 300px; /* Should be removed. Only for demonstration */
+}
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  height: 200px;
+  width: 200px;
+}
+
+
+
+.flex-row {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+}
+
+.flex-column {
+  display: flex;
+  flex-flow: column;
+}
+
+.center {
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.list {
+  border-radius: 3px;
+  overflow: hidden;
+}
+.list .card {
+  cursor: pointer;
+  min-width: 700px;
+  margin-bottom: 10px;
+  perspective: 600px;
+  transition: all 0.1s;
+  background-color: #212140;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  height: 90px;
+}
+.list .card .bottom {
+  height: 0px;
+  overflow: hidden;
+  width: 200px;
+  font-size: 12px;
+  color: #777;
+  font-weight: normal;
+}
+.list .card.open {
+  padding: 30px;
+  height: auto;
+}
+.list .card.open .bottom {
+  margin-top: 10px;
+  height: 100%;
+  overflow: visible;
+}
+.list .card.open .book {
+  transform: rotateY(50deg);
+  box-shadow: -10px 10px 10px 2px rgba(0, 0, 0, 0.2), -2px 0px 0px 0px #888;
+  transition: all 0.5s;
+  transition-delay: 0.05s;
+}
+.list .card.open .info {
+  transform: translate(0, -10px);
+}
+.list .card.open .members {
+  padding: 15px 20px;
+  border-radius: 4px;
+  align-self: flex-start;
+}
+.list .card button.simple {
+  cursor: pointer;
+  color: #CCC;
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  background-color: #1ea94b;
+  padding: 15px 20px;
+  font-family: "Montserrat";
+  font-weight: bold;
+  transition: all 0.1s;
+}
+.list .card button.simple:hover {
+  box-shadow: 0px 15px 20px -5px rgba(0, 0, 0, 0.3);
+  transform: translate(0, -2px);
+}
+.list .card .book {
+  transition: all 0.5s;
+  width: 120px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+.list .card .info {
+  transition: all 0.2s;
+  min-width: 200px;
+  padding: 0px 30px;
+  font-family: "Montserrat";
+  font-weight: bold;
+}
+.list .card .info .title {
+  font-size: 1em;
+  color: #FFF;
+  letter-spacing: 1px;
+}
+.list .card .info .author {
+  font-size: 12px;
+  font-weight: normal;
+  color: #888;
+}
+.list .card .group {
+  margin-left: auto;
+}
+.list .card .members {
+  transition: all 0.1s;
+  padding: 40px;
+  font-family: "Montserrat";
+  color: #CCC;
+  background-color: #1c1c36;
+}
+.list .card .members .current {
+  font-weight: bold;
+  margin-right: 10px;
+}
+.list .card .members .max {
+  opacity: 0.5;
+  margin-left: 10px;
+}

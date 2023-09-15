@@ -1,0 +1,14 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>heatmap - 标签 - MAJOR Computational Biology Research Lab</title>
+        <link>http://cb-majorbiolab.work/tags/heatmap/</link>
+        <description>heatmap - 标签 - MAJOR Computational Biology Research Lab</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 14 Dec 2020 16:29:59 &#43;0800</lastBuildDate><atom:link href="http://cb-majorbiolab.work/tags/heatmap/" rel="self" type="application/rss+xml" /><item>
+    <title>热图制作</title>
+    <link>http://cb-majorbiolab.work/posts/heatmap-dataviz/</link>
+    <pubDate>Mon, 14 Dec 2020 16:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/heatmap-dataviz/</guid>
+    <description><![CDATA[Heatmap 脚本所用软件包为：Complex Heatmap 一. 数据准备 数据矩阵： 分组文件： 二. 使用说明 脚本路径：/mnt/ilustre/centos7users]]></description>
+</item></channel>
+</rss>

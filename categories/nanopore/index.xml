@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Nanopore - 分类 - MAJOR Computational Biology Research Lab</title>
+        <link>http://cb-majorbiolab.work/categories/nanopore/</link>
+        <description>Nanopore - 分类 - MAJOR Computational Biology Research Lab</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 12 Dec 2021 17:29:59 &#43;0800</lastBuildDate><atom:link href="http://cb-majorbiolab.work/categories/nanopore/" rel="self" type="application/rss+xml" /><item>
+    <title>Nanopore demultiplexing, QC, mapping and downstream analysi pipeline</title>
+    <link>http://cb-majorbiolab.work/posts/ont-workflow/</link>
+    <pubDate>Sun, 12 Dec 2021 17:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/ont-workflow/</guid>
+    <description><![CDATA[Introduction nfcore/ontworkflow is a bioinformatics analysis pipeline for Nanopore DNA/RNA sequencing data that can be used to perform basecalling, demultiplexing, QC, mapping and downstream analysis.
+The pipeline is built using Nextflow, a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The Nextflow DSL2 implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies.]]></description>
+</item></channel>
+</rss>

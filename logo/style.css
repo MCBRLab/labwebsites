@@ -1,0 +1,65 @@
+  .cls-1, .cls-10, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8, .cls-9 {
+          fill: none;
+        }
+  
+        .cls-2 {
+          fill: #434e42;
+        }
+  
+        .cls-3 {
+          clip-path: url(#clip-path);
+        }
+  
+        .cls-4, .cls-9 {
+          stroke: #2c46df;
+          stroke-width: 6.06px;
+        }
+  
+        .cls-10, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8 {
+          stroke-miterlimit: 10;
+        }
+  
+        .cls-5 {
+          stroke: rgb(26, 165, 84);
+        }
+  
+        .cls-5, .cls-6, .cls-7, .cls-8 {
+          stroke-width: 3.03px;
+        }
+  
+        .cls-6 {
+          stroke: #92baea;
+        }
+  
+        .cls-7 {
+          stroke: #b8dbd9;
+        }
+  
+        .cls-10, .cls-8 {
+          stroke: rgb(174, 178, 185);
+        }
+  
+        .cls-9 {
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+  
+        .cls-10 {
+          stroke-width: 4px;
+        }
+  
+  
+  #strand:hover {
+    animation: spiral 10s infinite alternate;
+  }
+  
+  @keyframes spiral {
+    from{
+      transform: translate(0px);
+  
+    }
+    to {
+      transform: translate(150px,-150px);
+      
+    }
+  }

@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Network Analysis with R - MAJOR Computational Biology Research Lab</title><meta name="Description" content="根据基因的表达量，进行相关分析及网络图构建"><meta property="og:title" content="Network Analysis with R" />
+<meta property="og:description" content="根据基因的表达量，进行相关分析及网络图构建" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://cb-majorbiolab.work/posts/network-analysis-with-r/" />
+<meta property="article:published_time" content="2021-11-22T16:29:59+08:00" />
+<meta property="article:modified_time" content="2021-11-22T16:29:59+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Network Analysis with R"/>
+<meta name="twitter:description" content="根据基因的表达量，进行相关分析及网络图构建"/>
+<meta name="application-name" content="MAJOR Computational Biology Research Lab">
+<meta name="apple-mobile-web-app-title" content="MAJOR Computational Biology Research Lab"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/MBIL.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://cb-majorbiolab.work/posts/network-analysis-with-r/" /><link rel="prev" href="http://cb-majorbiolab.work/posts/repeatmasker-dfam/" /><link rel="next" href="http://cb-majorbiolab.work/posts/circran-quantification/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Network Analysis with R",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/cb-majorbiolab.work\/posts\/network-analysis-with-r\/"
+        },"genre": "posts","keywords": "NETWORK, RNAseq, 表达量, 可视化, 网络图构建","wordcount":  5649 ,
+        "url": "http:\/\/cb-majorbiolab.work\/posts\/network-analysis-with-r\/","datePublished": "2021-11-22T16:29:59+08:00","dateModified": "2021-11-22T16:29:59+08:00","publisher": {
+            "@type": "Organization",
+            "name": "美吉生物信息团队"},"author": {
+                "@type": "Person",
+                "name": "Wanyun Yang"
+            },"description": "根据基因的表达量，进行相关分析及网络图构建"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="MAJOR Computational Biology Research Lab"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/MBIL.svg"
+        data-srcset="/images/MBIL.svg, /images/MBIL.svg 1.5x, /images/MBIL.svg 2x"
+        data-sizes="auto"
+        alt="/images/MBIL.svg"
+        title="/images/MBIL.svg" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="Home"> Home </a><a class="menu-item" href="/workshop/" title=" "> Workshop/Talk </a><a class="menu-item" href="/publication/" title="Publications"> Publications </a><a class="menu-item" href="/team/" title="Team"> Team </a><a class="menu-item" href="/resource/" title="Resource"> Resource </a><a class="menu-item" href="/software/" title="Software"> Software </a><a class="menu-item" href="/ne/" title="News/Events"> News/Events </a><a class="menu-item" href="/joinus/" title="Join/Contact"> Join/Contact </a><a class="menu-item" href="https://github.com/MajorBio" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="MAJOR Computational Biology Research Lab"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/MBIL.svg"
+        data-srcset="/images/MBIL.svg, /images/MBIL.svg 1.5x, /images/MBIL.svg 2x"
+        data-sizes="auto"
+        alt="/images/MBIL.svg"
+        title="/images/MBIL.svg" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="Home">Home</a><a class="menu-item" href="/workshop/" title=" ">Workshop/Talk</a><a class="menu-item" href="/publication/" title="Publications">Publications</a><a class="menu-item" href="/team/" title="Team">Team</a><a class="menu-item" href="/resource/" title="Resource">Resource</a><a class="menu-item" href="/software/" title="Software">Software</a><a class="menu-item" href="/ne/" title="News/Events">News/Events</a><a class="menu-item" href="/joinus/" title="Join/Contact">Join/Contact</a><a class="menu-item" href="https://github.com/MajorBio" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Network Analysis with R</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/yangwanyun" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Wanyun Yang</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/rnaseq/"><i class="far fa-folder fa-fw"></i>RNAseq</a>&nbsp;<a href="/categories/dataviz/"><i class="far fa-folder fa-fw"></i>DataViz</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-11-22">2021-11-22</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 5649 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 12 分钟&nbsp;<span id="/posts/network-analysis-with-r/" class="leancloud_visitors" data-flag-title="Network Analysis with R">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#导入计算画图的r包">导入计算画图的R包</a></li>
+        <li><a href="#参数传递">参数传递</a></li>
+        <li><a href="#网路图数据矩阵搭建">网路图数据矩阵搭建</a></li>
+        <li><a href="#聚类分系和参数配置">聚类分系和参数配置</a></li>
+        <li><a href="#ggraph画网路图">g&rsquo;graph画网路图</a>
+          <ul>
+            <li>
+              <ul>
+                <li><a href="#layout"><code>layout</code>：</a></li>
+                <li><a href="#geom_edge_边的格式">geom_edge_：边的格式</a></li>
+                <li><a href="#edges边的样式"><code>Edges</code>：边的样式</a></li>
+                <li><a href="#geom_node_节点">geom_node_：节点</a></li>
+                <li><a href="#shape-定义点的形状如下">shape 定义点的形状如下：</a></li>
+                <li><a href="#geom_node_point-常用格式设置">geom_node_point() 常用格式设置：</a></li>
+                <li><a href="#geom_node_text-常用格式设置">geom_node_text() 常用格式设置</a></li>
+                <li><a href="#scales尺度">Scales：尺度</a></li>
+                <li><a href="#themes主题">themes：主题</a></li>
+              </ul>
+            </li>
+            <li><a href="#采用ggraph-的-stress-布局-画整体网络图">采用ggraph 的 stress 布局 画整体网络图</a></li>
+            <li><a href="#采用ggraph-的-linear-布局-画整体网络图建议少于100节点时画图">采用ggraph 的 linear 布局 画整体网络图（建议少于100节点时画图）</a></li>
+          </ul>
+        </li>
+        <li><a href="#使用igraph从顶点的子集中提取一个连通的子图">使用igraph从顶点的子集中提取一个连通的子图</a>
+          <ul>
+            <li><a href="#采用ggraph对的stress布局对网络图中size最大的网络画子图画图">采用ggraph对的stress布局对网络图中size最大的网络画子图画图</a></li>
+            <li><a href="#采用ggraph-的-focus-布局-画size最大的网络图的子图该布局只能画成分单一的网络图">采用ggraph 的 focus 布局 画size最大的网络图的子图，该布局只能画成分单一的网络图</a></li>
+            <li><a href="#采用ggraph-的-centrality-布局-画成分最大的网络图的子图该布局只能画成分单一的网络">采用ggraph 的 centrality 布局 画成分最大的网络图的子图，该布局只能画成分单一的网络</a></li>
+            <li><a href="#采用ggraph-的-kk-布局-画成分最大的网络图的子图该布局只能画成分单一的网络图">采用ggraph 的 kk 布局 画成分最大的网络图的子图，该布局只能画成分单一的网络图</a></li>
+            <li><a href="#3d网络图">3d网络图</a>
+              <ul>
+                <li><a href="#3d网络图参数简介">3d网络图参数简介：</a></li>
+              </ul>
+            </li>
+            <li><a href="#力导向网络图">力导向网络图</a></li>
+            <li><a href="#桑基图">桑基图</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="r网络画图">R网络画图</h1>
+<p>R中的画网络图的方法主要有 igraph/networkD3/sna（network）包主要用来做2基因之间的网络画图</p>
+<h3 id="导入计算画图的r包">导入计算画图的R包</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">#!/usr/bin/env Rscript
+suppressMessages({
+library(tidyverse)                                                                                                                                                          
+library(igraph)
+library(graphlayouts)
+library(ggraph)
+library(extrafont)
+library(reshape2)
+library(plotly)
+library(networkD3)
+library(argparser)
+library(RColorBrewer)
+loadfonts()})
+</code></pre></td></tr></table>
+</div>
+</div><p>igraph 是一个开源免费网络分析工具集合，在效率和便捷性上表现较好。 igraph 为 R、Python、Mathematica 和 C/C++ 均有支持</p>
+<p>参考:</p>
+<ol>
+<li><a href="https://igraph.org/">https://igraph.org/</a>    igraph 官网</li>
+<li><a href="https://kateto.net/networks-r-igraph">https://kateto.net/networks-r-igraph</a></li>
+</ol>
+<p>ggraph是建立在ggplot2一个扩展R包，它的目标是为网络、树和系统树等等表示关系与层次的数据结构进行可视化。ggraph继承了ggplot2的图形语法，建立了面向节点和边的新的图形对象（geom），并添加了布局的概念。这样就可以在ggplot2框架下进行更加灵活美观的网络可视化</p>
+<p>tidygraph是对传统的igraph包的打包和扩展，目的是在R的tidyverse语法框架下进行网络数据分析，ggraph使用tidygraph提供的tbl_graph类对象作为图形表示的数据结构，因此它可以直接支持tidygraph支持的每个对象，包括data.tree、phylo和graph等等，还可以通过as_tbl_graph()支持其他网络可视化包提供的数据对象，如igraph（igraph包）、dendrogram(stats包)、hclust（stats包）和network（network包）。不仅如此，ggraph还可以直接调用tidygraph的网络布局和网络分析算法</p>
+<p>参考：</p>
+<ol>
+<li><a href="https://www.rdocumentation.org/packages/ggraph/versions/0.1.1">https://www.rdocumentation.org/packages/ggraph/versions/0.1.1</a>     ggraph官网</li>
+</ol>
+<p>networkD3  R包生成的结果将是一个html文件，即网页文件(当然你也可以把它保存成静态图片的格式)，可以向他人更清晰地呈现数据本身</p>
+<p>参考：</p>
+<ol>
+<li><a href="http://christophergandrud.github.io/networkD3/">http://christophergandrud.github.io/networkD3/</a>  github主页</li>
+<li><a href="https://kateto.net/network-visualization">https://kateto.net/network-visualization</a></li>
+<li><a href="https://cran.r-project.org/web/packages/networkD3/networkD3.pdf">https://cran.r-project.org/web/packages/networkD3/networkD3.pdf</a></li>
+</ol>
+<p>sna是一个可以确定点的坐标，首先要生成plotcord这个坐标矩阵，然后调用网络图的R包画图，作者只是用sna包来得到数据，其实用的是ggplot来画网络图</p>
+<p>参考：</p>
+<ol>
+<li><a href="https://cran.r-project.org/web/packages/network/network.pdf">https://cran.r-project.org/web/packages/network/network.pdf</a></li>
+<li><a href="https://cran.r-project.org/web/packages/sna/sna.pdf">https://cran.r-project.org/web/packages/sna/sna.pdf</a>   官方说明</li>
+</ol>
+<h3 id="参数传递">参数传递</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">argv &lt;- arg_parser(&#39;&#39;)
+argv &lt;- add_argument(argv,&#34;--file1&#34;, help=&#34;the gene list&#34;)
+argv &lt;- add_argument(argv,&#34;--file2&#34;, help=&#34;the tpm file&#34;)
+argv &lt;- add_argument(argv,&#34;--file3&#34;, help=&#34;the input file&#34;)
+argv &lt;- add_argument(argv,&#34;--file4&#34;, help=&#34;the  name file&#34;)
+argv &lt;- parse_args(argv)
+
+file1 &lt;- argv$file1
+file2 &lt;- argv$file2
+file3 &lt;- argv$file3
+file4 &lt;- argv$file4
+</code></pre></td></tr></table>
+</div>
+</div><p>使用方法：</p>
+<p>脚本路径：/mnt/ilustre/users/meng.luo/Pipeline/Pipeline/script/network</p>
+<p>方法1：Rscript   network.R    &ndash;file1 Significant_meta2d_gene_tpm2.xls    &ndash;file2  gene_tpm1.txt</p>
+<p>前期文件准备，如果基因ID需要转换name，则数据应该要自己添加name信息，也可以使用这个脚本进行处理names.py。</p>
+<p>输入文件file1第一列是geneid是要画网络图的基因list,第二列是gene_name是图中要展示的genename ，第三列第四列等可以选择添加其他的属性，第一列必须有，第二列和其他列可以没有</p>
+<p>输入文件file2是一个表达量文件，第一列是geneid,后面几列是不同样品的表达量的tpm或者fpkm值，用于计算基因之间的相关性系数，筛选相关性系数0.8至1  和-0.8至 -1</p>
+<p>方法2：Rscript network.R  &ndash;file3  ppi6.xls   &ndash;file4  gene_info.txt</p>
+<p>输入文件file3可以直接输入ppi的结果进行作图, 第一列和第二列是有相关性的两geneid,第三列是相关性系数值，第一列和第二列必须有，第三列可以没有</p>
+<p>输入文件file4是file3里所有gene的描述信息，第一列是geneid,第二列是gene_name,第三列之后可以添加其他属性信息，file4里的geneid可以比file3里的多，但是不能少，file4可有可无</p>
+<p>添加R随机颜色</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">color &lt;- grDevices::colors()[grep(&#34;gr(a|e)y&#34;, grDevices::colors(), invert = T)]
+rcolor &lt;- color[sample(1:length(color), length(color))][1]
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="网路图数据矩阵搭建">网路图数据矩阵搭建</h3>
+<p>方法1，根据tpm值计算基因之间的相关性系数，根据筛gene间相关性系数搭建网路图矩阵</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">if (!is.na(file1)){
+    gene_list &lt;- read.delim(file1,header=TRUE,sep=&#39;\t&#39;,row.names=1)
+    tpm &lt;- read.delim(file2,header=TRUE,sep=&#39;\t&#39;,row.names=1)
+
+    data &lt;- subset(tpm)[rownames(gene_list),]
+    data &lt;- data[rowSums(data)&gt;1,]
+    data &lt;- na.omit(data)
+    data &lt;- log2(data+1)
+
+    correlation &lt;- cor(as.data.frame(t(data)),method=&#39;pearson&#39;,use=&#39;pairwise.complete.obs&#39;)
+    correlations &lt;- melt(correlation)
+    correlations_up  &lt;- subset(correlations, value &lt; 1  &amp; value &gt;= 0.8 )
+    correlations_down  &lt;- subset(correlations, value &lt;= -0.8  &amp; value &gt;-1 )
+    edges  &lt;- rbind(correlations_up,correlations_down)
+    colnames(edges) &lt;- c(&#34;source&#34;,&#34;target&#34;,&#34;value&#34;)
+
+    if (!is.na(gene_list$gene_name)) {
+	    nodes_f &lt;- cbind(id=rownames(gene_list),as.data.frame(gene_list)) 
+        got_graphs &lt;- graph_from_data_frame(edges,vertices = nodes_f,directed = FALSE)
+    }
+    else {
+        nodes_f &lt;- cbind(id=rownames(gene_list),gene_name=rownames(gene_list))
+        got_graphs &lt;- graph_from_data_frame(edges,vertices = nodes_f,directed = FALSE)
+    }
+ }
+</code></pre></td></tr></table>
+</div>
+</div><p>相关性计算使用cor函数计算，筛选相关性0.8至1  和-0.8至 -1 的之间的gene关系搭建网络矩阵</p>
+<p>采用igraph包中的graph_from_data_frame（）搭建网络矩阵</p>
+<p>graph_from_data_frame  function (d, directed = TRUE, vertices = NULL) 
+d &lt;- as.data.frame(d) 必须大于等于2列的矩阵，用来指定边id，默认将数据框d的前两列作为边id，其他列作为边的属性
+directed  节点的指向性，默认TRUE
+vertices  用于指定节点属性矩阵，默认NULL，如果指定第一列作为节点名称（name），那么剩余列作为节点的其他属性</p>
+<p>参考:</p>
+<ol>
+<li><a href="https://igraph.org/">https://igraph.org/</a></li>
+</ol>
+<p>方法2，根据给出来的相关性gene搭建网络图矩阵</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">if (!is.na(file3)){
+	edges &lt;- read.delim(file3,header=TRUE,sep=&#39;\t&#39;,col.names = c(&#34;source&#34;,&#34;target&#34;,&#34;value&#34;))
+    if (!is.na(file4)){
+	    nodes_f &lt;- read.delim(file4,header=TRUE,sep=&#39;\t&#39;,col.names = c(&#34;id&#34;,&#34;gene_name&#34;))
+	    }
+	else {
+	    nodes_f &lt;- data.frame(gene_id=unique(c(edges$source,edges$target)),gene_name=unique(c(edges$source,edges$target)))
+	 }
+	got_graphs &lt;- graph_from_data_frame(edges,vertices = nodes_f,directed = FALSE)
+}
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="聚类分系和参数配置">聚类分系和参数配置</h3>
+<p>平面网路图中的gene聚类和参数配置</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">clu &lt;- cluster_louvain(got_graphs)
+V(got_graphs)$clu &lt;- as.character(clu$membership)
+V(got_graphs)$size &lt;- graph.strength(got_graphs)
+size1 &lt;- V(got_graphs)$size[order(V(got_graphs)$size,decreasing=TRUE)[1]]
+name1 &lt;- V(got_graphs)$name[order(V(got_graphs)$size,decreasing=TRUE)[1]]
+</code></pre></td></tr></table>
+</div>
+</div><p>聚类方法采用igraph包的cluster_louvain函数</p>
+<p>clu &lt;- cluster_louvain(got_graphs)//聚类分析
+membership(clu) //成员所属社团
+print(clu) //社团和社团成员
+modularity(clu)
+length(clu) //社团个数
+sizes(clu)  //各社团成员数
+algorithm(clu) //所用算法名
+is_hierarchical(clu) //是否是层次算法
+plot(clu,got_graphs ) //对网络中成员社团所属类绘图</p>
+<p>#另一种聚类方法</p>
+<p>wc &lt;- cluster_walktrap(got_graphs)
+modularity(wc)
+membership(wc)
+plot(wc, karate)</p>
+<p>参考：</p>
+<ol>
+<li><a href="http://igraph.org/r/doc/cluster_louvain.html">http://igraph.org/r/doc/cluster_louvain.html</a>   louvain社团发现算法</li>
+<li><a href="http://igraph.org/r/doc/communities.html">http://igraph.org/r/doc/communities.html</a>    从发现的社团中抽取信息</li>
+<li><a href="http://jfaganuk.github.io/2015/01/24/basic-network-analysis/">http://jfaganuk.github.io/2015/01/24/basic-network-analysis/</a>   关于在igraph中用SNA包的flow betweenness功能</li>
+</ol>
+<p>3D网络图的数据配置</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">Nodes_f &lt;- cbind(name=V(got_graphs)$name,group=V(got_graphs)$clu,size=V(got_graphs)$size,gene_name=V(got_graphs)$gene_name)
+Nodes_f &lt;- data.frame(Nodes_f,stringsAsFactors = FALSE)
+linkData &lt;- data.frame(source = (match(edges$source, Nodes_f$name)-1),
+					target = (match(edges$target, Nodes_f$name)-1),
+					value = edges$value)
+</code></pre></td></tr></table>
+</div>
+</div><p>3D网络图的数据配置中需要两个矩阵，Nodes_f 矩阵包含网络图节点的属性信息，linkData 矩阵包含网络图边的属性信息</p>
+<p>由于networkD3 是java语言开发，所以索引是从0开始，而R语言索引是从1开始，所以构建data.frame的时候需要减1</p>
+<h3 id="ggraph画网路图">g&rsquo;graph画网路图</h3>
+<h5 id="layout"><code>layout</code>：</h5>
+<p>定义图的布局，布局定义了节点在图形中的位置，它是将数据的关系结构转换为图形中每个节点的x值和y值的过程，不同的布局算法对图的展示差异很大，因此，为自己的数据找到一个合适的布局很重要。ggraph可以访问<code>igraph</code>中可用的所有布局功能，而且还提供了大量自己的选择，总共提供了20多种不同的布局可供选择。没有所谓的“最佳布局算法”，因为算法已经针对不同的场景进行了优化。常用的布局有蜂巢图hive plots、树图treemaps和圆堆图circle packing等，如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">c(&#34;layout_with_dh&#34;, &#34;layout_with_drl&#34;, &#34;layout_with_fr&#34;, 
+  &#34;layout_with_gem&#34;, &#34;layout_with_graphopt&#34;, &#34;layout_with_kk&#34;, 
+  &#34;layout_with_lgl&#34;, &#34;layout_with_mds&#34;, &#34;layout_with_sugiyama&#34;,
+  &#34;layout_as_bipartite&#34;, &#34;layout_as_star&#34;, &#34;layout_as_tree&#34;)
+</code></pre></td></tr></table>
+</div>
+</div><p>参考：</p>
+<p>Ji, S., Pan, S., Cambria, E., Marttinen, P., &amp; Yu, P. S. (2021). <em>A Survey on Knowledge Graphs: Representation, Acquisition, and Applications. IEEE Transactions on Neural Networks and Learning Systems, 1–21.</em> doi:10.1109/tnnls.2021.3070843</p>
+<table>
+<thead>
+<tr>
+<th>简写</th>
+<th style="text-align:center">算法名称</th>
+<th style="text-align:center">分类</th>
+<th style="text-align:center">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>grid</td>
+<td style="text-align:center">网格布局算法</td>
+<td style="text-align:center">几何布局</td>
+<td style="text-align:center"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://segmentfault.com/img/remote/1460000039890712"
+        data-srcset="https://segmentfault.com/img/remote/1460000039890712, https://segmentfault.com/img/remote/1460000039890712 1.5x, https://segmentfault.com/img/remote/1460000039890712 2x"
+        data-sizes="auto"
+        alt="https://segmentfault.com/img/remote/1460000039890712"
+        title="图片" /></td>
+</tr>
+<tr>
+<td>circle</td>
+<td style="text-align:center">环形布局算法</td>
+<td style="text-align:center">几何布局</td>
+<td style="text-align:center"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://segmentfault.com/img/remote/1460000039890713"
+        data-srcset="https://segmentfault.com/img/remote/1460000039890713, https://segmentfault.com/img/remote/1460000039890713 1.5x, https://segmentfault.com/img/remote/1460000039890713 2x"
+        data-sizes="auto"
+        alt="https://segmentfault.com/img/remote/1460000039890713"
+        title="图片" /></td>
+</tr>
+<tr>
+<td>concentric</td>
+<td style="text-align:center">同心圆布局算法</td>
+<td style="text-align:center">几何布局</td>
+<td style="text-align:center"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://segmentfault.com/img/remote/1460000039890714"
+        data-srcset="https://segmentfault.com/img/remote/1460000039890714, https://segmentfault.com/img/remote/1460000039890714 1.5x, https://segmentfault.com/img/remote/1460000039890714 2x"
+        data-sizes="auto"
+        alt="https://segmentfault.com/img/remote/1460000039890714"
+        title="图片" /></td>
+</tr>
+<tr>
+<td>radial</td>
+<td style="text-align:center">辐射状布局算法</td>
+<td style="text-align:center">几何布局</td>
+<td style="text-align:center"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://segmentfault.com/img/remote/1460000039890715"
+        data-srcset="https://segmentfault.com/img/remote/1460000039890715, https://segmentfault.com/img/remote/1460000039890715 1.5x, https://segmentfault.com/img/remote/1460000039890715 2x"
+        data-sizes="auto"
+        alt="https://segmentfault.com/img/remote/1460000039890715"
+        title="图片" /></td>
+</tr>
+<tr>
+<td>avsdf</td>
+<td style="text-align:center">邻接点最小度优先算法（Adjacent Vertex with Smallest Degree First）</td>
+<td style="text-align:center">几何布局</td>
+<td style="text-align:center"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://segmentfault.com/img/remote/1460000039890716"
+        data-srcset="https://segmentfault.com/img/remote/1460000039890716, https://segmentfault.com/img/remote/1460000039890716 1.5x, https://segmentfault.com/img/remote/1460000039890716 2x"
+        data-sizes="auto"
+        alt="https://segmentfault.com/img/remote/1460000039890716"
+        title="图片" /></td>
+</tr>
+<tr>
+<td>dagre</td>
+<td style="text-align:center">有向无环图树布局算法（Directed Acyclic Graph and Trees）</td>
+<td style="text-align:center">层级布局</td>
+<td style="text-align:center"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://segmentfault.com/img/remote/1460000039890717"
+        data-srcset="https://segmentfault.com/img/remote/1460000039890717, https://segmentfault.com/img/remote/1460000039890717 1.5x, https://segmentfault.com/img/remote/1460000039890717 2x"
+        data-sizes="auto"
+        alt="https://segmentfault.com/img/remote/1460000039890717"
+        title="图片" /></td>
+</tr>
+<tr>
+<td>breadthfirst</td>
+<td style="text-align:center">广度优先布局算法</td>
+<td style="text-align:center">层级布局</td>
+<td style="text-align:center"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://segmentfault.com/img/remote/1460000039890718"
+        data-srcset="https://segmentfault.com/img/remote/1460000039890718, https://segmentfault.com/img/remote/1460000039890718 1.5x, https://segmentfault.com/img/remote/1460000039890718 2x"
+        data-sizes="auto"
+        alt="https://segmentfault.com/img/remote/1460000039890718"
+        title="图片" /></td>
+</tr>
+<tr>
+<td>elk</td>
+<td style="text-align:center">Eclipse布局算法（Eclipse Layout Kernel）</td>
+<td style="text-align:center">层级布局</td>
+<td style="text-align:center"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://segmentfault.com/img/remote/1460000039890719"
+        data-srcset="https://segmentfault.com/img/remote/1460000039890719, https://segmentfault.com/img/remote/1460000039890719 1.5x, https://segmentfault.com/img/remote/1460000039890719 2x"
+        data-sizes="auto"
+        alt="https://segmentfault.com/img/remote/1460000039890719"
+        title="图片" /></td>
+</tr>
+<tr>
+<td>klay</td>
+<td style="text-align:center">K层布局算法（K Lay）</td>
+<td style="text-align:center">层级布局</td>
+<td style="text-align:center"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://segmentfault.com/img/remote/1460000039890720"
+        data-srcset="https://segmentfault.com/img/remote/1460000039890720, https://segmentfault.com/img/remote/1460000039890720 1.5x, https://segmentfault.com/img/remote/1460000039890720 2x"
+        data-sizes="auto"
+        alt="https://segmentfault.com/img/remote/1460000039890720"
+        title="图片" /></td>
+</tr>
+<tr>
+<td>fcose</td>
+<td style="text-align:center">最快复合弹簧内置布局算法（Fast Compound Spring Embedder）</td>
+<td style="text-align:center">力导布局</td>
+<td style="text-align:center"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://segmentfault.com/img/remote/1460000039890721"
+        data-srcset="https://segmentfault.com/img/remote/1460000039890721, https://segmentfault.com/img/remote/1460000039890721 1.5x, https://segmentfault.com/img/remote/1460000039890721 2x"
+        data-sizes="auto"
+        alt="https://segmentfault.com/img/remote/1460000039890721"
+        title="图片" /></td>
+</tr>
+<tr>
+<td>cola</td>
+<td style="text-align:center">约束布局（Constraint-based Layout）</td>
+<td style="text-align:center">力导布局</td>
+<td style="text-align:center"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://segmentfault.com/img/remote/1460000039890722"
+        data-srcset="https://segmentfault.com/img/remote/1460000039890722, https://segmentfault.com/img/remote/1460000039890722 1.5x, https://segmentfault.com/img/remote/1460000039890722 2x"
+        data-sizes="auto"
+        alt="https://segmentfault.com/img/remote/1460000039890722"
+        title="图片" /></td>
+</tr>
+<tr>
+<td>cise</td>
+<td style="text-align:center">环形弹簧内置布局算法（Circular Spring Embedder）</td>
+<td style="text-align:center">力导布局</td>
+<td style="text-align:center"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://segmentfault.com/img/remote/1460000039890723"
+        data-srcset="https://segmentfault.com/img/remote/1460000039890723, https://segmentfault.com/img/remote/1460000039890723 1.5x, https://segmentfault.com/img/remote/1460000039890723 2x"
+        data-sizes="auto"
+        alt="https://segmentfault.com/img/remote/1460000039890723"
+        title="图片" /></td>
+</tr>
+<tr>
+<td>elk2</td>
+<td style="text-align:center">Eclipse布局算法（Eclipse Layout Kernel）</td>
+<td style="text-align:center">力导布局</td>
+<td style="text-align:center"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://segmentfault.com/img/remote/1460000039890724"
+        data-srcset="https://segmentfault.com/img/remote/1460000039890724, https://segmentfault.com/img/remote/1460000039890724 1.5x, https://segmentfault.com/img/remote/1460000039890724 2x"
+        data-sizes="auto"
+        alt="https://segmentfault.com/img/remote/1460000039890724"
+        title="图片" /></td>
+</tr>
+<tr>
+<td>euler</td>
+<td style="text-align:center">欧拉布局算法</td>
+<td style="text-align:center">力导布局</td>
+<td style="text-align:center"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://segmentfault.com/img/remote/1460000039890725"
+        data-srcset="https://segmentfault.com/img/remote/1460000039890725, https://segmentfault.com/img/remote/1460000039890725 1.5x, https://segmentfault.com/img/remote/1460000039890725 2x"
+        data-sizes="auto"
+        alt="https://segmentfault.com/img/remote/1460000039890725"
+        title="图片" /></td>
+</tr>
+<tr>
+<td>spread</td>
+<td style="text-align:center">扩展布局算法</td>
+<td style="text-align:center">力导布局</td>
+<td style="text-align:center"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://segmentfault.com/img/remote/1460000039890726"
+        data-srcset="https://segmentfault.com/img/remote/1460000039890726, https://segmentfault.com/img/remote/1460000039890726 1.5x, https://segmentfault.com/img/remote/1460000039890726 2x"
+        data-sizes="auto"
+        alt="https://segmentfault.com/img/remote/1460000039890726"
+        title="图片" /></td>
+</tr>
+<tr>
+<td>fruchterman</td>
+<td style="text-align:center">Fruchterman-Reingold布局算法</td>
+<td style="text-align:center">力导布局</td>
+<td style="text-align:center"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://segmentfault.com/img/remote/1460000039890727"
+        data-srcset="https://segmentfault.com/img/remote/1460000039890727, https://segmentfault.com/img/remote/1460000039890727 1.5x, https://segmentfault.com/img/remote/1460000039890727 2x"
+        data-sizes="auto"
+        alt="https://segmentfault.com/img/remote/1460000039890727"
+        title="图片" /></td>
+</tr>
+<tr>
+<td>combo</td>
+<td style="text-align:center">混合布局算法</td>
+<td style="text-align:center">力导布局</td>
+<td style="text-align:center"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://segmentfault.com/img/remote/1460000039890728"
+        data-srcset="https://segmentfault.com/img/remote/1460000039890728, https://segmentfault.com/img/remote/1460000039890728 1.5x, https://segmentfault.com/img/remote/1460000039890728 2x"
+        data-sizes="auto"
+        alt="https://segmentfault.com/img/remote/1460000039890728"
+        title="图片" /></td>
+</tr>
+<tr>
+<td>mds</td>
+<td style="text-align:center">高维数据降维布局算法（Multi Dimensional Scaling）</td>
+<td style="text-align:center">其他布局算法</td>
+<td style="text-align:center"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://segmentfault.com/img/remote/1460000039890729"
+        data-srcset="https://segmentfault.com/img/remote/1460000039890729, https://segmentfault.com/img/remote/1460000039890729 1.5x, https://segmentfault.com/img/remote/1460000039890729 2x"
+        data-sizes="auto"
+        alt="https://segmentfault.com/img/remote/1460000039890729"
+        title="图片" /></td>
+</tr>
+<tr>
+<td>random</td>
+<td style="text-align:center">随机布局算法</td>
+<td style="text-align:center">其他布局</td>
+<td style="text-align:center"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://segmentfault.com/img/remote/1460000039890730"
+        data-srcset="https://segmentfault.com/img/remote/1460000039890730, https://segmentfault.com/img/remote/1460000039890730 1.5x, https://segmentfault.com/img/remote/1460000039890730 2x"
+        data-sizes="auto"
+        alt="https://segmentfault.com/img/remote/1460000039890730"
+        title="图片" /></td>
+</tr>
+</tbody>
+</table>
+<h5 id="geom_edge_边的格式">geom_edge_：边的格式</h5>
+<p>定义边的属性如geom_edge_link0直线，geom_edge_arc曲线，其他格式如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">c(&#34;geom_edge_arc&#34;, &#34;geom_edge_arc0&#34;, &#34;geom_edge_arc2&#34;, &#34;geom_edge_density&#34;, 
+  &#34;geom_edge_diagonal&#34;, &#34;geom_edge_diagonal0&#34;, &#34;geom_edge_diagonal2&#34;, 
+  &#34;geom_edge_elbow&#34;, &#34;geom_edge_elbow0&#34;, &#34;geom_edge_elbow2&#34;, &#34;geom_edge_fan&#34;, 
+  &#34;geom_edge_fan0&#34;, &#34;geom_edge_fan2&#34;, &#34;geom_edge_hive&#34;, &#34;geom_edge_hive0&#34;, 
+  &#34;geom_edge_hive2&#34;, &#34;geom_edge_link&#34;, &#34;geom_edge_link0&#34;, &#34;geom_edge_link2&#34;, 
+  &#34;geom_edge_loop&#34;, &#34;geom_edge_loop0&#34;)
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="edges边的样式"><code>Edges</code>：边的样式</h5>
+<p>定义边的样式，如edge_colour颜色，edge_width粗细</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">edge_colour (colour of the edge)
+edge_width (width of the edge)
+edge_linetype (linetype of the edge, defaults to “solid”)
+edge_alpha (opacity; a value between 0 and 1)
+arrow = arrow(length = unit(2, &#39;mm&#39;))  设置边的长度和箭头
+end_cap = circle(3, &#39;mm&#39;)) strat_cap和end_cap参数可用于在与终端节点绝对距离处开始和停止边的绘制
+circle(), square(), ellipsis()和rectangle()用于表示边在两端的封顶方式
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="geom_node_节点">geom_node_：节点</h5>
+<p>节点是关系结构中连接的实体，某些节点几何图形对某些布局更有意义。geom_node_point_()绘制节点，geom_node_text_()绘制节点的描述信息</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">c(&#34;geom_node_arc_bar&#34;, &#34;geom_node_circle&#34;, &#34;geom_node_label&#34;, 
+&#34;geom_node_point&#34;, &#34;geom_node_text&#34;, &#34;geom_node_tile&#34;, &#34;geom_node_treemap&#34;)
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="shape-定义点的形状如下">shape 定义点的形状如下：</h5>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211119152545642.png"
+        data-srcset="/posts/network-analysis-with-r/image-20211119152545642.png, image-20211119152545642.png 1.5x, /posts/network-analysis-with-r/image-20211119152545642.png 2x"
+        data-sizes="auto"
+        alt="/posts/network-analysis-with-r/image-20211119152545642.png"
+        title="image-20211119152545642" /></p>
+<h5 id="geom_node_point-常用格式设置">geom_node_point() 常用格式设置：</h5>
+<ul>
+<li>alpha (opacity; a value between 0 and 1)</li>
+<li>colour (colour of shapes 0-20 and border colour for 21-25)</li>
+<li>fill (fill colour for shape 21-25)</li>
+<li>shape (node shape; a value between 0 and 25)</li>
+<li>size (size of node)</li>
+<li>stroke (size of node border)</li>
+</ul>
+<h5 id="geom_node_text-常用格式设置">geom_node_text() 常用格式设置</h5>
+<ul>
+<li>label (attribute to be displayed as node label)</li>
+<li>colour (text colour)</li>
+<li>family (font to be used)</li>
+<li>size (font size)</li>
+</ul>
+<h5 id="scales尺度">Scales：尺度</h5>
+<p>The <code>scale_*</code> functions are used to control aesthetics that are mapped within <code>aes()</code>. You do not necessarily need to set them, since <code>ggraph</code> can take care of it automatically.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">scale_fill_manual(values = got_palette) +
+scale_edge_width_continuous(range = c(0.2,3)) +
+scale_size_continuous(range = c(1,6))
+scale_fill_brewer(palette = &#34;Dark2&#34;)+
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="themes主题">themes：主题</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">theme_graph()+
+theme(legend.position = &#34;none&#34;)
+theme(legend.position = &#34;bottom&#34;)
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="采用ggraph-的-stress-布局-画整体网络图">采用ggraph 的 stress 布局 画整体网络图</h4>
+<p>While “stress” is the key layout algorithm in <code>graphlayouts</code></p>
+<p>MDS是Multidimensional Scaling的简称，即为高维数据降维算法，其是一种力导算法高维数据下的稳定下布局的优化，避免数据超载而导致的整体的布局不稳定</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211119182958217.png"
+        data-srcset="/posts/network-analysis-with-r/image-20211119182958217.png, image-20211119182958217.png 1.5x, /posts/network-analysis-with-r/image-20211119182958217.png 2x"
+        data-sizes="auto"
+        alt="/posts/network-analysis-with-r/image-20211119182958217.png"
+        title="image-20211119182958217" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">p &lt;- ggraph(got_graphs,layout = &#34;stress&#34;,bbox = 15)+  ##bbox越大，不同图层的排布宽度越大
+        geom_edge_link0(edge_colour= &#34;Gainsboro&#34;)+   ##直线边的颜色可以调试，简单快速画图，建议点多于100使用
+    #   geom_edge_link0(aes(width=value),edge_colour= &#34;Gainsboro&#34;)+   ##直线边的粗细可以按value值设置，建议点少于100使用
+    #   geom_edge_link2(aes(edge_colour = corr),edge_width = 0.5)+   ##直线边的颜色和粗细可以按corr值设置，建议点少于100使用，边越多运行越慢
+    #   geom_edge_arc(aes(edge_colour = corr),edge_width = 0.5)+    ##曲线边的颜色和粗细可以按corr和value值设置，建议点少于100使用
+       geom_node_point(aes(filter = size &gt;= 2,fill=clu,size=size),shape = 21)+  ##filter过滤size小于2的点，fill颜色可以按点的属性clu设置，size设置点大小，shape设置点的形状
+       geom_node_text(aes(filter = size &gt;= size1,label = gene_name),repel=F)+   ##filter过滤size小于一定值的点显示标记,label设置点的标记，repel避免重复标记                  
+       theme_graph()+  ##设置图的标题类似ggplot2
+       theme(legend.position = &#34;none&#34;) ##设置图例类似ggplot2
+
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211119130759805.png"
+        data-srcset="/posts/network-analysis-with-r/image-20211119130759805.png, image-20211119130759805.png 1.5x, /posts/network-analysis-with-r/image-20211119130759805.png 2x"
+        data-sizes="auto"
+        alt="/posts/network-analysis-with-r/image-20211119130759805.png"
+        title="image-20211119130759805" /></p>
+<h4 id="采用ggraph-的-linear-布局-画整体网络图建议少于100节点时画图">采用ggraph 的 linear 布局 画整体网络图（建议少于100节点时画图）</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">#p &lt;- ggraph(got_graphs,layout = &#34;linear&#34;)+  ##默认点的分布为线性                                                            
+p &lt;- ggraph(got_graphs,layout = &#34;linear&#34;,circular = TRUE)+  ##circular=T点的分布为圆形
+       geom_edge_arc(aes(edge_colour = corr))+  ##按正相关和负相关设置颜色
+       geom_node_point(aes(filter = size &gt;= 2,fill=clu,size=size),shape = 21)+  
+       geom_node_text(aes(filter = size &gt;= size1,label = gene_name),repel=F)+
+       theme_graph()
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211119131929851.png"
+        data-srcset="/posts/network-analysis-with-r/image-20211119131929851.png, image-20211119131929851.png 1.5x, /posts/network-analysis-with-r/image-20211119131929851.png 2x"
+        data-sizes="auto"
+        alt="/posts/network-analysis-with-r/image-20211119131929851.png"
+        title="image-20211119131929851" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211119132132199.png"
+        data-srcset="/posts/network-analysis-with-r/image-20211119132132199.png, image-20211119132132199.png 1.5x, /posts/network-analysis-with-r/image-20211119132132199.png 2x"
+        data-sizes="auto"
+        alt="/posts/network-analysis-with-r/image-20211119132132199.png"
+        title="image-20211119132132199" /></p>
+<h3 id="使用igraph从顶点的子集中提取一个连通的子图">使用igraph从顶点的子集中提取一个连通的子图</h3>
+<p>同一份数据里会可能会出现多个网络图并行分布，这时候需要单独对不同的子图画图分析，igraph package 其实提供了decompose.graph 函数，可以控制min.vertices，配合clusters和V函数得到的最大csize的vertex sequence，再用delete.vertices从igraph class 中剔除这些vertex</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">clusters(got_graphs) ##计算图表的连接组件
+clusters(got_graphs)$csize  ##计算图表的连接组件的size
+decompose.graph(got_graphs)  ##创建单独的组件
+big &lt;- order(clusters(got_graphs)$csize,decreasing=TRUE)[1]  ##挑选size最大的子图
+dg &lt;- decompose.graph(got_graphs)[[big]]  ## 挑选size最大的子图创建单独的图表
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="采用ggraph对的stress布局对网络图中size最大的网络画子图画图">采用ggraph对的stress布局对网络图中size最大的网络画子图画图</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">p &lt;- ggraph(dg,layout = &#34;stress&#34;)+  ##由于已经筛选了节点最多的图形，所以不需要bbox参数排布
+       geom_edge_link0(edge_colour= &#34;Gainsboro&#34;)+  
+       #geom_edge_link0(aes(width=value),edge_colour= &#34;Gainsboro&#34;)+  ##直线边
+       #geom_edge_link2(aes(edge_colour = corr),edge_width = 0.5)+ 
+       #geom_edge_arc(aes(edge_colour = corr),edge_width = 0.5)+   ##曲线边
+       geom_node_point(aes(fill=clu,size=size),shape = 21)+
+       geom_node_text(aes(filter = size &gt;= size1,label = gene_name),repel=F)+
+       scale_size(range=c(2,5))+
+       theme_graph(title_size = 40)+
+       theme(legend.position = &#34;none&#34;)
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="采用ggraph-的-focus-布局-画size最大的网络图的子图该布局只能画成分单一的网络图">采用ggraph 的 focus 布局 画size最大的网络图的子图，该布局只能画成分单一的网络图</h4>
+<p>Circular layouts are generally not advisable. Concentric circles, on the other hand, help to emphasize the position of certain nodes in the network. The <code>graphlayouts</code> package has two function to create concentric layouts, <code>layout_with_focus()</code> and <code>layout_with_centrality()</code>.</p>
+<p>The first one allows to focus the network on a specific node and arrange all other nodes in concentric circles (depending on the geodesic distance) around it. Below we focus on the character Ned Stark.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">p &lt;- ggraph(dg,layout = &#34;focus&#34;,focus = 1)+
+       geom_edge_link0(edge_colour = &#34;Gainsboro&#34;)+
+       #geom_edge_link0(aes(width=value),edge_colour= &#34;Gainsboro&#34;)+  ##直线边
+       #geom_edge_link2(aes(edge_colour = corr),edge_width = 0.5)+                                                                                                           
+       #geom_edge_arc(aes(edge_colour = corr),edge_width = 0.5)+   ##曲线边
+       geom_node_point(aes(fill = clu,size=size),shape = 21)+
+       geom_node_text(aes(filter = (name == name1 ),size = size,label = gene_name))+
+       coord_fixed()+
+       theme_graph()+
+       theme(legend.position = &#34;none&#34;)
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211119172819700.png"
+        data-srcset="/posts/network-analysis-with-r/image-20211119172819700.png, image-20211119172819700.png 1.5x, /posts/network-analysis-with-r/image-20211119172819700.png 2x"
+        data-sizes="auto"
+        alt="/posts/network-analysis-with-r/image-20211119172819700.png"
+        title="image-20211119172819700" /></p>
+<h4 id="采用ggraph-的-centrality-布局-画成分最大的网络图的子图该布局只能画成分单一的网络">采用ggraph 的 centrality 布局 画成分最大的网络图的子图，该布局只能画成分单一的网络</h4>
+<p>“同心圆”形式的布局：<code>layout_with_centrality（）</code>。可以指定任何中心性索引（或数值向量），并创建一个同心布局，其中最中心的节点放在图形中心，最外围的节点放在最大的圆中。用于布局的数值属性由cent参数指定。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">p &lt;- ggraph(dg,layout = &#34;centrality&#34;,cent = graph.strength(dg))+  ##对size最大的点为中心做图，可以改为具体某基因
+       geom_edge_link0(edge_colour = &#34;Gainsboro&#34;)+
+       #geom_edge_link0(aes(width=value),edge_colour= &#34;Gainsboro&#34;)+  ##直线边
+       #geom_edge_link2(aes(edge_colour = corr),edge_width = 0.5)+
+       #geom_edge_arc(aes(edge_colour = corr),edge_width = 0.5)+   ##曲线边
+       geom_node_point(aes(fill=clu,size=size),shape = 21)+
+       geom_node_text(aes(filter = size &gt;= size1,size = size,label = gene_name))+
+       coord_fixed()+
+       theme_graph()+
+       theme(legend.position = &#34;none&#34;)
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211119172905153.png"
+        data-srcset="/posts/network-analysis-with-r/image-20211119172905153.png, image-20211119172905153.png 1.5x, /posts/network-analysis-with-r/image-20211119172905153.png 2x"
+        data-sizes="auto"
+        alt="/posts/network-analysis-with-r/image-20211119172905153.png"
+        title="image-20211119172905153" /></p>
+<h4 id="采用ggraph-的-kk-布局-画成分最大的网络图的子图该布局只能画成分单一的网络图">采用ggraph 的 kk 布局 画成分最大的网络图的子图，该布局只能画成分单一的网络图</h4>
+<p>力导向算法 <code>Kamada Kawai</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">p &lt;- ggraph(dg,layout = &#34;kk&#34;)+
+       geom_edge_link0(edge_colour= &#34;Gainsboro&#34;)+
+       geom_node_point(aes(fill=clu,size=size),shape = 21)+
+       geom_node_text(aes(filter = size &gt;= size1,label = gene_name),repel=F)+
+       theme_graph(title_size = 40)+
+       theme(legend.position = &#34;none&#34;)
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211119174107246.png"
+        data-srcset="/posts/network-analysis-with-r/image-20211119174107246.png, image-20211119174107246.png 1.5x, /posts/network-analysis-with-r/image-20211119174107246.png 2x"
+        data-sizes="auto"
+        alt="/posts/network-analysis-with-r/image-20211119174107246.png"
+        title="image-20211119174107246" /></p>
+<h4 id="3d网络图">3d网络图</h4>
+<p>networkD3包基于D3.JS(最流行的可视化库之一)构建，还可以和R中常见的网络可视化包例如<strong>network</strong>、<strong>igraph</strong>等连用，支持<strong>管道操作符%&gt;%</strong>(dplyr中常用)<strong>和ggplot2语法</strong>，是一个非常灵活的网络可视化包。networkD3最大的亮点，在于clickAction = clickJS这一句，可以设置自己的鼠标点击事件，比如节点放大，弹出对话框，点击节点显示节点描述，加入搜索框等等。networkD3包生成的结果将是一个html文件，即<strong>网页文件</strong>。</p>
+<h5 id="3d网络图参数简介">3d网络图参数简介：</h5>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211119190317787.png"
+        data-srcset="/posts/network-analysis-with-r/image-20211119190317787.png, image-20211119190317787.png 1.5x, /posts/network-analysis-with-r/image-20211119190317787.png 2x"
+        data-sizes="auto"
+        alt="/posts/network-analysis-with-r/image-20211119190317787.png"
+        title="image-20211119190317787" /></p>
+<h4 id="力导向网络图">力导向网络图</h4>
+<p>这种图采用物理上的弹簧模型，将节点之间想象成是用弹簧连接的，然后把这些用弹簧连接的节点扔到桌面上，让这些弹簧自己弹啊弹，弹啊弹，最后总能停下来，达到一个平衡状态。这个状态下的节点连接图，能力最小，线和线之间的交叉最小。这种方法的学名叫spring-embedder 或者 force-directed。</p>
+<p>拖动中间的图里的任意节点，整个网络就会被拖动，并达到新的平衡位置。从图里，我们可以大致看出不同的群体，群体里的关系紧密，而不同群体之间的关系比较松散。群体分析也是网络数据可视化的一个主要目的。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">p &lt;- forceNetwork(Links = linkData,Nodes = Nodes_f,Source = &#34;source&#34;,Target = &#34;target&#34;,Value = &#34;value&#34;,NodeID = &#34;gene_name&#34;,Group = &#34;group&#34;)
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="webp1"
+        data-srcset="/posts/network-analysis-with-r/webp1, webp1 1.5x, /posts/network-analysis-with-r/webp1 2x"
+        data-sizes="auto"
+        alt="/posts/network-analysis-with-r/webp1"
+        title="img" /></p>
+<h4 id="桑基图">桑基图</h4>
+<p>桑基图（Sankey diagram），即桑基能量分流图，也叫桑基能量平衡图。它是一种特定类型的流程图，右图中延伸的分支的宽度对应数据流量的大小。因1898年Matthew Henry Phineas Riall Sankey绘制的“<a href="https://baike.baidu.com/item/%e8%92%b8%e6%b1%bd%e6%9c%ba/367409" target="_blank" rel="noopener noreffer">蒸汽机</a>的<a href="https://baike.baidu.com/item/%e8%83%bd%e6%ba%90/23358" target="_blank" rel="noopener noreffer">能源</a>效率图”而闻名，此后便以其名字命名为“桑基图”。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">p &lt;- sankeyNetwork(Links = linkData,Nodes = Nodes_f,Source = &#34;source&#34;,Target = &#34;target&#34;,Value = &#34;value&#34;,NodeID = &#34;gene_name&#34;,Group = &#34;group&#34;)
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="webp"
+        data-srcset="/posts/network-analysis-with-r/webp, webp 1.5x, /posts/network-analysis-with-r/webp 2x"
+        data-sizes="auto"
+        alt="/posts/network-analysis-with-r/webp"
+        title="img" /></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-11-22</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/posts/network-analysis-with-r/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://cb-majorbiolab.work/posts/network-analysis-with-r/" data-title="Network Analysis with R" data-via="https://twitter.com/czheluo" data-hashtags="NETWORK,RNAseq,表达量,可视化,网络图构建"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://cb-majorbiolab.work/posts/network-analysis-with-r/" data-hashtag="NETWORK"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Linkedin" data-sharer="linkedin" data-url="http://cb-majorbiolab.work/posts/network-analysis-with-r/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Hacker News" data-sharer="hackernews" data-url="http://cb-majorbiolab.work/posts/network-analysis-with-r/" data-title="Network Analysis with R"><i class="fab fa-hacker-news fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://cb-majorbiolab.work/posts/network-analysis-with-r/" data-title="Network Analysis with R"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://cb-majorbiolab.work/posts/network-analysis-with-r/" data-title="Network Analysis with R" data-ralateuid="https://weibo.com/2161302013/profile"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/network/">NETWORK</a>,&nbsp;<a href="/tags/rnaseq/">RNAseq</a>,&nbsp;<a href="/tags/%E8%A1%A8%E8%BE%BE%E9%87%8F/">表达量</a>,&nbsp;<a href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/">可视化</a>,&nbsp;<a href="/tags/%E7%BD%91%E7%BB%9C%E5%9B%BE%E6%9E%84%E5%BB%BA/">网络图构建</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/repeatmasker-dfam/" class="prev" rel="prev" title="转座元件分析"><i class="fas fa-angle-left fa-fw"></i>转座元件分析</a>
+            <a href="/posts/circran-quantification/" class="next" rel="next" title="circRNA定量软件分析比较">circRNA定量软件分析比较<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript><div id="fb-root" class="comment"></div>
+            <div
+                class="fb-comments"
+                data-href="http://cb-majorbiolab.work/posts/network-analysis-with-r/"
+                data-width="100%"
+                data-numposts="10"
+            ></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://developers.facebook.com/docs/plugins/comments/"></a>Facebook</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">MAJOR Computational Biology Research Lab</div>
+                <div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020-2022, MENG LUO, All rights reserved.</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+                
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="https://connect.facebook.net/zh_CN/sdk.js#xfbml=1&amp;version=v5.0&amp;appId=&amp;autoLogAppEvents=1" defer></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"valine":{"appId":"Noyy9UKaXGwYBIUdvBTt7u76-gzGzoHsz","appKey":"15w6pTF8mFoxnm8muOFx5buM","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"VX4BXOJBC5","algoliaIndex":"majorbio.zh-cn","algoliaSearchKey":"53790f167edb548b217bfe91dd891ac0","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

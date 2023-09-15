@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>降维分析方法比较 - MAJOR Computational Biology Research Lab</title><meta name="Description" content="RNAseq降维分析方法比较"><meta property="og:title" content="降维分析方法比较" />
+<meta property="og:description" content="RNAseq降维分析方法比较" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://cb-majorbiolab.work/posts/dimensionality-reduction-methods-for-rna-seq-analysis/" />
+<meta property="article:published_time" content="2021-10-26T16:29:59+08:00" />
+<meta property="article:modified_time" content="2021-10-26T16:29:59+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="降维分析方法比较"/>
+<meta name="twitter:description" content="RNAseq降维分析方法比较"/>
+<meta name="application-name" content="MAJOR Computational Biology Research Lab">
+<meta name="apple-mobile-web-app-title" content="MAJOR Computational Biology Research Lab"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/MBIL.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://cb-majorbiolab.work/posts/dimensionality-reduction-methods-for-rna-seq-analysis/" /><link rel="prev" href="http://cb-majorbiolab.work/posts/rnaseq-quantification/" /><link rel="next" href="http://cb-majorbiolab.work/posts/repeatmasker-dfam/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "降维分析方法比较",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/cb-majorbiolab.work\/posts\/dimensionality-reduction-methods-for-rna-seq-analysis\/"
+        },"genre": "posts","keywords": "RNAseq, MDS, scRNA","wordcount":  1681 ,
+        "url": "http:\/\/cb-majorbiolab.work\/posts\/dimensionality-reduction-methods-for-rna-seq-analysis\/","datePublished": "2021-10-26T16:29:59+08:00","dateModified": "2021-10-26T16:29:59+08:00","publisher": {
+            "@type": "Organization",
+            "name": "美吉生物信息团队"},"author": {
+                "@type": "Person",
+                "name": "Jiawen Ma"
+            },"description": "RNAseq降维分析方法比较"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="MAJOR Computational Biology Research Lab"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/MBIL.svg"
+        data-srcset="/images/MBIL.svg, /images/MBIL.svg 1.5x, /images/MBIL.svg 2x"
+        data-sizes="auto"
+        alt="/images/MBIL.svg"
+        title="/images/MBIL.svg" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="Home"> Home </a><a class="menu-item" href="/workshop/" title=" "> Workshop/Talk </a><a class="menu-item" href="/publication/" title="Publications"> Publications </a><a class="menu-item" href="/team/" title="Team"> Team </a><a class="menu-item" href="/resource/" title="Resource"> Resource </a><a class="menu-item" href="/software/" title="Software"> Software </a><a class="menu-item" href="/ne/" title="News/Events"> News/Events </a><a class="menu-item" href="/joinus/" title="Join/Contact"> Join/Contact </a><a class="menu-item" href="https://github.com/MajorBio" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="MAJOR Computational Biology Research Lab"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/MBIL.svg"
+        data-srcset="/images/MBIL.svg, /images/MBIL.svg 1.5x, /images/MBIL.svg 2x"
+        data-sizes="auto"
+        alt="/images/MBIL.svg"
+        title="/images/MBIL.svg" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="Home">Home</a><a class="menu-item" href="/workshop/" title=" ">Workshop/Talk</a><a class="menu-item" href="/publication/" title="Publications">Publications</a><a class="menu-item" href="/team/" title="Team">Team</a><a class="menu-item" href="/resource/" title="Resource">Resource</a><a class="menu-item" href="/software/" title="Software">Software</a><a class="menu-item" href="/ne/" title="News/Events">News/Events</a><a class="menu-item" href="/joinus/" title="Join/Contact">Join/Contact</a><a class="menu-item" href="https://github.com/MajorBio" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">降维分析方法比较</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/bystander456" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Jiawen Ma</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/rnaseq/"><i class="far fa-folder fa-fw"></i>RNAseq</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-10-26">2021-10-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1681 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;<span id="/posts/dimensionality-reduction-methods-for-rna-seq-analysis/" class="leancloud_visitors" data-flag-title="降维分析方法比较">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#概述">概述</a>
+      <ul>
+        <li><a href="#mds原理">MDS原理</a></li>
+        <li><a href="#mds的优缺点">MDS的优缺点</a></li>
+        <li><a href="#mds与pca比较">MDS与PCA比较</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="转录组对定量结果降维分析比较">转录组对定量结果降维分析比较</h1>
+<h2 id="概述">概述</h2>
+<h3 id="mds原理">MDS原理</h3>
+<p>MDS算法解决的问题是:当n个对象之间的相似性给定，确定这些对象在低维空间中的表示，并使其尽可能与原先的相似性大致匹配。高维空间中每一个点代表一个对象，因此点与点之间的距离和对象之间的相似度高度相关。可以这么理解，两个相似的对象在高维空间中由两个距离相近的点所表示，两个不相似的对象在高维空间中由两个距离比较远的点表示。</p>
+<p>MDS与PCA非常相似，都是一种降维的方法。根据样本是否可以计量，MDS分为度量MDS（Metric Multidimensional scaling）和非度量MDS（Non-metric Multidimensional scaling）。）。对于Metric MDS，这个方法以样本间相似度作为实际输入，需要样本是等距（interval）比例（ratio）尺度，优点是精确，可以根据多个准则评估样本间差异，缺点是计算成本高，耗时。对于很多应用问题，样本不费可计量，需要使用NonMetric MDS，这种方法接受样本的顺序尺度作为输入，并以此自动计算相似值。样本尺度要求是顺序的（ordinal），较简便，直观，从非计量的样本导出计量的分析结果，应用范围更广，但没法知道评估准则，效果较差。</p>
+<p>根据是否使用欧氏距离，其中MDS又分为classical MDS和no-classical MDS。</p>
+<p>Classical MDS(经典多维尺度变换):经典多维尺度变换的距离标准采用欧式距离。</p>
+<p>No-classical MDS(非经典多维度尺度变换):非经典多维度尺度变换的距离标准采用非欧式距离。</p>
+<p>MDS即将高维坐标中的点投影到低维空间中，保持点彼此之间的相似性尽可能不变。MDS算法可以缓解在高维情况下出现的样本数据稀疏和距离计算困难等问题，与主成分分析法和线性降维分析法都不同的是，MDS的目标不是保留数据的最大可分性，而是更加关注与高维数据内部的特征。</p>
+<h3 id="mds的优缺点">MDS的优缺点</h3>
+<p>优点：</p>
+<p>(1) 不需要先验知识，计算简单</p>
+<p>(2) 保留了数据在原始空间的相对关系，可视化效果比较好</p>
+<p>缺点:</p>
+<p>(1) 如果用户对观测对象有一定的先验知识，掌握了数据的一些特征，却无法通过参数化等方法对处理过程进行干预，可能会得不到预期的效果</p>
+<p>(2) 认为各个维度对目标的贡献相同，然而事实上有一些维度对目标的影响很小，有一些对目标是影响比较大。</p>
+<h3 id="mds与pca比较">MDS与PCA比较</h3>
+<blockquote>
+<p>PCA采用降维的思想，将组成复杂的数据信息（样本中包含大量物种信息，没有已知的坐标轴可以解释分布）进行降维排序，寻找能最大程度反应规律的坐标系。然而PCA分析存在着自身的局限性，PCA分析需基于线性模型（linear model）开展，所谓线性模型就是假设物种丰度伴随着环境变量的变化做出线性变化的响应，这种模型使用范围较为有限。</p>
+<p>PCA通过对N个数据点本身进行特征分析来选择影响维度，而MDS通过对成对距离矩阵的数据点进行特征分析来选择影响维度。本质上，PCA 更侧重于维度本身，并尽可能地拟合方差，而 MDS 更侧重于缩放对象之间的关系。</p>
+<p>PCA可能被称为最简单MDS的算法，如果使用欧几里得距离，则PCA产生与经典MDS完全相同的结果（如下图）。</p>
+</blockquote>
+<p>对同一表达量数据进行MDS与PCA进行降维：</p>
+<p>​	MDS（衡量距离使用欧氏距离）</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211026092239489.png"
+        data-srcset="/posts/dimensionality-reduction-methods-for-rna-seq-analysis/image-20211026092239489.png, image-20211026092239489.png 1.5x, /posts/dimensionality-reduction-methods-for-rna-seq-analysis/image-20211026092239489.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-methods-for-rna-seq-analysis/image-20211026092239489.png"
+        title="image-20211026092239489" /></p>
+<p>​	PCA: 使用R函数：prcomp</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211026092219606.png"
+        data-srcset="/posts/dimensionality-reduction-methods-for-rna-seq-analysis/image-20211026092219606.png, image-20211026092219606.png 1.5x, /posts/dimensionality-reduction-methods-for-rna-seq-analysis/image-20211026092219606.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-methods-for-rna-seq-analysis/image-20211026092219606.png"
+        title="image-20211026092219606" /></p>
+<h1 id="开发的脚步及分析例子比较">开发的脚步及分析例子比较</h1>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">/mnt/ilustre/users/meng.luo/Pipeline/Pipeline/script/MDS
+
+<span class="c1">#程序执行：</span>
+Rscript MDS.R -e gene_tpm.txt -g group.txt
+
+参数说明：
+-e：基因表达矩阵
+-g：分组文件
+-m：距离算法模型选择；默认为欧几里得
+-n：是否进行NMDS（非度量MDS）分析；默认为FALSE
+-k：维度数；默认为样本个数减1，可以自定义但必须小于等于样本数减1
+-o：输出路径；默认为./
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211026154834150.png"
+        data-srcset="/posts/dimensionality-reduction-methods-for-rna-seq-analysis/image-20211026154834150.png, image-20211026154834150.png 1.5x, /posts/dimensionality-reduction-methods-for-rna-seq-analysis/image-20211026154834150.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-methods-for-rna-seq-analysis/image-20211026154834150.png"
+        title="image-20211026154834150" /></p>
+<h1 id="三结果展示">三.结果展示：</h1>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211026161643363.png"
+        data-srcset="/posts/dimensionality-reduction-methods-for-rna-seq-analysis/image-20211026161643363.png, image-20211026161643363.png 1.5x, /posts/dimensionality-reduction-methods-for-rna-seq-analysis/image-20211026161643363.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-methods-for-rna-seq-analysis/image-20211026161643363.png"
+        title="image-20211026161643363" /></p>
+<blockquote>
+<p>gene_MDS.pdf: 使用MDS方法时，样本在二维坐标的分布图。</p>
+</blockquote>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211026161918402.png"
+        data-srcset="/posts/dimensionality-reduction-methods-for-rna-seq-analysis/image-20211026161918402.png, image-20211026161918402.png 1.5x, /posts/dimensionality-reduction-methods-for-rna-seq-analysis/image-20211026161918402.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-methods-for-rna-seq-analysis/image-20211026161918402.png"
+        title="image-20211026161918402" /></p>
+<blockquote>
+<p>gene_MDS.xls：使用MDS方法时，样本在不同维度中的信息。</p>
+</blockquote>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211026163405593.png"
+        data-srcset="/posts/dimensionality-reduction-methods-for-rna-seq-analysis/image-20211026163405593.png, image-20211026163405593.png 1.5x, /posts/dimensionality-reduction-methods-for-rna-seq-analysis/image-20211026163405593.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-methods-for-rna-seq-analysis/image-20211026163405593.png"
+        title="image-20211026163405593" /></p>
+<blockquote>
+<p><em>gene_NMDS</em> : 为使用NMDS方法得出的结果;</p>
+<p>注意：在xls文件中NMDS会多一列stress的信息；Stress值是反映模型合适程度的指标，NMDS会多次打乱数据计算Stress值，直到找到最合适的模型，也就是最低的Stress值；理想状况下，Stress值为0，一般Stress值低于0.1较为合理。</p>
+</blockquote>
+<p><strong>参考资料：</strong></p>
+<ul>
+<li>
+<p><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3555222/" target="_blank" rel="noopener noreffer">Multidimensional scaling</a></p>
+</li>
+<li>
+<p><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3555222/" target="_blank" rel="noopener noreffer">MDS</a></p>
+</li>
+<li>
+<p><a href="https://blog.csdn.net/mingjinliu/article/details/70194660" target="_blank" rel="noopener noreffer">多维尺度变换(multidimensional scaling, MDS)</a></p>
+</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-10-26</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/posts/dimensionality-reduction-methods-for-rna-seq-analysis/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://cb-majorbiolab.work/posts/dimensionality-reduction-methods-for-rna-seq-analysis/" data-title="降维分析方法比较" data-via="https://twitter.com/czheluo" data-hashtags="RNAseq,MDS,scRNA"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://cb-majorbiolab.work/posts/dimensionality-reduction-methods-for-rna-seq-analysis/" data-hashtag="RNAseq"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Linkedin" data-sharer="linkedin" data-url="http://cb-majorbiolab.work/posts/dimensionality-reduction-methods-for-rna-seq-analysis/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Hacker News" data-sharer="hackernews" data-url="http://cb-majorbiolab.work/posts/dimensionality-reduction-methods-for-rna-seq-analysis/" data-title="降维分析方法比较"><i class="fab fa-hacker-news fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://cb-majorbiolab.work/posts/dimensionality-reduction-methods-for-rna-seq-analysis/" data-title="降维分析方法比较"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://cb-majorbiolab.work/posts/dimensionality-reduction-methods-for-rna-seq-analysis/" data-title="降维分析方法比较" data-ralateuid="https://weibo.com/2161302013/profile"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/rnaseq/">RNAseq</a>,&nbsp;<a href="/tags/mds/">MDS</a>,&nbsp;<a href="/tags/scrna/">scRNA</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/rnaseq-quantification/" class="prev" rel="prev" title="RNAseq定量软件比较"><i class="fas fa-angle-left fa-fw"></i>RNAseq定量软件比较</a>
+            <a href="/posts/repeatmasker-dfam/" class="next" rel="next" title="转座元件分析">转座元件分析<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript><div id="fb-root" class="comment"></div>
+            <div
+                class="fb-comments"
+                data-href="http://cb-majorbiolab.work/posts/dimensionality-reduction-methods-for-rna-seq-analysis/"
+                data-width="100%"
+                data-numposts="10"
+            ></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://developers.facebook.com/docs/plugins/comments/"></a>Facebook</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">MAJOR Computational Biology Research Lab</div>
+                <div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020-2022, MENG LUO, All rights reserved.</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+                
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="https://connect.facebook.net/zh_CN/sdk.js#xfbml=1&amp;version=v5.0&amp;appId=&amp;autoLogAppEvents=1" defer></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"valine":{"appId":"Noyy9UKaXGwYBIUdvBTt7u76-gzGzoHsz","appKey":"15w6pTF8mFoxnm8muOFx5buM","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"VX4BXOJBC5","algoliaIndex":"majorbio.zh-cn","algoliaSearchKey":"53790f167edb548b217bfe91dd891ac0","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

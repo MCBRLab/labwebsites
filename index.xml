@@ -1,0 +1,117 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>MAJOR Computational Biology Research Lab</title>
+        <link>http://cb-majorbiolab.work/</link>
+        <description>MAJOR Computational Biology Research Lab</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 19 Dec 2021 16:29:59 &#43;0800</lastBuildDate>
+            <atom:link href="http://cb-majorbiolab.work/index.xml" rel="self" type="application/rss+xml" />
+        <item>
+    <title>Nanopore demultiplexing, QC, mapping and downstream analysi pipeline</title>
+    <link>http://cb-majorbiolab.work/posts/ont-workflow/</link>
+    <pubDate>Sun, 12 Dec 2021 17:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/ont-workflow/</guid>
+    <description><![CDATA[Introduction nfcore/ontworkflow is a bioinformatics analysis pipeline for Nanopore DNA/RNA sequencing data that can be used to perform basecalling, demultiplexing, QC, mapping and downstream analysis.
+The pipeline is built using Nextflow, a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The Nextflow DSL2 implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies.]]></description>
+</item><item>
+    <title>circRNA quantification, differential expression analysis and miRNA target prediction of RNA-Seq data</title>
+    <link>http://cb-majorbiolab.work/posts/circrna-pipeline/</link>
+    <pubDate>Mon, 06 Dec 2021 17:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/circrna-pipeline/</guid>
+    <description><![CDATA[nf-core/circrnaworkflow: Usage It is recommended that first time users run nf-core/circrnaworkflow with the minimal test dataset either locally or on a HPC, referring to the output documentation before running a full analysis.
+1  nextflow run nf-core/circrnaworkflow -profile test   Run the test dataset on a HPC:
+1  nextflow run nf-core/circrnaworkflow -profile test,&lt;docker/singularity/podman/institute&gt;   Running the pipeline A typical command for running the pipeline is as follows:]]></description>
+</item><item>
+    <title>visually combining expression data with functional analysis</title>
+    <link>http://cb-majorbiolab.work/posts/visually-combining-expression-data-with-functional-analysis/</link>
+    <pubDate>Fri, 03 Dec 2021 16:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/visually-combining-expression-data-with-functional-analysis/</guid>
+    <description><![CDATA[富集和弦图 功能富集分析，是指借助各类数据库和分析工具进行统计分析。挖掘在数据库中与我们研究的生物学问题具有显著相关性的功能类别，**期望发现]]></description>
+</item><item>
+    <title>比较不同降维分析方法在RNAseq数据的可视化结果</title>
+    <link>http://cb-majorbiolab.work/posts/dimensionality-reduction-for-dataviz/</link>
+    <pubDate>Fri, 26 Nov 2021 16:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/dimensionality-reduction-for-dataviz/</guid>
+    <description><![CDATA[不同的降维分析方法 ​ 数据降维就是通过特征选择或者特征变换操作将数据从原始的D维空间投影到新的K维空间，直白的说是把数据的维度降下来，用一个相]]></description>
+</item><item>
+    <title>circRNA定量软件分析比较</title>
+    <link>http://cb-majorbiolab.work/posts/circran-quantification/</link>
+    <pubDate>Wed, 24 Nov 2021 16:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/circran-quantification/</guid>
+    <description><![CDATA[一、CIRI &amp; CIRI2 1. CIRI鉴定circRNA的原理 在最初的环状RNA研究中，认为环状RNA都是由exon通过反向剪切构成的,称之为exoni]]></description>
+</item><item>
+    <title>Network Analysis with R</title>
+    <link>http://cb-majorbiolab.work/posts/network-analysis-with-r/</link>
+    <pubDate>Mon, 22 Nov 2021 16:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/network-analysis-with-r/</guid>
+    <description><![CDATA[R网络画图 R中的画网络图的方法主要有 igraph/networkD3/sna（network）包主要用来做2基因之间的网络画图 导入计算画图的]]></description>
+</item><item>
+    <title>转座元件分析</title>
+    <link>http://cb-majorbiolab.work/posts/repeatmasker-dfam/</link>
+    <pubDate>Thu, 18 Nov 2021 16:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/repeatmasker-dfam/</guid>
+    <description><![CDATA[Dfam数据库的使用 The Dfam database is a collection of Repetitive DNA element sequence alignments, hidden Markov models (HMMs) and matches lists for complete Eukaryote genomes. 1. 概述 转座元件是一类能改变其自身在基因组当中的位置的DNA重复序列，它能够]]></description>
+</item><item>
+    <title>降维分析方法比较</title>
+    <link>http://cb-majorbiolab.work/posts/dimensionality-reduction-methods-for-rna-seq-analysis/</link>
+    <pubDate>Tue, 26 Oct 2021 16:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/dimensionality-reduction-methods-for-rna-seq-analysis/</guid>
+    <description><![CDATA[转录组对定量结果降维分析比较 概述 MDS原理 MDS算法解决的问题是:当n个对象之间的相似性给定，确定这些对象在低维空间中的表示，并使其尽可能与]]></description>
+</item><item>
+    <title>RNAseq定量软件比较</title>
+    <link>http://cb-majorbiolab.work/posts/rnaseq-quantification/</link>
+    <pubDate>Sat, 16 Oct 2021 14:30:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/rnaseq-quantification/</guid>
+    <description><![CDATA[一些RNAseq定量软件的简介 RNAseq定量软件的简介 kallisto,salmon,rsem,stringtie,featurecoun]]></description>
+</item><item>
+    <title>circRNA差异表达分析软件</title>
+    <link>http://cb-majorbiolab.work/posts/differential-analysis-of-circrna-count-data-circrna/</link>
+    <pubDate>Thu, 23 Sep 2021 16:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/differential-analysis-of-circrna-count-data-circrna/</guid>
+    <description><![CDATA[circRNA差异分析 ​ 独特的环状结构使得二代测序较短的读长对其鉴定以及定量被限制，目前仅仅依靠其反向剪切序列；另外，环状RNA的表达总是与]]></description>
+</item><item>
+    <title>RNAseq三个差异组比较分析</title>
+    <link>http://cb-majorbiolab.work/posts/interactive-three-way-differential-expression-analysis/</link>
+    <pubDate>Sat, 18 Sep 2021 16:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/interactive-three-way-differential-expression-analysis/</guid>
+    <description><![CDATA[使用volcano3D进行三个差异组间的可视化分析 概述 The volcano3D package enables exploration of probes differentially expressed between three groups. Its main purpose is for the visualisation of differentially expressed genes in a three-dimensional volcano plot. These plots can be converted to interactive visualisations using plotly. The methodology has been published]]></description>
+</item><item>
+    <title>使用clusterProfiler对基因集进行富集分析（任何物种）</title>
+    <link>http://cb-majorbiolab.work/posts/clusterprofiler_pipeline/</link>
+    <pubDate>Tue, 24 Aug 2021 16:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/clusterprofiler_pipeline/</guid>
+    <description><![CDATA[使用clusterProfiler对基因集进行富集分析 分析内容包括GO、KEGG、GSEA、DO Reactome 构建自己物种的数据库R包 如果分析的物种没有]]></description>
+</item><item>
+    <title>差异表达分析结果可视化</title>
+    <link>http://cb-majorbiolab.work/posts/degs-viz/</link>
+    <pubDate>Fri, 30 Jul 2021 16:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/degs-viz/</guid>
+    <description><![CDATA[一.目的： 使用Volcano_gene_annotation.R对基因表达量进行火山图绘制以及基因标注 二.使用示例： 脚本路径: 1 /mnt/ilustre/users/jiawen.ma/script/R_script/Volcano_gene_annotation 程序执行：]]></description>
+</item><item>
+    <title>富集分析结果数据可视化</title>
+    <link>http://cb-majorbiolab.work/posts/enrichment-plots/</link>
+    <pubDate>Wed, 28 Jul 2021 16:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/enrichment-plots/</guid>
+    <description><![CDATA[一.目的： 使用Go_pie.R绘制GO功能富集图 二.使用示例： 脚本路径: 1 /mnt/ilustre/users/jiawen.ma/script/R/GO/GO_pie/Go_pie.R 程序执行： 1 Rscript Go_pie.R -g GoEnrich_20210731_104746207.txt -n GoEnrich_20210731_104746207 -o ./ 参数说明： -g：云平台下载的GO功能]]></description>
+</item><item>
+    <title>DEGseq 对无重复样本进行差异分析</title>
+    <link>http://cb-majorbiolab.work/posts/degseq-differential-analysis-of-count-data/</link>
+    <pubDate>Fri, 23 Jul 2021 16:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/degseq-differential-analysis-of-count-data/</guid>
+    <description><![CDATA[DEGseq 对无重复样本进行差异分析 一.目的： 使用DEGseq.R 对无重复样本进行差异分析 二.使用示例： 脚本路径: 1 /mnt/ilustre/users/jiawen.ma/script/RNA-seq/DEGseq/DEGseq.R 程序执行： 1 Rscript DEGseq.R -g gene.count.matrix.annot.xls -t gene.TPM.matrix.annot.xls -s compare.txt -o ./]]></description>
+</item></channel>
+</rss>

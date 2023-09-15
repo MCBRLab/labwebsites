@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>RNAseq三个差异组比较分析 - MAJOR Computational Biology Research Lab</title><meta name="Description" content="使用volcano3d做3个组别间的火山图"><meta property="og:title" content="RNAseq三个差异组比较分析" />
+<meta property="og:description" content="使用volcano3d做3个组别间的火山图" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://cb-majorbiolab.work/posts/interactive-three-way-differential-expression-analysis/" />
+<meta property="og:image" content="http://cb-majorbiolab.work/posts/interactive-three-way-differential-expression-analysis/volcano_3D.png"/>
+<meta property="article:published_time" content="2021-09-18T16:29:59+08:00" />
+<meta property="article:modified_time" content="2021-09-18T16:29:59+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://cb-majorbiolab.work/posts/interactive-three-way-differential-expression-analysis/volcano_3D.png"/>
+<meta name="twitter:title" content="RNAseq三个差异组比较分析"/>
+<meta name="twitter:description" content="使用volcano3d做3个组别间的火山图"/>
+<meta name="application-name" content="MAJOR Computational Biology Research Lab">
+<meta name="apple-mobile-web-app-title" content="MAJOR Computational Biology Research Lab"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/MBIL.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://cb-majorbiolab.work/posts/interactive-three-way-differential-expression-analysis/" /><link rel="prev" href="http://cb-majorbiolab.work/posts/clusterprofiler_pipeline/" /><link rel="next" href="http://cb-majorbiolab.work/posts/differential-analysis-of-circrna-count-data-circrna/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "RNAseq三个差异组比较分析",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/cb-majorbiolab.work\/posts\/interactive-three-way-differential-expression-analysis\/"
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "http:\/\/cb-majorbiolab.work\/posts\/interactive-three-way-differential-expression-analysis\/volcano_3D.png",
+                            "width":  700 ,
+                            "height":  1000 
+                        }],"genre": "posts","keywords": "RNAseq, volcano3d, 三个差异组比较","wordcount":  817 ,
+        "url": "http:\/\/cb-majorbiolab.work\/posts\/interactive-three-way-differential-expression-analysis\/","datePublished": "2021-09-18T16:29:59+08:00","dateModified": "2021-09-18T16:29:59+08:00","publisher": {
+            "@type": "Organization",
+            "name": "美吉生物信息团队"},"author": {
+                "@type": "Person",
+                "name": "Wanyun yang"
+            },"description": "使用volcano3d做3个组别间的火山图"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="MAJOR Computational Biology Research Lab"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/MBIL.svg"
+        data-srcset="/images/MBIL.svg, /images/MBIL.svg 1.5x, /images/MBIL.svg 2x"
+        data-sizes="auto"
+        alt="/images/MBIL.svg"
+        title="/images/MBIL.svg" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="Home"> Home </a><a class="menu-item" href="/workshop/" title=" "> Workshop/Talk </a><a class="menu-item" href="/publication/" title="Publications"> Publications </a><a class="menu-item" href="/team/" title="Team"> Team </a><a class="menu-item" href="/resource/" title="Resource"> Resource </a><a class="menu-item" href="/software/" title="Software"> Software </a><a class="menu-item" href="/ne/" title="News/Events"> News/Events </a><a class="menu-item" href="/joinus/" title="Join/Contact"> Join/Contact </a><a class="menu-item" href="https://github.com/MajorBio" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="MAJOR Computational Biology Research Lab"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/MBIL.svg"
+        data-srcset="/images/MBIL.svg, /images/MBIL.svg 1.5x, /images/MBIL.svg 2x"
+        data-sizes="auto"
+        alt="/images/MBIL.svg"
+        title="/images/MBIL.svg" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="Home">Home</a><a class="menu-item" href="/workshop/" title=" ">Workshop/Talk</a><a class="menu-item" href="/publication/" title="Publications">Publications</a><a class="menu-item" href="/team/" title="Team">Team</a><a class="menu-item" href="/resource/" title="Resource">Resource</a><a class="menu-item" href="/software/" title="Software">Software</a><a class="menu-item" href="/ne/" title="News/Events">News/Events</a><a class="menu-item" href="/joinus/" title="Join/Contact">Join/Contact</a><a class="menu-item" href="https://github.com/MajorBio" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">RNAseq三个差异组比较分析</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/yangwanyun" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Wanyun yang</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/rnaseq/"><i class="far fa-folder fa-fw"></i>RNAseq</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-09-18">2021-09-18</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 817 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;<span id="/posts/interactive-three-way-differential-expression-analysis/" class="leancloud_visitors" data-flag-title="RNAseq三个差异组比较分析">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/posts/interactive-three-way-differential-expression-analysis/volcano_3D.png"
+        data-srcset="/posts/interactive-three-way-differential-expression-analysis/volcano_3D.png, /posts/interactive-three-way-differential-expression-analysis/volcano_3D.png 1.5x, /posts/interactive-three-way-differential-expression-analysis/volcano_3D.png 2x"
+        data-sizes="auto"
+        alt="/posts/interactive-three-way-differential-expression-analysis/volcano_3D.png"
+        title="使用volcano3d做3个组别间的火山图" /></div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#脚本执行">脚本执行:</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#组间不同条件下的二维火山图">组间不同条件下的二维火山图</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#执行脚本">执行脚本</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="使用volcano3dhttpsgithubcomkatrionagoldmannvolcano3d进行三个差异组间的可视化分析">使用<a href="https://github.com/KatrionaGoldmann/volcano3D" target="_blank" rel="noopener noreffer">volcano3D</a>进行三个差异组间的可视化分析</h1>
+<p><a href="" rel=""><img src="volcano__3D.png" height="200"/></a></p>
+<h1 id="概述">概述</h1>
+<blockquote>
+<p>The volcano3D package enables exploration of probes differentially
+expressed between three groups. Its main purpose is for the visualisation 
+of differentially expressed genes in a three-dimensional volcano plot. 
+These plots can be converted to interactive visualisations using plotly.</p>
+</blockquote>
+<blockquote>
+<p>The methodology has been published in <a href="https://doi.org/10.1016/j.celrep.2019.07.091" target="_blank" rel="noopener noreffer">Lewis, Myles J., et al. <em>Molecular portraits of early
+rheumatoid arthritis identify clinical and treatment response
+phenotypes</em>. Cell reports 28.9 (2019): 2455-2470. (DOI:
+10.1016/j.celrep.2019.07.091)</a>
+with an interactive web tool available at <a href="https://peac.hpc.qmul.ac.uk">https://peac.hpc.qmul.ac.uk</a>.</p>
+</blockquote>
+<h1 id="分析方法">分析方法</h1>
+<blockquote>
+<p>当前差异分析方法只用DESeq2 和limma 两个模型，其他差异软件也可以使用，建议只对有生物学重复的项目进行分析。当然无重复也是可以做的，可以使用DEGseq进行分析，但是综合组间并不能进行分析，所以总体无生物学重复的项目不考虑做。当前根据DESeq2和limma两个模型，我们整合到了一个脚步中，这个脚本使用如下<a href="https://katrionagoldmann.github.io/volcano3D/articles/Extended_Vignette.html" target="_blank" rel="noopener noreffer">分析参考</a>：</p>
+</blockquote>
+<h2 id="脚本执行">脚本执行:</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">Rscript /mnt/ilustre/users/meng.luo/Pipeline/Pipeline/script/3Dplot/volcano3d.R --count gene.count.txt  --group group.txt  --diff  DESeq2  --p 0.05
+
+参数说明：
+--count：基因定量结果readcount文件
+--group：样品分组文件（至少有3个组别）
+--diff：差异分析方法，可选择DESeq2或者Limma，默认DESeq2
+--p: 过滤不显著差异基因的padj值，默认0.05
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>注意事项：</strong> group.txt文件中的分组需要大于等于3组</p>
+<h1 id="结果可视化">结果可视化</h1>
+<blockquote>
+<p>生成的颜色是随机的，根据情况，可以再自行定义</p>
+</blockquote>
+<h2 id="组间不同条件下的二维火山图">组间不同条件下的二维火山图</h2>
+<blockquote>
+<p>只显示显著与不显著的结果</p>
+</blockquote>
+<p><img src="volcano2D_type1.png" alt="image-20210918164820718"  style="zoom:67%;" /></p>
+<blockquote>
+<p>根据结果，显示所有不同组间的差异结果
+Alternatively using the polar significance levels</p>
+</blockquote>
+<p><img src="volcano2D_type2.png" alt="image-20210918164820718"  style="zoom:70%;" /></p>
+<blockquote>
+<p>只显示组间，差异上调的基因结果
+upregulated group within the standard volcano plot</p>
+</blockquote>
+<p><img src="volcano2D_type2.png" alt="image-20210918164820718"  style="zoom:70%;" /></p>
+<blockquote>
+</blockquote>
+<h1 id="radial-plots">Radial Plots</h1>
+<blockquote>
+<p>以放射性图展示所有不同组间的差异情况
+The differential expression can now be visualised on an interactive radar plot using radial_plotly</p>
+</blockquote>
+<p><img src="Radiol_volcano.jpg" alt="image-20210918164820718"  style="zoom:70%;" /></p>
+<h1 id="boxplots">Boxplots</h1>
+<blockquote>
+<p>根据最显著的五个基因，做箱图，比较其在不同组间是否显著差异</p>
+</blockquote>
+<p><img src="AT1G69880.box.png" alt="image-20210918164820718"  style="zoom:30%;" />
+<img src="AT2G01422.box.png" alt="image-20210918164820718"  style="zoom:30%;" />
+<img src="AT2G29350.box.png" alt="image-20210918164820718"  style="zoom:30%;" />
+<img src="AT2G33380.box.png" alt="image-20210918164820718"  style="zoom:30%;" />
+<img src="AT4G02280.box.png" alt="image-20210918164820718"  style="zoom:30%;" /></p>
+<h1 id="three-dimensional-volcano-plots">Three Dimensional Volcano Plots</h1>
+<blockquote>
+<p>最后根据以上的结果，做3D图呈现最终的结果图
+The final thing we can look at is the 3D volcano plot which projects differential gene expression onto cylindrical coordinates.</p>
+</blockquote>
+<p><img src="volcano_3D.png" alt="image-20210918164820718"  style="zoom:70%;" /></p>
+<blockquote>
+<p>可以呈现<a href="/posts/interactive-three-way-differential-expression-analysis/volcano_3D.html" rel="">html</a>的格式</p>
+</blockquote>
+<h1 id="多组差异比较">多组差异比较</h1>
+<blockquote>
+<p>增对不同的项目，进行多组间差异比较，当前只使用的模型是DESeq2 和 Limma</p>
+</blockquote>
+<h2 id="执行脚本">执行脚本</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">Rscript /mnt/ilustre/users/meng.luo/Pipeline/Pipeline/script/multipleDGEs/test/multipleDGEs.R -c readcount.txt -g group.txt -m Limma 
+
+参数说明：
+-c：基因定量结果readcount文件
+-g：样品分组文件（至少有3个组别）
+-m：差异分析方法，可选择DESeq2或者Limma 
+
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>参考资料及文献：</strong></p>
+<ul>
+<li><a href="https://katrionagoldmann.github.io/volcano3D/index.html" target="_blank" rel="noopener noreffer">volcano3D包的使用方法</a></li>
+<li><a href="https://www.cell.com/cell-reports/fulltext/S2211-1247%2819%2931007-1?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS2211124719310071%3Fshowall%3Dtrue" target="_blank" rel="noopener noreffer">Molecular Portraits of Early Rheumatoid Arthritis Identify Clinical and Treatment Response Phenotypes</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-09-18</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/posts/interactive-three-way-differential-expression-analysis/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://cb-majorbiolab.work/posts/interactive-three-way-differential-expression-analysis/" data-title="RNAseq三个差异组比较分析" data-via="https://twitter.com/czheluo" data-hashtags="RNAseq,volcano3d,三个差异组比较"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://cb-majorbiolab.work/posts/interactive-three-way-differential-expression-analysis/" data-hashtag="RNAseq"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Linkedin" data-sharer="linkedin" data-url="http://cb-majorbiolab.work/posts/interactive-three-way-differential-expression-analysis/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Hacker News" data-sharer="hackernews" data-url="http://cb-majorbiolab.work/posts/interactive-three-way-differential-expression-analysis/" data-title="RNAseq三个差异组比较分析"><i class="fab fa-hacker-news fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://cb-majorbiolab.work/posts/interactive-three-way-differential-expression-analysis/" data-title="RNAseq三个差异组比较分析"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://cb-majorbiolab.work/posts/interactive-three-way-differential-expression-analysis/" data-title="RNAseq三个差异组比较分析" data-ralateuid="https://weibo.com/2161302013/profile"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/rnaseq/">RNAseq</a>,&nbsp;<a href="/tags/volcano3d/">volcano3d</a>,&nbsp;<a href="/tags/%E4%B8%89%E4%B8%AA%E5%B7%AE%E5%BC%82%E7%BB%84%E6%AF%94%E8%BE%83/">三个差异组比较</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/clusterprofiler_pipeline/" class="prev" rel="prev" title="使用clusterProfiler对基因集进行富集分析（任何物种）"><i class="fas fa-angle-left fa-fw"></i>使用clusterProfiler对基因集进行富集分析（任何物种）</a>
+            <a href="/posts/differential-analysis-of-circrna-count-data-circrna/" class="next" rel="next" title="circRNA差异表达分析软件">circRNA差异表达分析软件<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript><div id="fb-root" class="comment"></div>
+            <div
+                class="fb-comments"
+                data-href="http://cb-majorbiolab.work/posts/interactive-three-way-differential-expression-analysis/"
+                data-width="100%"
+                data-numposts="10"
+            ></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://developers.facebook.com/docs/plugins/comments/"></a>Facebook</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">MAJOR Computational Biology Research Lab</div>
+                <div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020-2022, MENG LUO, All rights reserved.</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+                
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="https://connect.facebook.net/zh_CN/sdk.js#xfbml=1&amp;version=v5.0&amp;appId=&amp;autoLogAppEvents=1" defer></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"valine":{"appId":"Noyy9UKaXGwYBIUdvBTt7u76-gzGzoHsz","appKey":"15w6pTF8mFoxnm8muOFx5buM","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"VX4BXOJBC5","algoliaIndex":"majorbio.zh-cn","algoliaSearchKey":"53790f167edb548b217bfe91dd891ac0","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

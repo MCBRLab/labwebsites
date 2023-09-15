@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>circRNA差异表达分析软件 - MAJOR Computational Biology Research Lab</title><meta name="Description" content="circRNA差异表达分析软件比较"><meta property="og:title" content="circRNA差异表达分析软件" />
+<meta property="og:description" content="circRNA差异表达分析软件比较" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://cb-majorbiolab.work/posts/differential-analysis-of-circrna-count-data-circrna/" />
+<meta property="article:published_time" content="2021-09-23T16:29:59+08:00" />
+<meta property="article:modified_time" content="2021-09-23T16:29:59+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="circRNA差异表达分析软件"/>
+<meta name="twitter:description" content="circRNA差异表达分析软件比较"/>
+<meta name="application-name" content="MAJOR Computational Biology Research Lab">
+<meta name="apple-mobile-web-app-title" content="MAJOR Computational Biology Research Lab"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/MBIL.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://cb-majorbiolab.work/posts/differential-analysis-of-circrna-count-data-circrna/" /><link rel="prev" href="http://cb-majorbiolab.work/posts/interactive-three-way-differential-expression-analysis/" /><link rel="next" href="http://cb-majorbiolab.work/posts/rnaseq-quantification/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "circRNA差异表达分析软件",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/cb-majorbiolab.work\/posts\/differential-analysis-of-circrna-count-data-circrna\/"
+        },"genre": "posts","keywords": "RNAseq, EBSeq, DEBKS","wordcount":  1185 ,
+        "url": "http:\/\/cb-majorbiolab.work\/posts\/differential-analysis-of-circrna-count-data-circrna\/","datePublished": "2021-09-23T16:29:59+08:00","dateModified": "2021-09-23T16:29:59+08:00","publisher": {
+            "@type": "Organization",
+            "name": "美吉生物信息团队"},"author": {
+                "@type": "Person",
+                "name": "Jiawen Ma"
+            },"description": "circRNA差异表达分析软件比较"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="MAJOR Computational Biology Research Lab"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/MBIL.svg"
+        data-srcset="/images/MBIL.svg, /images/MBIL.svg 1.5x, /images/MBIL.svg 2x"
+        data-sizes="auto"
+        alt="/images/MBIL.svg"
+        title="/images/MBIL.svg" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="Home"> Home </a><a class="menu-item" href="/workshop/" title=" "> Workshop/Talk </a><a class="menu-item" href="/publication/" title="Publications"> Publications </a><a class="menu-item" href="/team/" title="Team"> Team </a><a class="menu-item" href="/resource/" title="Resource"> Resource </a><a class="menu-item" href="/software/" title="Software"> Software </a><a class="menu-item" href="/ne/" title="News/Events"> News/Events </a><a class="menu-item" href="/joinus/" title="Join/Contact"> Join/Contact </a><a class="menu-item" href="https://github.com/MajorBio" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="MAJOR Computational Biology Research Lab"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/MBIL.svg"
+        data-srcset="/images/MBIL.svg, /images/MBIL.svg 1.5x, /images/MBIL.svg 2x"
+        data-sizes="auto"
+        alt="/images/MBIL.svg"
+        title="/images/MBIL.svg" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="Home">Home</a><a class="menu-item" href="/workshop/" title=" ">Workshop/Talk</a><a class="menu-item" href="/publication/" title="Publications">Publications</a><a class="menu-item" href="/team/" title="Team">Team</a><a class="menu-item" href="/resource/" title="Resource">Resource</a><a class="menu-item" href="/software/" title="Software">Software</a><a class="menu-item" href="/ne/" title="News/Events">News/Events</a><a class="menu-item" href="/joinus/" title="Join/Contact">Join/Contact</a><a class="menu-item" href="https://github.com/MajorBio" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">circRNA差异表达分析软件</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/bystander456" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Jiawen Ma</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/rnaseq/"><i class="far fa-folder fa-fw"></i>RNAseq</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-09-23">2021-09-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1185 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;<span id="/posts/differential-analysis-of-circrna-count-data-circrna/" class="leancloud_visitors" data-flag-title="circRNA差异表达分析软件">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-使用ebseq-进行差异表达分析">1. 使用EBSeq 进行差异表达分析</a>
+      <ul>
+        <li><a href="#11-原理">1.1 原理：</a></li>
+        <li><a href="#12-使用示例">1.2 使用示例：</a>
+          <ul>
+            <li><a href="#路径">路径:</a></li>
+            <li><a href="#程序执行">程序执行：</a></li>
+          </ul>
+        </li>
+        <li><a href="#13-结果展示">1.3 结果展示：</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-使用debks进行差异表达分析">2. 使用DEBKS进行差异表达分析</a>
+      <ul>
+        <li><a href="#21-原理">2.1 原理：</a></li>
+        <li><a href="#22-使用示例">2.2 使用示例：</a>
+          <ul>
+            <li><a href="#路径-1">路径:</a></li>
+            <li><a href="#程序执行-1">程序执行：</a></li>
+            <li><a href="#23-结果展示">2.3 结果展示：</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="circrna差异分析">circRNA差异分析</h1>
+<p>​        独特的环状结构使得二代测序较短的读长对其鉴定以及定量被限制，目前仅仅依靠其反向剪切序列；另外，环状RNA的表达总是与来源基因（host gene）线性RNA的表达纠缠不清，让人们很难区分差异是来源于反向剪切还是只是来源基因的副产物。
+​        对此，许多软件在识别上下功夫，比如DCC、CIRCexplorer、CIRI等等，然后用DESeq2或edgeR进行差异分析；而另一些软件在定量上使劲，对环状 RNA 的定量不仅仅使用反向剪切序列（BSJ），而且考虑到来源基因线性分子表达的影响，使用BS ratio进行定量，例如DCC、CIRI2、CIRIquant以及CLEAR。当然这种定量就不适合用于DESeq2或edgeR，一般可以用DCC::CircTest或CIRIquant等软件进行差异分析。</p>
+<h2 id="1-使用ebseq-进行差异表达分析">1. 使用EBSeq 进行差异表达分析</h2>
+<h3 id="11-原理">1.1 原理：</h3>
+<p>​	EBSeq: an empirical Bayes model for identifying DE genes and isoforms.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211122124134568.png"
+        data-srcset="/posts/differential-analysis-of-circrna-count-data-circrna/image-20211122124134568.png, image-20211122124134568.png 1.5x, /posts/differential-analysis-of-circrna-count-data-circrna/image-20211122124134568.png 2x"
+        data-sizes="auto"
+        alt="/posts/differential-analysis-of-circrna-count-data-circrna/image-20211122124134568.png"
+        title="image-20211122124134568" /></p>
+<p>一句话描述，贝叶斯方法就是利用先验知识，结合当前获得数据，来更新关于未知参数的信息，以此获得修订后的参数的可能性，也就是后验概率。</p>
+<p>EBSeq requires gene counts or estimates of isoform expression, but it is not specific to any particular estimation method (e.g. RSEM, Rseq, Cufflinks or another method may be used).</p>
+<p>library size：total number of reads or obtained by TMM (Robinson and Oshlack, 2010), Median Normalization (Anders and Huber, 2010) or Upper Quartile Normalization (Bullard et al., 2010).</p>
+<p>Since the total number of reads may be adversely affected by outliers from PCR or other artifacts, the latter three methods are recommended. The EBSeq code defaults to Median Normalization, but Quantile Normalization is also available.</p>
+<p>mean:<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211122124310462.png"
+        data-srcset="/posts/differential-analysis-of-circrna-count-data-circrna/image-20211122124310462.png, image-20211122124310462.png 1.5x, /posts/differential-analysis-of-circrna-count-data-circrna/image-20211122124310462.png 2x"
+        data-sizes="auto"
+        alt="/posts/differential-analysis-of-circrna-count-data-circrna/image-20211122124310462.png"
+        title="image-20211122124310462" />	;	variance:<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211122124342809.png"
+        data-srcset="/posts/differential-analysis-of-circrna-count-data-circrna/image-20211122124342809.png, image-20211122124342809.png 1.5x, /posts/differential-analysis-of-circrna-count-data-circrna/image-20211122124342809.png 2x"
+        data-sizes="auto"
+        alt="/posts/differential-analysis-of-circrna-count-data-circrna/image-20211122124342809.png"
+        title="image-20211122124342809" /></p>
+<p>When RNA-seq reads in two biological conditions are available:</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211122124420372.png"
+        data-srcset="/posts/differential-analysis-of-circrna-count-data-circrna/image-20211122124420372.png, image-20211122124420372.png 1.5x, /posts/differential-analysis-of-circrna-count-data-circrna/image-20211122124420372.png 2x"
+        data-sizes="auto"
+        alt="/posts/differential-analysis-of-circrna-count-data-circrna/image-20211122124420372.png"
+        title="image-20211122124420372" />                                  <img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211122124424572.png"
+        data-srcset="/posts/differential-analysis-of-circrna-count-data-circrna/image-20211122124424572.png, image-20211122124424572.png 1.5x, /posts/differential-analysis-of-circrna-count-data-circrna/image-20211122124424572.png 2x"
+        data-sizes="auto"
+        alt="/posts/differential-analysis-of-circrna-count-data-circrna/image-20211122124424572.png"
+        title="image-20211122124424572" /></p>
+<p>p denote the prior probability of DE:	![image-20211122124512688.png)</p>
+<h3 id="12-使用示例">1.2 使用示例：</h3>
+<h4 id="路径">路径:</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">脚本：/mnt/ilustre/users/jiawen.ma/script/RNA-seq/EBSeq
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="程序执行">程序执行：</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">Rscript EBSeq.R -f gene.count.matrix.annot.xls -g group.txt -c compare.txt
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">参数说明：
+-f：基因count文件
+-g：分组文件
+-c：对照文件
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20210922165346074.png"
+        data-srcset="image-20210922165346074.png, image-20210922165346074.png 1.5x, image-20210922165346074.png 2x"
+        data-sizes="auto"
+        alt="image-20210922165346074.png"
+        title="image-20210922165346074" /></p>
+<h3 id="13-结果展示">1.3 结果展示：</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">cat *_maxrount.txt
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20210922165516734.png"
+        data-srcset="/posts/differential-analysis-of-circrna-count-data-circrna/image-20210922165516734.png, image-20210922165516734.png 1.5x, /posts/differential-analysis-of-circrna-count-data-circrna/image-20210922165516734.png 2x"
+        data-sizes="auto"
+        alt="/posts/differential-analysis-of-circrna-count-data-circrna/image-20210922165516734.png"
+        title="image-20210922165516734" /></p>
+<blockquote>
+<p>3个指标用于判断选择的迭代次数maxround是否合理，一般来说每个指标的最后两个值相差小于0.01就可以了</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">head *_DEG_FDR005.txt <span class="c1"># FDR &lt; 0.05 时的差异基因</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20210922165728515.png"
+        data-srcset="/posts/differential-analysis-of-circrna-count-data-circrna/image-20210922165728515.png, image-20210922165728515.png 1.5x, /posts/differential-analysis-of-circrna-count-data-circrna/image-20210922165728515.png 2x"
+        data-sizes="auto"
+        alt="/posts/differential-analysis-of-circrna-count-data-circrna/image-20210922165728515.png"
+        title="image-20210922165728515" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">head *_EBSeq_summary.xls <span class="c1">#每个基因的在不同组别中的平均表达量，差异倍数，FDR</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20210922170307635.png"
+        data-srcset="/posts/differential-analysis-of-circrna-count-data-circrna/image-20210922170307635.png, image-20210922170307635.png 1.5x, /posts/differential-analysis-of-circrna-count-data-circrna/image-20210922170307635.png 2x"
+        data-sizes="auto"
+        alt="/posts/differential-analysis-of-circrna-count-data-circrna/image-20210922170307635.png"
+        title="image-20210922170307635" /></p>
+<h2 id="2-使用debks进行差异表达分析">2. 使用DEBKS进行差异表达分析</h2>
+<h3 id="21-原理">2.1 原理：</h3>
+<p>​	通过比较，DEBKS具有更优秀的性能并且更少受来源基因表达的影响。</p>
+<p>​	由于需要包含线性剪切位点的表达（LJC），因此，<strong>DEBKS只能应用于既包含环状 RNA又包含线性RNA的测序</strong>，例如rRNA-depleted RNA-seq或exome capture RNA-seq。
+​	另外，基因间区的环状RNA由于缺乏线性分子的表达，因此无法用DEBKS评估。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211122123235462.png"
+        data-srcset="/posts/differential-analysis-of-circrna-count-data-circrna/image-20211122123235462.png, image-20211122123235462.png 1.5x, /posts/differential-analysis-of-circrna-count-data-circrna/image-20211122123235462.png 2x"
+        data-sizes="auto"
+        alt="/posts/differential-analysis-of-circrna-count-data-circrna/image-20211122123235462.png"
+        title="image-20211122123235462" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211122112118560.png"
+        data-srcset="/posts/differential-analysis-of-circrna-count-data-circrna/image-20211122112118560.png, image-20211122112118560.png 1.5x, /posts/differential-analysis-of-circrna-count-data-circrna/image-20211122112118560.png 2x"
+        data-sizes="auto"
+        alt="/posts/differential-analysis-of-circrna-count-data-circrna/image-20211122112118560.png"
+        title="image-20211122112118560" /></p>
+<h3 id="22-使用示例">2.2 使用示例：</h3>
+<p>DEBKS设计了4个模块, count与anno两个模块为非必需步骤。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211122123357898.png"
+        data-srcset="/posts/differential-analysis-of-circrna-count-data-circrna/image-20211122123357898.png, image-20211122123357898.png 1.5x, /posts/differential-analysis-of-circrna-count-data-circrna/image-20211122123357898.png 2x"
+        data-sizes="auto"
+        alt="/posts/differential-analysis-of-circrna-count-data-circrna/image-20211122123357898.png"
+        title="image-20211122123357898" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211122123418973.png"
+        data-srcset="/posts/differential-analysis-of-circrna-count-data-circrna/image-20211122123418973.png, image-20211122123418973.png 1.5x, /posts/differential-analysis-of-circrna-count-data-circrna/image-20211122123418973.png 2x"
+        data-sizes="auto"
+        alt="/posts/differential-analysis-of-circrna-count-data-circrna/image-20211122123418973.png"
+        title="image-20211122123418973" /></p>
+<h4 id="路径-1">路径:</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">脚本：/mnt/ilustre/users/jiawen.ma/test/debks
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="程序执行-1">程序执行：</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">ls CIRI/*.txt &gt; samplelist.txt
+DEBKS merge  -s ciri2 -f samplelist.txt
+DEBKS dec -c merge_circ.txt -l merge_linear.txt -t <span class="m">20</span>  -o dec_star.txt 
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">文件与参数说明：
+samplelist.txt：circRNA预测结果的文件路径
+-s：circRNA预测的软件名
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="23-结果展示">2.3 结果展示：</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211122125227405.png"
+        data-srcset="/posts/differential-analysis-of-circrna-count-data-circrna/image-20211122125227405.png, image-20211122125227405.png 1.5x, /posts/differential-analysis-of-circrna-count-data-circrna/image-20211122125227405.png 2x"
+        data-sizes="auto"
+        alt="/posts/differential-analysis-of-circrna-count-data-circrna/image-20211122125227405.png"
+        title="image-20211122125227405" /></p>
+<p>结果文件每列的说明：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211122125050171.png"
+        data-srcset="/posts/differential-analysis-of-circrna-count-data-circrna/image-20211122125050171.png, image-20211122125050171.png 1.5x, /posts/differential-analysis-of-circrna-count-data-circrna/image-20211122125050171.png 2x"
+        data-sizes="auto"
+        alt="/posts/differential-analysis-of-circrna-count-data-circrna/image-20211122125050171.png"
+        title="image-20211122125050171" /></p>
+<p><strong>参考资料：</strong></p>
+<ul>
+<li><a href="https://academic.oup.com/bioinformatics/article/29/8/1035/228913" target="_blank" rel="noopener noreffer">EBSeq: an empirical Bayes hierarchical model for inference in RNA-seq experiments</a></li>
+<li><a href="https://www.sciencedirect.com/science/article/pii/S1672022921000292" target="_blank" rel="noopener noreffer">DEBKS: A Tool to Detect Differentially Expressed Circular RNA</a></li>
+<li><a href="https://github.com/yangence/DEBKS" target="_blank" rel="noopener noreffer">DEBKS_github</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-09-23</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/posts/differential-analysis-of-circrna-count-data-circrna/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://cb-majorbiolab.work/posts/differential-analysis-of-circrna-count-data-circrna/" data-title="circRNA差异表达分析软件" data-via="https://twitter.com/czheluo" data-hashtags="RNAseq,EBSeq,DEBKS"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://cb-majorbiolab.work/posts/differential-analysis-of-circrna-count-data-circrna/" data-hashtag="RNAseq"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Linkedin" data-sharer="linkedin" data-url="http://cb-majorbiolab.work/posts/differential-analysis-of-circrna-count-data-circrna/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Hacker News" data-sharer="hackernews" data-url="http://cb-majorbiolab.work/posts/differential-analysis-of-circrna-count-data-circrna/" data-title="circRNA差异表达分析软件"><i class="fab fa-hacker-news fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://cb-majorbiolab.work/posts/differential-analysis-of-circrna-count-data-circrna/" data-title="circRNA差异表达分析软件"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://cb-majorbiolab.work/posts/differential-analysis-of-circrna-count-data-circrna/" data-title="circRNA差异表达分析软件" data-ralateuid="https://weibo.com/2161302013/profile"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/rnaseq/">RNAseq</a>,&nbsp;<a href="/tags/ebseq/">EBSeq</a>,&nbsp;<a href="/tags/debks/">DEBKS</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/interactive-three-way-differential-expression-analysis/" class="prev" rel="prev" title="RNAseq三个差异组比较分析"><i class="fas fa-angle-left fa-fw"></i>RNAseq三个差异组比较分析</a>
+            <a href="/posts/rnaseq-quantification/" class="next" rel="next" title="RNAseq定量软件比较">RNAseq定量软件比较<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript><div id="fb-root" class="comment"></div>
+            <div
+                class="fb-comments"
+                data-href="http://cb-majorbiolab.work/posts/differential-analysis-of-circrna-count-data-circrna/"
+                data-width="100%"
+                data-numposts="10"
+            ></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://developers.facebook.com/docs/plugins/comments/"></a>Facebook</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">MAJOR Computational Biology Research Lab</div>
+                <div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020-2022, MENG LUO, All rights reserved.</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+                
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="https://connect.facebook.net/zh_CN/sdk.js#xfbml=1&amp;version=v5.0&amp;appId=&amp;autoLogAppEvents=1" defer></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"valine":{"appId":"Noyy9UKaXGwYBIUdvBTt7u76-gzGzoHsz","appKey":"15w6pTF8mFoxnm8muOFx5buM","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"VX4BXOJBC5","algoliaIndex":"majorbio.zh-cn","algoliaSearchKey":"53790f167edb548b217bfe91dd891ac0","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

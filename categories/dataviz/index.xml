@@ -1,0 +1,21 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>DataViz - 分类 - MAJOR Computational Biology Research Lab</title>
+        <link>http://cb-majorbiolab.work/categories/dataviz/</link>
+        <description>DataViz - 分类 - MAJOR Computational Biology Research Lab</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Fri, 03 Dec 2021 16:29:59 &#43;0800</lastBuildDate><atom:link href="http://cb-majorbiolab.work/categories/dataviz/" rel="self" type="application/rss+xml" /><item>
+    <title>visually combining expression data with functional analysis</title>
+    <link>http://cb-majorbiolab.work/posts/visually-combining-expression-data-with-functional-analysis/</link>
+    <pubDate>Fri, 03 Dec 2021 16:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/visually-combining-expression-data-with-functional-analysis/</guid>
+    <description><![CDATA[富集和弦图 功能富集分析，是指借助各类数据库和分析工具进行统计分析。挖掘在数据库中与我们研究的生物学问题具有显著相关性的功能类别，**期望发现]]></description>
+</item><item>
+    <title>Network Analysis with R</title>
+    <link>http://cb-majorbiolab.work/posts/network-analysis-with-r/</link>
+    <pubDate>Mon, 22 Nov 2021 16:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/network-analysis-with-r/</guid>
+    <description><![CDATA[R网络画图 R中的画网络图的方法主要有 igraph/networkD3/sna（network）包主要用来做2基因之间的网络画图 导入计算画图的]]></description>
+</item></channel>
+</rss>

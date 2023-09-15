@@ -1,0 +1,33 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>workflow - 标签 - MAJOR Computational Biology Research Lab</title>
+        <link>http://cb-majorbiolab.work/tags/workflow/</link>
+        <description>workflow - 标签 - MAJOR Computational Biology Research Lab</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 12 Dec 2021 17:29:59 &#43;0800</lastBuildDate><atom:link href="http://cb-majorbiolab.work/tags/workflow/" rel="self" type="application/rss+xml" /><item>
+    <title>Nanopore demultiplexing, QC, mapping and downstream analysi pipeline</title>
+    <link>http://cb-majorbiolab.work/posts/ont-workflow/</link>
+    <pubDate>Sun, 12 Dec 2021 17:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/ont-workflow/</guid>
+    <description><![CDATA[Introduction nfcore/ontworkflow is a bioinformatics analysis pipeline for Nanopore DNA/RNA sequencing data that can be used to perform basecalling, demultiplexing, QC, mapping and downstream analysis.
+The pipeline is built using Nextflow, a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The Nextflow DSL2 implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies.]]></description>
+</item><item>
+    <title>circRNA quantification, differential expression analysis and miRNA target prediction of RNA-Seq data</title>
+    <link>http://cb-majorbiolab.work/posts/circrna-pipeline/</link>
+    <pubDate>Mon, 06 Dec 2021 17:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/circrna-pipeline/</guid>
+    <description><![CDATA[nf-core/circrnaworkflow: Usage It is recommended that first time users run nf-core/circrnaworkflow with the minimal test dataset either locally or on a HPC, referring to the output documentation before running a full analysis.
+1  nextflow run nf-core/circrnaworkflow -profile test   Run the test dataset on a HPC:
+1  nextflow run nf-core/circrnaworkflow -profile test,&lt;docker/singularity/podman/institute&gt;   Running the pipeline A typical command for running the pipeline is as follows:]]></description>
+</item><item>
+    <title>Integrative analyses of single-cell transcriptome and regulome using sc/n-workflow</title>
+    <link>http://cb-majorbiolab.work/posts/scrnaseq-pipeline/</link>
+    <pubDate>Thu, 17 Dec 2020 17:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/scrnaseq-pipeline/</guid>
+    <description><![CDATA[SingleCelldataVZ nRNA-seq Schematicsc/nRNA-seq Schematic
+" nRNA-seq Schematic 
+Summarizing single-cell RNA-sequencing data with unified molecular identifiers by scumi scumi  As for &ndash;cell_barcode_whitelist, typically you don&rsquo;t need to set this parameter as you don&rsquo;t know which cell barcodes are from cells. Note, this parameter is different from the candidate cell barcodes for protocols such as 10x or inDrops, which are know and should be used as inputs. Let me know if it&rsquo;s confusion.]]></description>
+</item></channel>
+</rss>

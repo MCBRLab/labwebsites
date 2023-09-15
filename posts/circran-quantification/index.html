@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>circRNA定量软件分析比较 - MAJOR Computational Biology Research Lab</title><meta name="Description" content="circRNA定量软件分析比较"><meta property="og:title" content="circRNA定量软件分析比较" />
+<meta property="og:description" content="circRNA定量软件分析比较" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://cb-majorbiolab.work/posts/circran-quantification/" />
+<meta property="article:published_time" content="2021-11-24T16:29:59+08:00" />
+<meta property="article:modified_time" content="2021-11-24T16:29:59+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="circRNA定量软件分析比较"/>
+<meta name="twitter:description" content="circRNA定量软件分析比较"/>
+<meta name="application-name" content="MAJOR Computational Biology Research Lab">
+<meta name="apple-mobile-web-app-title" content="MAJOR Computational Biology Research Lab"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/MBIL.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://cb-majorbiolab.work/posts/circran-quantification/" /><link rel="prev" href="http://cb-majorbiolab.work/posts/network-analysis-with-r/" /><link rel="next" href="http://cb-majorbiolab.work/posts/dimensionality-reduction-for-dataviz/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "circRNA定量软件分析比较",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/cb-majorbiolab.work\/posts\/circran-quantification\/"
+        },"genre": "posts","keywords": "RNAseq, circRNA, 定量","wordcount":  7709 ,
+        "url": "http:\/\/cb-majorbiolab.work\/posts\/circran-quantification\/","datePublished": "2021-11-24T16:29:59+08:00","dateModified": "2021-11-24T16:29:59+08:00","publisher": {
+            "@type": "Organization",
+            "name": "美吉生物信息团队"},"author": {
+                "@type": "Person",
+                "name": "Jiawen Ma"
+            },"description": "circRNA定量软件分析比较"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="MAJOR Computational Biology Research Lab"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/MBIL.svg"
+        data-srcset="/images/MBIL.svg, /images/MBIL.svg 1.5x, /images/MBIL.svg 2x"
+        data-sizes="auto"
+        alt="/images/MBIL.svg"
+        title="/images/MBIL.svg" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="Home"> Home </a><a class="menu-item" href="/workshop/" title=" "> Workshop/Talk </a><a class="menu-item" href="/publication/" title="Publications"> Publications </a><a class="menu-item" href="/team/" title="Team"> Team </a><a class="menu-item" href="/resource/" title="Resource"> Resource </a><a class="menu-item" href="/software/" title="Software"> Software </a><a class="menu-item" href="/ne/" title="News/Events"> News/Events </a><a class="menu-item" href="/joinus/" title="Join/Contact"> Join/Contact </a><a class="menu-item" href="https://github.com/MajorBio" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="MAJOR Computational Biology Research Lab"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/MBIL.svg"
+        data-srcset="/images/MBIL.svg, /images/MBIL.svg 1.5x, /images/MBIL.svg 2x"
+        data-sizes="auto"
+        alt="/images/MBIL.svg"
+        title="/images/MBIL.svg" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="Home">Home</a><a class="menu-item" href="/workshop/" title=" ">Workshop/Talk</a><a class="menu-item" href="/publication/" title="Publications">Publications</a><a class="menu-item" href="/team/" title="Team">Team</a><a class="menu-item" href="/resource/" title="Resource">Resource</a><a class="menu-item" href="/software/" title="Software">Software</a><a class="menu-item" href="/ne/" title="News/Events">News/Events</a><a class="menu-item" href="/joinus/" title="Join/Contact">Join/Contact</a><a class="menu-item" href="https://github.com/MajorBio" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">circRNA定量软件分析比较</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/bystander456" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Jiawen Ma</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/rnaseq/"><i class="far fa-folder fa-fw"></i>RNAseq</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-11-24">2021-11-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 7709 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 16 分钟&nbsp;<span id="/posts/circran-quantification/" class="leancloud_visitors" data-flag-title="circRNA定量软件分析比较">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-ciri鉴定circrna的原理">1. CIRI鉴定circRNA的原理</a></li>
+    <li><a href="#2-ciri使用方法">2. CIRI使用方法</a>
+      <ul>
+        <li><a href="#21-bwa比对参考基因组">2.1. bwa比对参考基因组</a>
+          <ul>
+            <li>
+              <ul>
+                <li><a href="#代码如下">代码如下：</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#22-运行ciri">2.2. 运行CIRI</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#1-ciriquant-鉴定circrna的原理">1. CIRIquant 鉴定circRNA的原理</a></li>
+    <li><a href="#2-ciriquan使用方法">2. ciriquan使用方法</a>
+      <ul>
+        <li><a href="#21-circrna的定量">2.1 circRNA的定量</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#22-rnase-r效应矫正">2.2 RNase R效应矫正</a></li>
+        <li><a href="#23-差异表达分析">2.3 差异表达分析</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#1-circexplorer原理">1. CIRCexplorer原理</a></li>
+    <li><a href="#2-circexplorer使用方法">2. CIRCexplorer使用方法</a>
+      <ul>
+        <li><a href="#安装">安装</a></li>
+        <li><a href="#21-align">2.1 Align</a></li>
+        <li><a href="#22-parse">2.2 parse</a></li>
+        <li><a href="#23-annotation">2.3 annotation</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#1-find_circ鉴定circrna的原理">1. find_circ鉴定circRNA的原理</a></li>
+    <li><a href="#2-find_circ的安装">2. find_circ的安装</a></li>
+    <li><a href="#3-参考基因组的下载">3. 参考基因组的下载</a></li>
+    <li><a href="#4-bowtie2建立参考基因组索引">4. bowtie2建立参考基因组索引</a></li>
+    <li><a href="#5-基于rna-seq的基因组比对pair-end模式">5. 基于RNA-Seq的基因组比对（pair-end模式）</a></li>
+    <li><a href="#6-挑出没有比对上的序列各取两头20bp短序列anchor">6. 挑出没有比对上的序列，各取两头20bp短序列（anchor)</a></li>
+    <li><a href="#7-根据anchor比对基因组情况寻找潜在的circrna">7. 根据anchor比对基因组情况寻找潜在的circRNA</a></li>
+    <li><a href="#8-分析多个样本">8. 分析多个样本</a></li>
+    <li><a href="#9-输出的spliced_sites_bed文件格式">9. 输出的spliced_sites_bed文件格式</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#1-star构建index">1. STAR构建index</a></li>
+    <li><a href="#2-star比对">2. STAR比对</a></li>
+    <li><a href="#3--运行circrna_finder">3.  运行circRNA_finder</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="一ciri--ciri2">一、CIRI &amp; CIRI2</h1>
+<h2 id="1-ciri鉴定circrna的原理">1. CIRI鉴定circRNA的原理</h2>
+<p>在最初的环状RNA研究中，认为环状RNA都是由exon通过反向剪切构成的,称之为exonic circRNA，只有这样的环状RNA能够由PCR反应验证出来的。</p>
+<p>CIRI是一款环状RNA检测软件，通过该软件的预测结果，学者第一次用实验验证出了intronic circRNA和intergenic circRNA。该软件操作简便，准确度高，是非常流行的一款环状RNA检测软件。</p>
+<p>CIRI 相对于依赖基因注释的算法具有以下不可或缺的优势：能够从内含子或基因组间区鉴定到circRNA；对于基因注释不好甚至没有注释的真核生物也能对测序数据进行鉴定。</p>
+<p>CIRI2是在CIRI基础上，改进了 maximum likelihood estimation（MLE）模型：判断潜在BSJ read中是否多个可能区域，有效控制由错误mapping或者基因组中重复序列所导致的假阳性；CIRI2在测试数据中F1得分平均值最高，且较其他识别程序消耗更少的内存及运算时间；CIRI2需求经RNase R处理的样本数据。</p>
+<p>该软件至少需要两个输入文件，基因组的fasta序列和测序数据比对产生的sam文件，需要注意的是，输入的sam文件必须是由<strong>bwa-mem</strong>算法比对产生的 。分析的pipeline示意如下</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211021141728032.png"
+        data-srcset="/posts/circran-quantification/image-20211021141728032.png, image-20211021141728032.png 1.5x, /posts/circran-quantification/image-20211021141728032.png 2x"
+        data-sizes="auto"
+        alt="/posts/circran-quantification/image-20211021141728032.png"
+        title="image-20211021141728032" /></p>
+<p>对于输入的sam文件，需要经过两次扫描，在第一次扫描时，根据双端数据的比对情况筛选候选的环状RNA，这一步通过判断SAM文件中CIGAR那一列的值来实现，本质上是检测覆盖环状RNA连接点处的junction reads,根据测序读长和连接点处包含的基因组区域的特征，分成以下3种模型</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://upload-images.jianshu.io/upload_images/18418860-311bd84c8582106a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000"
+        data-srcset="https://upload-images.jianshu.io/upload_images/18418860-311bd84c8582106a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000, https://upload-images.jianshu.io/upload_images/18418860-311bd84c8582106a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000 1.5x, https://upload-images.jianshu.io/upload_images/18418860-311bd84c8582106a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000 2x"
+        data-sizes="auto"
+        alt="https://upload-images.jianshu.io/upload_images/18418860-311bd84c8582106a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000"
+        title="image.png" /></p>
+<p>图A：表示junction read只覆盖了起始外显子和终止外显子的部分序列，这两部分reads在基因组上的比对位置是相反的，绝大部分的环状RNA都符合这种模型。</p>
+<p>图B：表示junction read除了覆盖了起始外显子和终止外显子的两部分序列外，还覆盖了中间的一个外显子的部分序列，这种情况下reads可以分成3个部分比对到基因组上。</p>
+<p>图C：表示junction read除了覆盖了整个环状RNA外，还重复又读了一部分序列，这个只有当环状RNA的序列长度小于测序读长时才可能出现。</p>
+<p>该软件将以上3种模型定义为paired chiastic clipping signals，简称PCC信号，如果一条reads比对情况符合以上任意一种，就认为该reads是一条环状RNA的junction reads。</p>
+<p>为了提高准确性，识别到junciton reads之后，还会结合双端序列比对的质量paired end mapping即PEM和GT-AG保守的剪切位点进行过滤，示意图如下</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://upload-images.jianshu.io/upload_images/18418860-c57d3491671cf955.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"
+        data-srcset="https://upload-images.jianshu.io/upload_images/18418860-c57d3491671cf955.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240, https://upload-images.jianshu.io/upload_images/18418860-c57d3491671cf955.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240 1.5x, https://upload-images.jianshu.io/upload_images/18418860-c57d3491671cf955.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240 2x"
+        data-sizes="auto"
+        alt="https://upload-images.jianshu.io/upload_images/18418860-c57d3491671cf955.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"
+        title="image.png" /></p>
+<p>只保留比对质量较高，且头尾符合AG-GT剪切信号的junciton reads进入下游分析，在第二次扫描SAM文件的过程中，通过动态规划算法给出最终的环状RNA预测结果，如果提供了GTF文件，还会对环状RNA进行注释。</p>
+<h2 id="2-ciri使用方法">2. CIRI使用方法</h2>
+<h3 id="21-bwa比对参考基因组">2.1. bwa比对参考基因组</h3>
+<p>首先需要使用<strong>bwa mem</strong> 将reads 与基因组比对</p>
+<h5 id="代码如下">代码如下：</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">bwa mem \
+-T 19 \
+-t 5 hg19_index \
+R1.fastq.gz R2.fastq.gz \
+&gt; align.sam
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="22-运行ciri">2.2. 运行CIRI</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">CIRI2.pl  \
+-T 20 \
+-F hg19.fa \
+-A hg19.gtf \
+-I align.sam \
+-O circRNA.xls
+</code></pre></td></tr></table>
+</div>
+</div><p>输出结果如下所示
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://upload-images.jianshu.io/upload_images/18418860-62771ed00b511ce4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"
+        data-srcset="https://upload-images.jianshu.io/upload_images/18418860-62771ed00b511ce4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240, https://upload-images.jianshu.io/upload_images/18418860-62771ed00b511ce4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240 1.5x, https://upload-images.jianshu.io/upload_images/18418860-62771ed00b511ce4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240 2x"
+        data-sizes="auto"
+        alt="https://upload-images.jianshu.io/upload_images/18418860-62771ed00b511ce4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"
+        title="image.png" /></p>
+<p>在后续验证时，可以挑选表达量较高的来验证，在软件对应的文章中，挑选了junction reads数大于5的环状RNA来进行验证。</p>
+<p>参考资料：</p>
+<p><a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-014-0571-3" target="_blank" rel="noopener noreffer">CIRI: an efficient and unbiased algorithm for de novo circular RNA identification</a></p>
+<p><a href="https://ciri-cookbook.readthedocs.io/en/latest/CIRI2.html" target="_blank" rel="noopener noreffer">CIRI-cookbook</a></p>
+<h1 id="二ciriquant">二、CIRIquant</h1>
+<blockquote>
+<p>CIRIquant 与其他同类算法相比，其在鉴定circRNA的过程中降低了假阳性率。在circRNA的定量和差异表达分析方面，CIRIquant也考虑到RNase R处理不均等因素对最终结果的影响，通过qPCR验证其结果相较于其他方法拥有更高的准确度。同时，CIRIquant还提供对circRNA与线性转录本比例的分析，为circRNA生物发生和调控的相关研究提供基础。</p>
+</blockquote>
+<h2 id="1-ciriquant-鉴定circrna的原理">1. CIRIquant 鉴定circRNA的原理</h2>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211021143624030.png"
+        data-srcset="/posts/circran-quantification/image-20211021143624030.png, image-20211021143624030.png 1.5x, /posts/circran-quantification/image-20211021143624030.png 2x"
+        data-sizes="auto"
+        alt="/posts/circran-quantification/image-20211021143624030.png"
+        title="image-20211021143624030" />首先将1.</p>
+<ol>
+<li>
+<p>reads使用hisat2与参考基因组进行比对，使用CIRI2或者其他软件对circRNA进行鉴定获得潜在的circRNA；</p>
+</li>
+<li>
+<p>为了对circRNA的表达水平进行精准的定量并筛选BSJs的假阳性，我们将BSJ区域的两个全长序列连接构建一个伪circRNA参考序列；</p>
+</li>
+<li>
+<p>然后将潜在的circRNA重新比对到伪序列上，确定BSJ reads 是否可以与BSJ区域完全线性对齐。</p>
+</li>
+<li>
+<p>结合与基因组和伪circRNA序列比对结果，可以通过计算BSJ上的环装剪切junction reads 的比列来确定每个circRNA的junction 率；然后使用RNA-seq分析流程获得转录本水平表达量信息。</p>
+</li>
+</ol>
+<h2 id="2-ciriquan使用方法">2. ciriquan使用方法</h2>
+<h3 id="21-circrna的定量">2.1 circRNA的定量</h3>
+<p>参数使用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">Usage:
+  CIRIquant [options] --config &lt;config&gt; -1 &lt;m1&gt; -2 &lt;m2&gt;
+
+  &lt;config&gt;            Config file
+  &lt;m1&gt;                Input mate1 reads (for paired-end data)
+  &lt;m2&gt;                Input mate2 reads (for paired-end data)
+
+Options (defaults in parentheses):
+
+  -v                  Run in verbose mode
+  -o, --out           Output directory (default: current directory)
+  -e, --log           Specific log file (default: sample_prefix.log)
+  -p, --prefix        Output sample prefix (default: input sample name)
+  -t, --threads       Number of CPU threads to use (defualt: 4)
+  -a, --anchor        Minimum anchor length for junction alignment (default: 5)
+  -l, --library-type  Library type, 0: unstranded, 1: read1 match the sense strand, 2: read1 match the antisense strand (default: 0)
+
+  --bed               User provided Back-Spliced Junction Site in BED format
+  --circ              circRNA prediction results from other tools
+  --tool              Tool name, required when --circ is specified ([CIRI2/CIRCexplorer2/DCC/KNIFE/MapSplice/UROBORUS/circRNA_finder/find_circ])
+
+  --RNaseR            CIRIquant output file of RNase R data (required for RNase R correction)
+  --bam               Specific hisat2 alignment bam file against reference genome
+  --no-gene           Skip StringTie estimation of gene abundance
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>注意:</strong></p>
+<ul>
+<li>目前，–circ 和–tool 选项支持来自<code>CIRI2</code>/ <code>CIRCexplorer2</code>/ <code>DCC</code>/<code> KNIFE</code>/ <code>MapSplice</code>/ <code>UROBORUS</code>/ <code>circRNA_finder</code>/ <code>find_cir</code> 的结果</li>
+<li>对于DCC和circRNA_finder等工具，需手动删除连接位置相同但链相反的重复环状rna。</li>
+<li>基因表达值需要进行归一化，如果之后需要运行DE分析，不要使用-<code>--no-gene</code>。</li>
+</ul>
+<p>CIRIquant需要输入一个配置文件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">// Example of config file
+name: hg19
+tools:
+  bwa: path/bwa
+  hisat2: path/hisat2
+  stringtie: path/stringtie
+  samtools: path/samtools
+
+reference:
+  fasta: path/hg19.fa
+  gtf: path/gencode.v19.annotation.gtf
+  bwa_index: path//hg19
+  hisat_index: path/hg19
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>参数设置</strong></p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>the name of config file</td>
+</tr>
+<tr>
+<td>bwa</td>
+<td>the path of bwa</td>
+</tr>
+<tr>
+<td>hisat2</td>
+<td>the path of hisat2</td>
+</tr>
+<tr>
+<td>stringtie</td>
+<td>the path of stringite</td>
+</tr>
+<tr>
+<td>samtools</td>
+<td>the path of samtools, samtools version below 1.3.1 is not supported</td>
+</tr>
+<tr>
+<td>fasta</td>
+<td>reference genome fasta, a fai index by samtools faidx is also needed under the same directory</td>
+</tr>
+<tr>
+<td>gtf</td>
+<td>annotation file of reference genome in GTF/GFF3 format</td>
+</tr>
+<tr>
+<td>bwa_index</td>
+<td>prefix of BWA index for reference genome</td>
+</tr>
+<tr>
+<td>hisat_index</td>
+<td>prefix of HISAT2 index for reference genome</td>
+</tr>
+</tbody>
+</table>
+<p>对于线下提供的circRNA定量表需要有junction位点的bed文件，第4列的格式必须为<code>“chrom:start|end”</code>。例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">chr1    10000   10099   chr1:10000|10099    .   +
+chr1    31000   31200   chr1:31000|31200    .   -
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>Usage</strong>
+推荐：使用CIRI2进行circRMA的预测</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">CIRIquant -t 4 \
+          -1 ./test_1.fq.gz \
+          -2 ./test_2.fq.gz \
+          --config ./chr1.yml \
+          -o ./test \
+          -p test
+</code></pre></td></tr></table>
+</div>
+</div><p>使用提供的bed文件时：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">CIRIquant -t 4 \
+          -1 ./test_1.fq.gz \
+          -2 ./test_2.fq.gz \
+          --config ./chr1.yml \
+          -o ./test \
+          -p test \
+          --bed your_circRNAs.bed
+</code></pre></td></tr></table>
+</div>
+</div><p>使用其它鉴定工具时：
+例如使用find_circ鉴定的circRNA结果</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">CIRIquant -t 4 \
+          -1 ./test_1.fq.gz \
+          -2 ./test_2.fq.gz \
+          --config ./chr1.yml \
+          -o ./test \
+          -p test \
+          --circ find_circ_results.txt \
+          --tool find_circ
+</code></pre></td></tr></table>
+</div>
+</div><h1 id="输出结果">输出结果</h1>
+<p>The main output of CIRIquant is a GTF file, that contains detailed information of BSJ and FSJ reads of circRNAs and annotation of circRNA back-spliced regions in the attribute columns
+CIRIquant 输出的是一个GTF文件，其中包括circRNA的BSJ和FSJ reads 的详细信息，以及属性列中对circRNA反向拼接区域的注释。</p>
+<p><strong>每一列的信息</strong></p>
+<table>
+<thead>
+<tr>
+<th>column</th>
+<th>name</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>chrom</td>
+<td>chromosome / contig name</td>
+</tr>
+<tr>
+<td>2</td>
+<td>source</td>
+<td>CIRIquant</td>
+</tr>
+<tr>
+<td>3</td>
+<td>type</td>
+<td>circRNA</td>
+</tr>
+<tr>
+<td>4</td>
+<td>start</td>
+<td>5' back-spliced junction site</td>
+</tr>
+<tr>
+<td>5</td>
+<td>end</td>
+<td>3' back-spliced junction site</td>
+</tr>
+<tr>
+<td>6</td>
+<td>score</td>
+<td>CPM of circRNAs (#BSJ / #Mapped reads)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>strand</td>
+<td>strand information</td>
+</tr>
+<tr>
+<td>8</td>
+<td>.</td>
+<td>.</td>
+</tr>
+<tr>
+<td>9</td>
+<td>attributes</td>
+<td>attributes seperated by semicolon</td>
+</tr>
+</tbody>
+</table>
+<p><strong>attributes包含的key与value：</strong></p>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>circ_id</td>
+<td>name of circRNA</td>
+</tr>
+<tr>
+<td>circ_type</td>
+<td>circRNA types: exon / intron / intergenic</td>
+</tr>
+<tr>
+<td>bsj</td>
+<td>number of bsj reads</td>
+</tr>
+<tr>
+<td>fsj</td>
+<td>number of fsj reads</td>
+</tr>
+<tr>
+<td>junc_ratio</td>
+<td>circular to linear ratio: 2 * bsj / ( 2 * bsj + fsj)</td>
+</tr>
+<tr>
+<td>rnaser_bsj</td>
+<td>number of bsj reads in RNase R data (only when &ndash;RNaseR is specificed)</td>
+</tr>
+<tr>
+<td>rnaser_fsj</td>
+<td>number of fsj reads in RNase R data (only when &ndash;RNaseR is specificed)</td>
+</tr>
+<tr>
+<td>gene_id</td>
+<td>ensemble id of host gene</td>
+</tr>
+<tr>
+<td>gene_name</td>
+<td>HGNC symbol of host gene</td>
+</tr>
+<tr>
+<td>gene_type</td>
+<td>type of host gene in gtf file</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22-rnase-r效应矫正">2.2 RNase R效应矫正</h3>
+<p>当拥有RNase R处理和未经处理的样本时，CIRIquant 可以评估RNase R数据中处理前的circrna的表达水平。
+为了去除RNase R处理效果，需要两个步骤:</p>
+<ul>
+<li>对RNase R处理过的样品运行CIRIquant。</li>
+<li>对未经处理的总RNA样本运行CIRIquant，<code>--RNaseR</code>使用之前Step1中的输出gtf文件。</li>
+</ul>
+<p>然后，CIRIquant将输出RNaseR数据中鉴定到的circrna的表达水平，标题行将包含额外的RNaseR处理效率信息。</p>
+<p><strong>Usage:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback"># Step1. Run CIRIquant with RNase R treated data
+CIRIquant --config ./hg19.yml \
+          -1 ./RNaseR_treated_1.fq.gz \
+          -2 ./RNaseR_treated_2.fq.gz \
+          --no-gene \
+          -o ./RNaseR_treated \
+          -p RNaseR_treated \
+          -t 6
+
+# Step2. Run CIRIquant with untreated total RNA
+CIRIquant --config ./hg19.yml \
+          -1 ./TotalRNA_1.fq.gz \
+          -2 ./TotalRNA_2.fq.gz \
+          -o ./TotalRNA \
+          -p TotalRNA \
+          -t 6 \
+          --RNaseR ./RNaseR_treated/RNaseR_treated.gtf
+</code></pre></td></tr></table>
+</div>
+</div><p>##2.3 差异表达分析
+####针对无生物学重复
+对于没有重复的样品，差异表达和差异剪接分析使用 CIRI_DE</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">Usage:
+  CIRI_DE [options] -n &lt;control&gt; -c &lt;case&gt; -o &lt;out&gt;
+
+  &lt;control&gt;         CIRIquant result of control sample
+  &lt;case&gt;            CIRIquant result of treatment cases
+  &lt;out&gt;             Output file
+
+Options (defaults in parentheses):
+
+  -p                p value threshold for DE and DS score calculation (default: 0.05)
+  -t                numer of threads (default: 4)
+
+Example usage:
+  CIRI_DE -n control.gtf -c case.gtf -o CIRI_DE.tsv
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>输出结果</strong></p>
+<table>
+<thead>
+<tr>
+<th>column</th>
+<th>name</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>circRNA_ID</td>
+<td>circRNA identifier</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Case_BSJ</td>
+<td>number of BSJ reads in case</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Case_FSJ</td>
+<td>number of FSJ reads in case</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Case_Ratio</td>
+<td>junction ratio in case</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Ctrl_BSJ</td>
+<td>number of BSJ reads in control</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Ctrl_FSJ</td>
+<td>number of FSJ reads in control</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Ctrl_Ratio</td>
+<td>junction ratio in control</td>
+</tr>
+<tr>
+<td>8</td>
+<td>DE_score</td>
+<td>differential expression score</td>
+</tr>
+<tr>
+<td>9</td>
+<td>DS_score</td>
+<td>differential splicing score</td>
+</tr>
+</tbody>
+</table>
+<h3 id="23-差异表达分析">2.3 差异表达分析</h3>
+<p>####有生物学重复</p>
+<p>对于生物学重复，推荐使用edgeR分析，使用<code>prep_CIRIquant </code>去生成circRNA表达水平/junction比率的矩阵，使用<code>CIRI_DE_replicate </code>用于DE分析。</p>
+<p><strong>Step1: 准备CIRIquant 的输出文件</strong>
+需要提供一个文本文件，包含样本信息和CIRIquant输出的GTF文件的路径信息</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">CONTROL1 ./c1/c1.gtf C 1
+CONTROL2 ./c2/c2.gtf C 2
+CONTROL3 ./c3/c3.gtf C 3
+CASE1 ./t1/t1.gtf T 1
+CASE2 ./t2/t2.gtf T 2
+CASE3 ./t3/t3.gtf T 3
+</code></pre></td></tr></table>
+</div>
+</div><p>默认情况下，前三列是必需的。对于paired 样本，还可以添加一个主题名称列。</p>
+<table>
+<thead>
+<tr>
+<th>column</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>sample name</td>
+</tr>
+<tr>
+<td>2</td>
+<td>path to CIRIquant output gtf</td>
+</tr>
+<tr>
+<td>3</td>
+<td>group (&ldquo;C&rdquo; for control, &ldquo;T&rdquo; for treatment)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>subject (optional, only for paired samples)</td>
+</tr>
+<tr>
+<td>**注意:**如果使用<code>CIRI_DE</code>进行差异表达分析，第3列group列必须是“C”或者“T”</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>然后，运行<code>prep_CIRIquant</code>汇总所以样本的circRNA的表达量</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">Usage:
+  prep_CIRIquant [options]
+
+  -i                the file of sample list
+  --lib             where to output library information
+  --circ            where to output circRNA annotation information
+  --bsj             where to output the circRNA expression matrix
+  --ratio           where to output the circRNA junction ratio matrix
+
+Example:
+  prep_CIRIquant -i sample.lst \
+                 --lib library_info.csv \
+                 --circ circRNA_info.csv \
+                 --bsj circRNA_bsj.csv \
+                 --ratio circRNA_ratio.csv
+</code></pre></td></tr></table>
+</div>
+</div><p>输出的结果可以使用DEseq2与edgeR进行分析。</p>
+<p><strong>Step2: 准备 StringTie 的输出</strong>
+StringTie的输出应该位于<code>output_dir/gene/prefix_out.gtf</code>下。 需要使用stringTie中的<a href="http://ccb.jhu.edu/software/stringtie/dl/prepDE.py" target="_blank" rel="noopener noreffer">prepDE.py</a>来生成用于标准化的基因计数矩阵。</p>
+<p>例如，可以提供一个<code>sample_gene.lst</code> 包含样本 ID 和 <code>StringTie </code>输出路径的文本文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">CONTROL1 ./c1/gene/c1_out.gtf
+CONTROL2 ./c2/gene/c2_out.gtf
+CONTROL3 ./c3/gene/c3_out.gtf
+CASE1 ./t1/gene/t1_out.gtf
+CASE2 ./t2/gene/t2_out.gtf
+CASE3 ./t3/gene/t3_out.gtf
+</code></pre></td></tr></table>
+</div>
+</div><p>然后使用生成的<code>gene_count_matrix.csv</code>去运行<code>prepDE.py -i sample_gene.lst</code>。</p>
+<p><strong>Step3: 差异表达分析</strong>
+使用<code>CIRI_DE_replicate</code>进行差异表达分析，需要安装edgeR包</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">Usage:
+  CIRI_DE_replicate [options]
+
+  --lib             library information by CIRIquant
+  --bsj             circRNA expression matrix
+  --gene            gene expression matrix
+  --out             output differential expression result
+
+Example:
+  CIRI_DE_replicate --lib  library_info.csv \
+            --bsj  circRNA_bsj.csv \
+            --gene gene_count_matrix.csv \
+            --out  circRNA_de.tsv
+</code></pre></td></tr></table>
+</div>
+</div><p>输出结果是未过滤的，可以设定阈值对结果进行过滤。</p>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://www.nature.com/articles/s41467-019-13840-9" target="_blank" rel="noopener noreffer">Accurate quantification of circular RNAs identifies extensive circular isoform switching events</a></li>
+<li><a href="https://ciri-cookbook.readthedocs.io/en/latest/CIRIquant_4_de.html" target="_blank" rel="noopener noreffer">CIRI-cookbook</a></li>
+</ul>
+<h1 id="三circexplorer2">三、CIRCexplorer2</h1>
+<p>环状RNA的识别包含了序列比对和环状RNA预测两步，该软件目前更新到了v2版本，相比v1版本，用法有较大变化。在v1版本中只支持tophat-fusion和STAR两款软件进行序列比对来识别junction reads,在v2版本中，扩展到了以下5种软件</p>
+<ul>
+<li>TopHat2/TopHat-Fusion</li>
+<li>STAR</li>
+<li>BWA</li>
+<li>MapSplice</li>
+<li>segemehl</li>
+</ul>
+<h2 id="1-circexplorer原理">1. CIRCexplorer原理</h2>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211022100955967.png"
+        data-srcset="/posts/circran-quantification/image-20211022100955967.png, image-20211022100955967.png 1.5x, /posts/circran-quantification/image-20211022100955967.png 2x"
+        data-sizes="auto"
+        alt="/posts/circran-quantification/image-20211022100955967.png"
+        title="image-20211022100955967" /></p>
+<ul>
+<li>
+<p>Align用于将序列比对到参考基因组上;</p>
+</li>
+<li>
+<p>Parse用于从比对结果中挑选junction reads;</p>
+</li>
+<li>
+<p>Annotate用于预测环状RNA;</p>
+</li>
+<li>
+<p>Assemble用于组装环状RNA的转录本序列；</p>
+</li>
+<li>
+<p>Denovo根据序列组装结果，识别新的环状RNA和分析环状RNA上的可变剪切事件</p>
+</li>
+</ul>
+<h2 id="2-circexplorer使用方法">2. CIRCexplorer使用方法</h2>
+<h3 id="安装">安装</h3>
+<ul>
+<li>pip install circexplorer2</li>
+<li>conda install circexplorer2 &ndash;channel bioconda</li>
+</ul>
+<h3 id="21-align">2.1 Align</h3>
+<p>虽然支持多款序列比对软件，但是由于tophat的结果更方便后续的cufflinks软件进行分析，官方推荐使用tophat来进行比对。针对单端序列的比对，代码如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-css" data-lang="css"><span class="nt">CIRCexplorer2</span> <span class="nt">align</span> <span class="err">\</span>
+<span class="nt">-G</span> <span class="nt">hg19</span><span class="p">.</span><span class="nc">gtf</span> <span class="err">\</span>
+<span class="nt">-i</span> <span class="nt">bowtie1_index</span> <span class="err">\</span>
+<span class="nt">-j</span> <span class="nt">bowtie2_index</span> <span class="err">\</span>
+<span class="nt">-f</span> <span class="nt">RNA_seq</span><span class="p">.</span><span class="nc">fastq</span> <span class="err">\</span>
+<span class="o">&gt;</span> <span class="nt">CIRCexplorer2_align</span><span class="p">.</span><span class="nc">log</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>值得注意的是，align模块仅提供了针对单端序列使用tophat进行比对的功能，如果你是双端测序的结果或者想要使用其他软件，只能是自己手工进行比对，这里比较推荐STAR软件，速度较快，缺点就是内存消耗较大。</p>
+<h3 id="22-parse">2.2 parse</h3>
+<p>parse用于解析序列比对的结果，支持多款软件，以常用的STAR为例，代码如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-css" data-lang="css"><span class="nt">CIRCexplorer2</span> <span class="nt">parse</span> <span class="err">\</span>
+<span class="nt">-t</span> <span class="nt">STAR</span> <span class="err">\</span>
+<span class="nt">Chimeric</span><span class="p">.</span><span class="nc">out</span><span class="p">.</span><span class="nc">junction</span> <span class="err">\</span>
+<span class="o">&gt;</span> <span class="nt">CIRCexplorer2_parse</span><span class="p">.</span><span class="nc">log</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>对于其他软件的用法，具体请参考官方文档，无论是什么比对软件，该命令最终都会生成以下文件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-css" data-lang="css"><span class="nt">back_spliced_junction</span><span class="p">.</span><span class="nc">bed</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="23-annotation">2.3 annotation</h3>
+<p>这一步就是根据已知的线性转录本信息，识别环状RNA，所以需要提供参考基因组对应的注释文件，官方也提供了脚本来帮助我们下载，用法如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-css" data-lang="css"><span class="nt">fetch_ucsc</span><span class="p">.</span><span class="nc">py</span> <span class="nt">hg19</span> <span class="nt">ref</span> <span class="nt">hg19_ref</span><span class="p">.</span><span class="nc">txt</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>预测环状RNA的代码如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-css" data-lang="css"><span class="nt">CIRCexplorer2</span> <span class="nt">annotate</span> <span class="err">\</span>
+<span class="nt">-r</span> <span class="nt">hg19_ref</span><span class="p">.</span><span class="nc">txt</span> <span class="err">\</span>
+<span class="nt">-g</span> <span class="nt">hg19</span><span class="p">.</span><span class="nc">fa</span> <span class="err">\</span>
+<span class="nt">-b</span> <span class="nt">back_spliced_junction</span><span class="p">.</span><span class="nc">bed</span> <span class="err">\</span>
+<span class="nt">-o</span> <span class="nt">circularRNA_known</span><span class="p">.</span><span class="nc">txt</span> <span class="err">\</span>
+<span class="o">&gt;</span> <span class="nt">CIRCexplorer2_annotate</span><span class="p">.</span><span class="nc">log</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>-o</code>参数为输出结果，内容示意如下</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211022101623909.png"
+        data-srcset="/posts/circran-quantification/image-20211022101623909.png, image-20211022101623909.png 1.5x, /posts/circran-quantification/image-20211022101623909.png 2x"
+        data-sizes="auto"
+        alt="/posts/circran-quantification/image-20211022101623909.png"
+        title="image-20211022101623909" /></p>
+<p>每列的含义如下所示</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211022101643481.png"
+        data-srcset="/posts/circran-quantification/image-20211022101643481.png, image-20211022101643481.png 1.5x, /posts/circran-quantification/image-20211022101643481.png 2x"
+        data-sizes="auto"
+        alt="/posts/circran-quantification/image-20211022101643481.png"
+        title="image-20211022101643481" /></p>
+<p>如果你只是想要使用这个软件来预测环状RNA,那么多款序列比对软件都可以选择，但是你想要使用完整功能，则必须使用tophat来进行比对。</p>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://links.jianshu.com/go?to=https%3A%2F%2Flink.springer.com%2Fprotocol%2F10.1007%2F978-1-4939-8808-2_10" target="_blank" rel="noopener noreffer">Genome-Wide Annotation of circRNAs and Their Alternative Back-Splicing/Splicing with CIRCexplorer Pipeline</a></li>
+<li><a href="https://links.jianshu.com/go?to=https%3A%2F%2Fcircexplorer2.readthedocs.io%2Fen%2Flatest%2F" target="_blank" rel="noopener noreffer">CIRCexplorer2使用手册</a></li>
+</ul>
+<h1 id="四find_circ">四、find_circ</h1>
+<h2 id="1-find_circ鉴定circrna的原理">1. find_circ鉴定circRNA的原理</h2>
+<blockquote>
+<p>find_circ 的基本原理: find_circ根据Bowtie2比对结果，从没有比对到参考序列的 reads 的两端各提取 20nt 的 anchor 序列，将每一对 anchor 序列再次与参考序列比对。如果 anchor 序列的 5' 端比对到参考序列（起始与终止位点分别记为 A3，A4），anchor 序列的 3' 端比对到此位点的上游（起始与终止位点分别记为 A1，A2），并且在参考序列的 A2 到 A3 之间存在剪接位点（GT-AG），则将此 read 作为候选 circRNA。最后将 read count 大于等于 2 的候选 circRNA 作为鉴定的 circRNA。</p>
+</blockquote>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211011100808363.png"
+        data-srcset="/posts/circran-quantification/image-20211011100808363.png, image-20211011100808363.png 1.5x, /posts/circran-quantification/image-20211011100808363.png 2x"
+        data-sizes="auto"
+        alt="/posts/circran-quantification/image-20211011100808363.png"
+        title="image-20211011100808363" /></p>
+<h2 id="2-find_circ的安装">2. find_circ的安装</h2>
+<blockquote>
+<p>find_circ需要运行在装有python 2.7的64位系统上，同时需要安装numpy和pysam这两个python模块。其运行需要借助bowtie2和samtools来完成基因组mapping的过程。</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="m">1</span> wget https://github.com/marvin-jens/find_circ/archive/v1.2.tar.gz
+<span class="m">2</span> tar -xzvf v1.2.tar.gz
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="3-参考基因组的下载">3. 参考基因组的下载</h2>
+<blockquote>
+<p>通过fetch_ucsc.py下载ucsc最新版本的参考基因组</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">1 fetch_ucsc.py hg19/hg38/mm9/mm10 ref/kg/ens/fa out
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="4-bowtie2建立参考基因组索引">4. bowtie2建立参考基因组索引</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">1 bowtie2_build hg38.fa hg38
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="5-基于rna-seq的基因组比对pair-end模式">5. 基于RNA-Seq的基因组比对（pair-end模式）</h2>
+<p><strong>bowtie2参数介绍</strong>
+-p 使用多线程
+&ndash;very-sensitive 允许多重比对，报告出最好的一个
+&ndash;score-min=C,-15,0 设置比对分数函数
+&ndash;mm 设置I/O模式。</p>
+<p><strong>samtools view参数介绍</strong>
+-h 文件包含header line
+-b 输出bam格式
+-u 输出非压缩的bam格式
+–S 忽略版本兼容</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">1 bowtie2 -p 16 --very-sensitive --score-min=C,-15,0 --mm -x /path/to/bowtie2_index -q -1 reads1.fq -2 reads2.fq | samtools view -hbuS - | samtools sort - -o output.bam
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="6-挑出没有比对上的序列各取两头20bp短序列anchor">6. 挑出没有比对上的序列，各取两头20bp短序列（anchor)</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">1 samtools view -hf 4 output.bam | samtools view -Sb - &gt; unmapped.bam
+2 /path/to/unmapped2anchors.py unmapped.bam | gzip &gt; anchors.fq.gz
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="7-根据anchor比对基因组情况寻找潜在的circrna">7. 根据anchor比对基因组情况寻找潜在的circRNA</h2>
+<p><strong>find_circ.py参数介绍</strong>
+&ndash;prefix参数指定的是spliced_sites.bed文件中第四列内容的前缀，建议指定为物种对应的三字母缩写，需要注意的是，在spliced_sites_bed中同时包含了环状RNA和线性RNA,环状RNA的名称用circ标识，线性RNA的名称用norm标识，这里设置为&ndash;prefix=hsa_
+&ndash;name参数会在生成的spliced_sites.bed文件中指定tissues列的名字
+&ndash;reads参数会生成包含spliced reads的fa文件
+&ndash;stats参数会生成包含数值统计信息的txt文件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">1 bowtie2 -p 16 --reorder --mm  --score-min=C,-15,0 -q -x /path/to/bowtie2_index -U anchors.fq.gz | /path/to/find_circ.py --genome=/path/to/hg38.fa --prefix=hsa_ --name=my_test_sample --stats=&lt;run folder&gt;/stats.txt --reads=&lt;run folder&gt;/splice_reads.fa &gt; &lt;run folder&gt;/spliced_sites.bed
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>根据以下规则对结果进行筛选</strong>
+1.根据关键词CIRCULAR筛选环状RNA
+2.去除线粒体上的环状RNA
+3.筛选unique junction reads数至少为2的环状RNA
+4.去除断裂点不明确的环状RNA
+5.过滤掉长度大于100kb的circRNA,这里的100kb为基因组长度，直接用环状RNA的头尾相减即可</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">1 grep CIRCULAR spliced_sites.bed | grep -v chrM | gawk &#39;$5&gt;=2&#39; | grep UNAMBIGUOUS_BP | grep ANCHOR_UNIQUE | /path/to/maxlength.py 100000 &gt; find_circ.candidates.bed
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="8-分析多个样本">8. 分析多个样本</h2>
+<blockquote>
+<p>如果有多个样本，需要分别用find_circ.py运行，然后将各自的结果合并</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">1 /path/to/merge_bed.py sample1.bed sample2.bed [...] &gt;combined.bed
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="9-输出的spliced_sites_bed文件格式">9. 输出的spliced_sites_bed文件格式</h2>
+<blockquote>
+<p>输出的spliced_sites.bed文件前六列为标准的BED文件格式，剩余的12列关于junction的一些信息</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>column</th>
+<th>name</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>chrom</td>
+<td>chromosome/contig name</td>
+</tr>
+<tr>
+<td>2</td>
+<td>start</td>
+<td>left splice site (zero-based)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>end</td>
+<td>right splice site (zero-based).(Always: end &gt; start. 5' 3' depends on strand)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>name</td>
+<td>(provisional) running number/name assigned to junction</td>
+</tr>
+<tr>
+<td>5</td>
+<td>n_reads</td>
+<td>number of reads supporting the junction (BED &lsquo;score&rsquo;)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>strand</td>
+<td>genomic strand (+ or -)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>n_uniq</td>
+<td>number of distinct read sequences supporting the junction</td>
+</tr>
+<tr>
+<td>8</td>
+<td>uniq_bridges</td>
+<td>number of reads with both anchors aligning uniquely</td>
+</tr>
+<tr>
+<td>9</td>
+<td>best_qual_left</td>
+<td>alignment score margin of the best anchor alignment supporting the left splice junction (max=2 * anchor_length)</td>
+</tr>
+<tr>
+<td>10</td>
+<td>best_qual_right</td>
+<td>same for the right splice site</td>
+</tr>
+<tr>
+<td>11</td>
+<td>tissues</td>
+<td>comma-separated, alphabetically sorted list of supporting the left splice junction (max=2 * anchor_length)</td>
+</tr>
+<tr>
+<td>12</td>
+<td>tiss_counts</td>
+<td>comma-separated list of corresponding read-counts</td>
+</tr>
+<tr>
+<td>13</td>
+<td>edits</td>
+<td>number of mismatches in the anchor extension process</td>
+</tr>
+<tr>
+<td>14</td>
+<td>anchor_overlap</td>
+<td>number of nucleotides the breakpoint resides within one anchor</td>
+</tr>
+<tr>
+<td>15</td>
+<td>breakpoints</td>
+<td>number of alternative ways to break the read with flanking GT/AG</td>
+</tr>
+<tr>
+<td>16</td>
+<td>signal</td>
+<td>flanking dinucleotide splice signal (normally GT/AG)</td>
+</tr>
+<tr>
+<td>17</td>
+<td>strandmatch</td>
+<td>&lsquo;MATCH&rsquo;, &lsquo;MISMATCH&rsquo; or &lsquo;NA&rsquo; for non-stranded analysis</td>
+</tr>
+<tr>
+<td>18</td>
+<td>category</td>
+<td>list of keywords describing the junction. Useful for quick grep filtering</td>
+</tr>
+</tbody>
+</table>
+<p>参考资料</p>
+<ul>
+<li><a href="https://www.nature.com/articles/nature11928" target="_blank" rel="noopener noreffer">Circular RNAs are a large class of animal RNAs with regulatory potency</a></li>
+</ul>
+<h1 id="五circrna_finder">五、circRNA_finder</h1>
+<p>circRNA_finder是一款环状RNA预测软件，在对果蝇的研究中采用该软件进行了环状RNA的预测，该软件的源代码托管在github上，网址如下</p>
+<blockquote>
+<p><a href="https://github.com/orzechoj/circRNA_finder">https://github.com/orzechoj/circRNA_finder</a></p>
+</blockquote>
+<p>软件的安装比较简便，直接下载解压就可以了，需要注意的是，该软件依赖以下几个软件</p>
+<ul>
+<li>perl</li>
+<li>awk</li>
+<li>STAR</li>
+<li>samtools</li>
+</ul>
+<p>其中samtools的版本必须是低于1.0的版本，因为两个版本samtools sort的用法有变化。软件的使用包含如下两个步骤</p>
+<p>虽然软件提供了一个名为runStar.pl的脚本(如下)，但是由于STAR的版本问题，使用起来并不方便。该脚本本质上是对STAR的封装，直接用STAR就好了，参数设置可以参考脚本中的设置。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">./runStar.pl --inFile1 [R1 fastq] --inFile2 [R2 fastq] --genomeDir [path to STAR genome] --maxMismatch [max mismatches realtive to read length, default 0.02] --outPrefix [output directory and prefix]
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="1-star构建index">1. STAR构建index</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback"> STAR     --runMode genomeGenerate  \
+	--runThreadN &lt;# cpus&gt; \
+	--genomeDir &lt;genome output directory&gt;  \
+	--genomeFastaFiles &lt;input Genome FASTA file&gt;
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<p>&ndash;runThreadN是指你要用几个cpu来运行；</p>
+</li>
+<li>
+<p>&ndash;genomeDir构建索引输出文件的目录；</p>
+</li>
+<li>
+<p>&ndash;genomeFastaFiles你的基因组fasta文件所在的目录</p>
+</li>
+</ul>
+<h2 id="2-star比对">2. STAR比对</h2>
+<p>首先要明确的是，STAR软件的参数实在是太多了，那么经常用的就那么几个。
+下面的代码里，其中<code>--twopassMode</code>参数凭个人爱好是否使用，这个参数是非常非常耗时的，加上这个参数以后的运行时间是正常的两倍。而且非常消耗内存（<a href="https://www.jianshu.com/p/4d9b3458af2e" target="_blank" rel="noopener noreffer">star的twopassMode问题</a>）。但是比对结果更为精准。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">STAR <span class="se">\
+</span><span class="se"></span>--runThreadN <span class="m">40</span> <span class="se">\ </span><span class="c1">#线程数</span>
+--runMode alignReads <span class="se">\#</span>比对模式
+--readFilesCommand zcat <span class="se">\#</span>说明你的fastq文件是压缩形式的，就是.gz结尾的，不加的话会报错
+--quantMode TranscriptomeSAM GeneCounts <span class="se">\ </span><span class="c1">#将reads比对至转录本序列</span>
+--twopassMode Basic <span class="se">\#</span>先按索引进行第一次比对，而后把第一次比对发现的新剪切位点信息加入到索引中进行第二次比对。这个参数可以保证更精准的比对情况，但是费时也费内存。
+--outSAMtype BAM Unsorted <span class="se">\ </span><span class="c1">#输出BAM文件，不进行排序。如果不加这一行，只输出SAM文件。</span>
+--outSAMunmapped None <span class="se">\
+</span><span class="se"></span>--genomeDir /gpfs/home/fangy04/downloads/STAR_index/GRCh38/ <span class="se">\ </span><span class="c1">#索引文件目录</span>
+--readFilesIn /gpfs/home/fangy04/downloads/SRR8112732_1.fastq.gz /gpfs/home/fangy04/downloads/SRR8112732_2.fastq.gz <span class="se">\ </span><span class="c1">#两个fastq文件目录</span>
+--outFileNamePrefix DRB_TT_seq_SRR8112732 <span class="c1">#输出文件前缀</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>因为后续运行ciriRNA_finder 除了正常比对结果还需要以下三个文件：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211022153157227.png"
+        data-srcset="/posts/circran-quantification/image-20211022153157227.png, image-20211022153157227.png 1.5x, /posts/circran-quantification/image-20211022153157227.png 2x"
+        data-sizes="auto"
+        alt="/posts/circran-quantification/image-20211022153157227.png"
+        title="image-20211022153157227" /></p>
+<p>所以在<code>STAR</code> 比对中最少需要增加两个参数：<code>--chimOutType Junctions SeparateSAMold </code> <code>--chimSegmentMin 10</code>;</p>
+<p><code>--chimSegmentMin</code>默认为<code>0</code>，如果为0着不会输出junction信息文件</p>
+</blockquote>
+<h2 id="3--运行circrna_finder">3.  运行circRNA_finder</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">perl \
+postProcessStarAlignment.pl \
+--starDir star_out_dir \
+--minLen 100
+--outDir output_dir
+</code></pre></td></tr></table>
+</div>
+</div><p>运行完成之后，会三个文件,对应的后缀如下所示</p>
+<ol>
+<li>_filteredJunctions.bed</li>
+<li>_s_filteredJunctions.bed</li>
+<li>_s_filteredJunctions_fw.bed</li>
+</ol>
+<p>第一个文件为所有环状RNA的结果文件；第二个文件为剪切位点符合GT-AG剪切信号的环状RNA；第三个文件和第二个文件的环状RNA相同，只不过新增了环状RNA连接点附近的线性RNA平均测序深度信息。通常情况下，我们选择第二个文件的结果作为最终的环状RNA预测结果，该文件内容示意如下 
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211025101030193.png"
+        data-srcset="/posts/circran-quantification/image-20211025101030193.png, image-20211025101030193.png 1.5x, /posts/circran-quantification/image-20211025101030193.png 2x"
+        data-sizes="auto"
+        alt="/posts/circran-quantification/image-20211025101030193.png"
+        title="image-20211025101030193" /></p>
+<p>每一行代表一个环状RNA,第一列代表染色体编号，第二列和第三列分别代表起始和终止位置，第四列代表name,这里用数字编号加上字母<code>s</code>表示，第五列代表环状RNA的junction reads数目,也就是表达量，第六列代表正负链信息。</p>
+<p><strong>参考资料：</strong></p>
+<ul>
+<li><a href="https://github.com/orzechoj/circRNA_finder" target="_blank" rel="noopener noreffer">circRNA_finder_github</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-11-24</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/posts/circran-quantification/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://cb-majorbiolab.work/posts/circran-quantification/" data-title="circRNA定量软件分析比较" data-via="https://twitter.com/czheluo" data-hashtags="RNAseq,circRNA,定量"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://cb-majorbiolab.work/posts/circran-quantification/" data-hashtag="RNAseq"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Linkedin" data-sharer="linkedin" data-url="http://cb-majorbiolab.work/posts/circran-quantification/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Hacker News" data-sharer="hackernews" data-url="http://cb-majorbiolab.work/posts/circran-quantification/" data-title="circRNA定量软件分析比较"><i class="fab fa-hacker-news fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://cb-majorbiolab.work/posts/circran-quantification/" data-title="circRNA定量软件分析比较"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://cb-majorbiolab.work/posts/circran-quantification/" data-title="circRNA定量软件分析比较" data-ralateuid="https://weibo.com/2161302013/profile"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/rnaseq/">RNAseq</a>,&nbsp;<a href="/tags/circrna/">circRNA</a>,&nbsp;<a href="/tags/%E5%AE%9A%E9%87%8F/">定量</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/network-analysis-with-r/" class="prev" rel="prev" title="Network Analysis with R"><i class="fas fa-angle-left fa-fw"></i>Network Analysis with R</a>
+            <a href="/posts/dimensionality-reduction-for-dataviz/" class="next" rel="next" title="比较不同降维分析方法在RNAseq数据的可视化结果">比较不同降维分析方法在RNAseq数据的可视化结果<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript><div id="fb-root" class="comment"></div>
+            <div
+                class="fb-comments"
+                data-href="http://cb-majorbiolab.work/posts/circran-quantification/"
+                data-width="100%"
+                data-numposts="10"
+            ></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://developers.facebook.com/docs/plugins/comments/"></a>Facebook</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">MAJOR Computational Biology Research Lab</div>
+                <div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020-2022, MENG LUO, All rights reserved.</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+                
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="https://connect.facebook.net/zh_CN/sdk.js#xfbml=1&amp;version=v5.0&amp;appId=&amp;autoLogAppEvents=1" defer></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"valine":{"appId":"Noyy9UKaXGwYBIUdvBTt7u76-gzGzoHsz","appKey":"15w6pTF8mFoxnm8muOFx5buM","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"VX4BXOJBC5","algoliaIndex":"majorbio.zh-cn","algoliaSearchKey":"53790f167edb548b217bfe91dd891ac0","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

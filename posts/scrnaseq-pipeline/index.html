@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Integrative analyses of single-cell transcriptome and regulome using sc/n-workflow - MAJOR Computational Biology Research Lab</title><meta name="Description" content="Integrative analyses of single-cell transcriptome and regulome using sc/n-workflow"><meta property="og:title" content="Integrative analyses of single-cell transcriptome and regulome using sc/n-workflow" />
+<meta property="og:description" content="Integrative analyses of single-cell transcriptome and regulome using sc/n-workflow" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://cb-majorbiolab.work/posts/scrnaseq-pipeline/" />
+<meta property="og:image" content="http://cb-majorbiolab.work/posts/scrnaseq-pipeline/scRNA.png"/>
+<meta property="article:published_time" content="2020-12-17T17:29:59+08:00" />
+<meta property="article:modified_time" content="2020-12-18T16:29:59+08:00" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://cb-majorbiolab.work/posts/scrnaseq-pipeline/scRNA.png"/>
+<meta name="twitter:title" content="Integrative analyses of single-cell transcriptome and regulome using sc/n-workflow"/>
+<meta name="twitter:description" content="Integrative analyses of single-cell transcriptome and regulome using sc/n-workflow"/>
+<meta name="application-name" content="MAJOR Computational Biology Research Lab">
+<meta name="apple-mobile-web-app-title" content="MAJOR Computational Biology Research Lab"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/MBIL.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://cb-majorbiolab.work/posts/scrnaseq-pipeline/" /><link rel="prev" href="http://cb-majorbiolab.work/posts/deseq2-differential-analysis-of-count-data/" /><link rel="next" href="http://cb-majorbiolab.work/posts/degseq-differential-analysis-of-count-data/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Integrative analyses of single-cell transcriptome and regulome using sc/n-workflow",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/cb-majorbiolab.work\/posts\/scrnaseq-pipeline\/"
+        },"image": [{
+                            "@type": "ImageObject",
+                            "url": "http:\/\/cb-majorbiolab.work\/posts\/scrnaseq-pipeline\/scRNA.png",
+                            "width":  1512 ,
+                            "height":  1417 
+                        }],"genre": "posts","keywords": "DEGs, UMI, workflow, scRNAseq","wordcount":  763 ,
+        "url": "http:\/\/cb-majorbiolab.work\/posts\/scrnaseq-pipeline\/","datePublished": "2020-12-17T17:29:59+08:00","dateModified": "2020-12-18T16:29:59+08:00","publisher": {
+            "@type": "Organization",
+            "name": "美吉生物信息团队"},"author": {
+                "@type": "Person",
+                "name": "Meng Luo"
+            },"description": "Integrative analyses of single-cell transcriptome and regulome using sc/n-workflow"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="MAJOR Computational Biology Research Lab"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/MBIL.svg"
+        data-srcset="/images/MBIL.svg, /images/MBIL.svg 1.5x, /images/MBIL.svg 2x"
+        data-sizes="auto"
+        alt="/images/MBIL.svg"
+        title="/images/MBIL.svg" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="Home"> Home </a><a class="menu-item" href="/workshop/" title=" "> Workshop/Talk </a><a class="menu-item" href="/publication/" title="Publications"> Publications </a><a class="menu-item" href="/team/" title="Team"> Team </a><a class="menu-item" href="/resource/" title="Resource"> Resource </a><a class="menu-item" href="/software/" title="Software"> Software </a><a class="menu-item" href="/ne/" title="News/Events"> News/Events </a><a class="menu-item" href="/joinus/" title="Join/Contact"> Join/Contact </a><a class="menu-item" href="https://github.com/MajorBio" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="MAJOR Computational Biology Research Lab"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/MBIL.svg"
+        data-srcset="/images/MBIL.svg, /images/MBIL.svg 1.5x, /images/MBIL.svg 2x"
+        data-sizes="auto"
+        alt="/images/MBIL.svg"
+        title="/images/MBIL.svg" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="Home">Home</a><a class="menu-item" href="/workshop/" title=" ">Workshop/Talk</a><a class="menu-item" href="/publication/" title="Publications">Publications</a><a class="menu-item" href="/team/" title="Team">Team</a><a class="menu-item" href="/resource/" title="Resource">Resource</a><a class="menu-item" href="/software/" title="Software">Software</a><a class="menu-item" href="/ne/" title="News/Events">News/Events</a><a class="menu-item" href="/joinus/" title="Join/Contact">Join/Contact</a><a class="menu-item" href="https://github.com/MajorBio" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Integrative analyses of single-cell transcriptome and regulome using sc/n-workflow</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/czheluo" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Meng Luo</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/scrnaseq/"><i class="far fa-folder fa-fw"></i>scRNAseq</a>&nbsp;<a href="/categories/pipeline/"><i class="far fa-folder fa-fw"></i>Pipeline</a>&nbsp;<a href="/categories/workflow/"><i class="far fa-folder fa-fw"></i>workflow</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-12-17">2020-12-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 763 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;<span id="/posts/scrnaseq-pipeline/" class="leancloud_visitors" data-flag-title="Integrative analyses of single-cell transcriptome and regulome using sc/n-workflow">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/posts/scrnaseq-pipeline/scRNA.png"
+        data-srcset="/posts/scrnaseq-pipeline/scRNA.png, /posts/scrnaseq-pipeline/scRNA.png 1.5x, /posts/scrnaseq-pipeline/scRNA.png 2x"
+        data-sizes="auto"
+        alt="/posts/scrnaseq-pipeline/scRNA.png"
+        title="Integrative analyses of single-cell transcriptome and regulome using sc/n-workflow" /></div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#singlecelldatavz">SingleCelldataVZ</a>
+      <ul>
+        <li><a href="#summarizing-single-cell-rna-sequencing-data-with-unified-molecular-identifiers-by-scumi">Summarizing single-cell RNA-sequencing data with unified molecular identifiers by scumi</a>
+          <ul>
+            <li><a href="#scumihttpsbitbucketorgjerry00scumi-devsrcmaster"><a href="https://bitbucket.org/jerry00/scumi-dev/src/master/">scumi</a></a></li>
+          </ul>
+        </li>
+        <li><a href="#differential-gene-expression-analysis-in-single-cell-rnaseq">Differential gene expression analysis in single-cell RNAseq</a>
+          <ul>
+            <li>
+              <ul>
+                <li><a href="#installation">Installation</a></li>
+              </ul>
+            </li>
+            <li><a href="#results-vz">Results VZ</a></li>
+            <li><a href="#references">References</a></li>
+            <li><a href="#phate-potential-of-heat-diffusion-for-affinity-based-transition-embedding-to-analyze-and-datavz">PHATE (Potential of Heat-diffusion for Affinity-based Transition Embedding) to analyze and DataVZ</a>
+              <ul>
+                <li><a href="#installation-1">Installation</a></li>
+              </ul>
+            </li>
+            <li><a href="#results-vz-1">Results VZ</a></li>
+            <li><a href="#learning-video">learning Video</a></li>
+            <li><a href="#references-1">References</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="singlecelldatavz">SingleCelldataVZ</h2>
+<p><figure><a class="lightgallery" href="sc_nRNA.png" title="sc/nRNA-seq Schematic" data-thumbnail="sc_nRNA.png" data-sub-html="<h2>nRNA-seq Schematic</h2><p>sc/nRNA-seq Schematic</p>">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="sc_nRNA.png"
+            data-srcset="sc_nRNA.png, sc_nRNA.png 1.5x, sc_nRNA.png 2x"
+            data-sizes="auto"
+            alt="sc_nRNA.png" />
+    </a><figcaption class="image-caption">nRNA-seq Schematic</figcaption>
+    </figure></p>
+<h3 id="summarizing-single-cell-rna-sequencing-data-with-unified-molecular-identifiers-by-scumi">Summarizing single-cell RNA-sequencing data with unified molecular identifiers by scumi</h3>
+<h4 id="scumihttpsbitbucketorgjerry00scumi-devsrcmaster"><a href="https://bitbucket.org/jerry00/scumi-dev/src/master/" target="_blank" rel="noopener noreffer">scumi</a></h4>
+<blockquote>
+<p>As for &ndash;cell_barcode_whitelist, typically you don&rsquo;t need to set this parameter as you don&rsquo;t know which cell barcodes are from cells. Note, this parameter is different from the candidate cell barcodes for protocols such as 10x or inDrops, which are know and should be used as inputs. Let me know if it&rsquo;s confusion.</p>
+</blockquote>
+<blockquote>
+<p>For the final results, you should use the depth_1_transcript, which is the UMI count matrix (PCR duplicates removed). The read_count matrix may or may not be useful for your down-stream analysis because this one is the read matrix (PCR duplicates included).</p>
+</blockquote>
+<blockquote>
+<p>As for poly-Ts, for standard sequencing people typically don&rsquo;t sequence the poly-Ts, so you have to remove the polyT filter, otherwise you will get incorrect results. I may add some other filters, such as base-quality filter so it helps filter low-quality reads for the cases without polyT sequenced.</p>
+</blockquote>
+<h3 id="differential-gene-expression-analysis-in-single-cell-rnaseq">Differential gene expression analysis in single-cell RNAseq</h3>
+<h5 id="installation">Installation</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#SigEMD </span>
+<span class="n">source</span> <span class="n">all</span> <span class="n">scripts</span> <span class="n">in</span> <span class="n">https</span><span class="o">://</span><span class="n">github.com</span><span class="o">/</span><span class="n">NabaviLab</span><span class="o">/</span><span class="n">SigEMD</span>
+
+<span class="c1">#DEsingle (https://github.com/miaozhun/DEsingle)</span>
+<span class="nf">if </span><span class="p">(</span><span class="o">!</span><span class="nf">requireNamespace</span><span class="p">(</span><span class="s">&#34;BiocManager&#34;</span><span class="p">,</span> <span class="n">quietly</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">))</span>
+<span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;BiocManager&#34;</span><span class="p">)</span>
+
+<span class="n">BiocManager</span><span class="o">::</span><span class="nf">install</span><span class="p">(</span><span class="s">&#34;DEsingle&#34;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>scRNA pipeline</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-perl" data-lang="perl"><span class="nv">$</span> <span class="nv">perl</span> <span class="o">../</span><span class="n">scRNA</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">pl</span> 
+<span class="n">Description:</span> 
+<span class="n">Version:</span>  <span class="mf">1.0.0</span>
+<span class="n">Contact:</span> <span class="n">meng</span><span class="o">.</span><span class="n">luo</span><span class="nv">@majorbio</span><span class="o">.</span><span class="n">com</span>
+		<span class="n">Framework</span> <span class="n">by</span> <span class="n">Meng</span> <span class="n">Luo</span>
+		<span class="n">developed</span> <span class="n">By</span> <span class="n">cuili</span><span class="o">.</span><span class="n">li</span> <span class="o">&amp;&amp;</span> <span class="n">Meng</span><span class="o">.</span><span class="n">Luo</span>
+<span class="n">Usage:</span>
+	<span class="n">required:</span>
+		<span class="o">-</span><span class="n">fqlist</span> <span class="sr">&lt;file&gt;</span>  <span class="n">Input</span> <span class="n">file</span> <span class="n">with</span> <span class="n">sample</span> <span class="n">name</span><span class="p">,</span><span class="n">the</span> <span class="n">path</span> <span class="n">of</span> <span class="n">raw</span> <span class="n">data</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">path</span> <span class="n">of</span> <span class="n">R2</span>
+		<span class="o">-</span><span class="nb">ref</span>  <span class="sr">&lt;dir&gt;</span>     <span class="n">the</span> <span class="n">dir</span> <span class="n">with</span> <span class="n">reference</span> <span class="n">Genome</span> <span class="ow">and</span> <span class="n">other</span> <span class="n">files</span>
+		<span class="o">-</span><span class="n">outdir</span> <span class="sr">&lt;dir&gt;</span>   <span class="n">output</span> <span class="n">dir</span>
+		<span class="o">-</span><span class="n">dsh</span>    <span class="sr">&lt;dir&gt;</span>   <span class="n">output</span> <span class="n">work</span> <span class="n">sh</span>
+		<span class="o">-</span><span class="n">queue</span>  <span class="sr">&lt;str&gt;</span>   <span class="n">DNA</span> <span class="ow">or</span> <span class="n">RNA</span> <span class="p">,</span><span class="n">defult</span> <span class="n">RNA</span>
+		<span class="o">-</span><span class="n">cellrefdir</span>  <span class="sr">&lt;dir&gt;</span>	<span class="n">the</span> <span class="n">dataset</span> <span class="n">of</span> <span class="n">singleR</span>
+		<span class="o">-</span><span class="n">sample</span> <span class="sr">&lt;str&gt;</span> <span class="sr">&lt;single&gt;</span> <span class="n">sample</span> <span class="ow">or</span> <span class="sr">&lt;multiple&gt;</span> <span class="n">samples</span>
+	<span class="n">Optional:</span>
+		<span class="o">-</span><span class="n">cellref</span>	<span class="sr">&lt;str&gt;</span>   <span class="n">the</span> <span class="n">Ref</span> <span class="n">dateset</span> <span class="n">of</span> <span class="n">SingleR</span> <span class="k">for</span> <span class="n">celltype</span> <span class="n">identification</span><span class="p">,</span><span class="n">default</span> <span class="n">hpca</span>
+		<span class="o">-</span><span class="n">minRNA</span>	<span class="sr">&lt;num&gt;</span>   <span class="n">Default</span> <span class="mi">200</span><span class="p">,</span> <span class="n">the</span> <span class="n">Min</span> <span class="n">features</span> <span class="n">filtered</span> <span class="n">in</span> <span class="n">Seurat</span>
+		<span class="o">-</span><span class="n">maxRNA</span>	<span class="sr">&lt;num&gt;</span>   <span class="n">Default</span> <span class="mi">2500</span><span class="p">,</span> <span class="n">the</span> <span class="n">Max</span> <span class="n">features</span> <span class="n">filtered</span> <span class="n">in</span> <span class="n">Seurat</span>
+		<span class="o">-</span><span class="n">mito</span>	<span class="sr">&lt;num&gt;</span>   <span class="n">Default</span> <span class="mi">5</span><span class="p">,</span> <span class="n">the</span> <span class="n">mito</span> <span class="n">percent</span> <span class="n">filtered</span> <span class="n">in</span> <span class="n">Seurat</span>
+		<span class="o">-</span><span class="n">marker</span>	<span class="sr">&lt;str&gt;</span>   <span class="n">Default</span> <span class="s">&#34;wilcox&#34;</span><span class="p">,</span> <span class="n">the</span> <span class="n">Parament</span> <span class="k">for</span> <span class="n">FindAllmarker</span> <span class="n">in</span> <span class="n">Seurat</span><span class="p">,</span><span class="n">optional</span> <span class="s">&#34;wilcox&#34;</span><span class="p">,</span><span class="s">&#34;bimod&#34;</span><span class="p">,</span><span class="s">&#34;roc&#34;</span><span class="p">,</span><span class="s">&#34;t&#34;</span><span class="p">,</span><span class="s">&#34;negbinom&#34;</span><span class="p">,</span><span class="s">&#34;poisson&#34;</span><span class="p">,</span><span class="s">&#34;LR&#34;</span><span class="p">,</span><span class="s">&#34;MAST&#34;</span><span class="p">,</span><span class="s">&#34;DESeq2&#34;</span>
+		<span class="o">-</span><span class="n">logfc</span>	<span class="sr">&lt;num&gt;</span>   <span class="n">Default</span> <span class="mf">0.25</span><span class="p">,</span> <span class="n">limit</span> <span class="n">testing</span> <span class="n">to</span> <span class="n">genes</span> <span class="n">which</span> <span class="n">show</span>
+		<span class="o">-</span><span class="n">mem</span> <span class="sr">&lt;num&gt;</span>   <span class="n">Default</span> <span class="mi">100</span><span class="p">,</span> <span class="n">THE</span> <span class="n">MEMORY</span> 
+		<span class="o">-</span><span class="n">cpu</span> <span class="sr">&lt;num&gt;</span>   <span class="n">Default</span> <span class="mi">8</span><span class="p">,</span> <span class="n">THE</span> <span class="n">threads</span>
+		<span class="o">-</span><span class="n">species</span> <span class="sr">&lt;str&gt;</span> <span class="n">Default</span> <span class="n">human</span> <span class="p">,</span><span class="n">currently</span> <span class="n">only</span> <span class="n">used</span> <span class="n">to</span> <span class="n">mouse</span> <span class="ow">and</span> <span class="n">human</span> <span class="n">data</span> <span class="n">analysis</span>
+		<span class="o">-</span><span class="n">step</span>	<span class="sr">&lt;num&gt;</span>	<span class="n">pipeline</span> <span class="n">control</span>
+		<span class="o">-</span><span class="n">stop</span>	<span class="sr">&lt;num&gt;</span>	<span class="n">stop</span> <span class="n">step</span>
+		<span class="o">-</span><span class="n">protocols</span> <span class="sr">&lt;str&gt;</span> <span class="n">default</span> <span class="n">cellranger</span><span class="p">,</span> <span class="ow">or</span> <span class="n">scumi</span>
+		<span class="o">-</span><span class="n">polyT</span> <span class="sr">&lt;none&gt;</span>   <span class="n">If</span> <span class="n">there</span> <span class="n">are</span> <span class="n">poly</span><span class="o">-</span><span class="n">T</span> <span class="n">sequences</span> <span class="n">after</span> <span class="n">the</span> <span class="n">cell</span> <span class="n">barcodes</span> <span class="n">in</span> <span class="n">read1</span><span class="o">.</span> <span class="n">scumi</span> <span class="n">will</span> <span class="n">look</span> <span class="n">at</span> <span class="n">the</span> <span class="n">poly</span><span class="o">-</span><span class="n">T</span> <span class="n">sequences</span> <span class="n">from</span> <span class="n">base</span> <span class="mi">19</span> <span class="n">to</span> <span class="n">base</span> <span class="mi">23</span>
+		<span class="o">-</span><span class="n">RTbarcode</span> <span class="sr">&lt;none&gt;</span>	<span class="n">If</span> <span class="n">the</span> <span class="n">set</span> <span class="n">of</span> <span class="n">cell</span> <span class="n">barcode</span> <span class="n">whitelists</span> <span class="n">is</span> <span class="n">known</span><span class="p">,</span> <span class="n">scumi</span> <span class="n">can</span> <span class="n">only</span> <span class="n">consider</span> <span class="n">these</span> <span class="n">cell</span> <span class="n">barcodes</span> <span class="n">by</span> <span class="n">specifying</span> <span class="o">--</span><span class="n">cell_barcode_whitelist</span>
+		<span class="o">-</span><span class="n">h</span>		<span class="n">Help</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>DEG.single.R Pipeline</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nv">$Rscript</span> DEG.single.R
+Usage: DEG.single.R <span class="o">[</span>-<span class="o">[</span>-count<span class="p">|</span>c<span class="o">]</span> &lt;character&gt;<span class="o">]</span> <span class="o">[</span>-<span class="o">[</span>-rpkm<span class="p">|</span>r<span class="o">]</span> <span class="o">[</span>&lt;character&gt;<span class="o">]]</span> <span class="o">[</span>-<span class="o">[</span>-group<span class="p">|</span>g<span class="o">]</span> &lt;character&gt;<span class="o">]</span> <span class="o">[</span>-<span class="o">[</span>-perm<span class="p">|</span>p<span class="o">]</span> <span class="o">[</span>&lt;character&gt;<span class="o">]]</span> <span class="o">[</span>-<span class="o">[</span>-imput<span class="p">|</span>i<span class="o">]</span> <span class="o">[</span>&lt;character&gt;<span class="o">]]</span> <span class="o">[</span>-<span class="o">[</span>-outdir<span class="p">|</span>o<span class="o">]</span> &lt;character&gt;<span class="o">]</span> <span class="o">[</span>-<span class="o">[</span>-help<span class="p">|</span>h<span class="o">]]</span>
+Contact: meng.luo@majorbio.com
+
+Usage example:
+       Rscript DEG.single.R --count filename --rpkm filename --group filename
+Usage:
+    --counts counts file name
+          --rpkm rpkm file name
+          --group group info
+    --perm permutation <span class="nb">test</span> <span class="k">for</span> SigEMD method,default is <span class="m">100</span>
+    --imput imputatiom expression data <span class="k">for</span> SigEMD method or not,default is not
+          --outdir result director
+          --help                usage
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="results-vz">Results VZ</h4>
+<div align="center"><a href=""><img src="Rplot_00.png" width="60%" alt="pca"></a></div>
+<div align="center"><a href=""><img src="venn_diagramm.png" width="60%" alt="pca"></a></div>
+<h4 id="references">References</h4>
+<blockquote>
+<p>T. Wang and S. Nabavi, &ldquo;Differential gene expression analysis in single-cell RNA sequencing data,&rdquo; 2017 IEEE International Conference on Bioinformatics and Biomedicine (BIBM), Kansas City, MO, 2017, pp. 202-207.</p>
+</blockquote>
+<blockquote>
+<p>Zhun Miao, Ke Deng, Xiaowo Wang, Xuegong Zhang, DEsingle for detecting three types of differential expression in single-cell RNA-seq data, Bioinformatics, Volume 34, Issue 18, 15 September 2018, Pages 3223–3224, <a href="https://doi.org/10.1093/bioinformatics/bty332">https://doi.org/10.1093/bioinformatics/bty332</a></p>
+</blockquote>
+<h4 id="phate-potential-of-heat-diffusion-for-affinity-based-transition-embedding-to-analyze-and-datavz">PHATE (Potential of Heat-diffusion for Affinity-based Transition Embedding) to analyze and DataVZ</h4>
+<h5 id="installation-1">Installation</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-r" data-lang="r"><span class="c1">#phateR (http://htmlpreview.github.io/?https://github.com/KrishnaswamyLab/phateR/blob/master/inst/examples/bonemarrow_tutorial.html)</span>
+<span class="nf">if </span><span class="p">(</span><span class="o">!</span><span class="nf">require</span><span class="p">(</span><span class="n">viridis</span><span class="p">))</span> <span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;viridis&#34;</span><span class="p">)</span>
+<span class="nf">if </span><span class="p">(</span><span class="o">!</span><span class="nf">require</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">))</span> <span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;ggplot2&#34;</span><span class="p">)</span>
+<span class="nf">if </span><span class="p">(</span><span class="o">!</span><span class="nf">require</span><span class="p">(</span><span class="n">readr</span><span class="p">))</span> <span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;readr&#34;</span><span class="p">)</span>
+<span class="nf">if </span><span class="p">(</span><span class="o">!</span><span class="nf">require</span><span class="p">(</span><span class="n">Rmagic</span><span class="p">))</span> <span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;Rmagic&#34;</span><span class="p">)</span>
+<span class="nf">if </span><span class="p">(</span><span class="o">!</span><span class="nf">require</span><span class="p">(</span><span class="n">ggsci</span><span class="p">))</span> <span class="nf">install.packages</span><span class="p">(</span><span class="s">&#34;ggsci&#34;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1">#phate(https://nbviewer.jupyter.org/github/KrishnaswamyLab/PHATE/blob/master/Python/tutorial/EmbryoidBody.ipynb)</span>
+<span class="nv">$pip</span> install --user --upgrade phate scprep 
+
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>phateR.VZ.R Pipeline</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nv">$Rscript</span> phateR.VZ.R
+Usage: phateR.VZ.R <span class="o">[</span>-<span class="o">[</span>-count<span class="p">|</span>c<span class="o">]</span> &lt;character&gt;<span class="o">]</span> <span class="o">[</span>-<span class="o">[</span>-rpkm<span class="p">|</span>r<span class="o">]</span> <span class="o">[</span>&lt;character&gt;<span class="o">]]</span> <span class="o">[</span>-<span class="o">[</span>-group<span class="p">|</span>g<span class="o">]</span> &lt;character&gt;<span class="o">]</span> <span class="o">[</span>-<span class="o">[</span>-dim<span class="p">|</span>d<span class="o">]</span> <span class="o">[</span>&lt;character&gt;<span class="o">]]</span> <span class="o">[</span>-<span class="o">[</span>-outdir<span class="p">|</span>o<span class="o">]</span> &lt;character&gt;<span class="o">]</span> <span class="o">[</span>-<span class="o">[</span>-help<span class="p">|</span>h<span class="o">]]</span>
+Contact: meng.luo@majorbio.com
+
+Usage example:
+       Rscript phateR.VZ.R --count filename --group filename
+Usage:
+    --count count file name
+          --rpkm rpkm file name
+          --group group info
+    --dim the dimension <span class="k">for</span> phate results, default is <span class="m">3</span>
+          --outdir result director, default is currently dir
+          --help                usage
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>phate.pipeline.py Pipeline</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nv">$python3</span> phate.pipeline.py
+usage: phate.pipeline.py <span class="o">[</span>-h<span class="o">]</span> -d DIRNAME -f FILENAME
+phate.pipeline.py: error: the following arguments are required: -d/--dirname, -f/--filename
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="results-vz-1">Results VZ</h4>
+<div align="center"><a href=""><img src="phate.2D.png" width="60%" alt="pca"></a></div>
+<div align="center"><a href=""><img src="phate.3D.png" width="60%" alt="pca"></a></div>
+<p><figure><a class="lightgallery" href="/posts/scrnaseq-pipeline/compare_00.png" title="phate" data-thumbnail="/posts/scrnaseq-pipeline/compare_00.png" data-sub-html="<h2>phate</h2><p>phate</p>">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="compare_00.png"
+            data-srcset="/posts/scrnaseq-pipeline/compare_00.png, compare_00.png 1.5x, /posts/scrnaseq-pipeline/compare_00.png 2x"
+            data-sizes="auto"
+            alt="/posts/scrnaseq-pipeline/compare_00.png" />
+    </a><figcaption class="image-caption">phate</figcaption>
+    </figure></p>
+<h4 id="learning-video">learning Video</h4>
+<iframe src="//player.bilibili.com/player.html?bvid=BV1hF411a7He&page=1" height="600" width="800" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+<h4 id="references-1">References</h4>
+<blockquote>
+<p>Moon, K.R., van Dijk, D., Wang, Z. et al. Visualizing structure and transitions in high-dimensional biological data. Nat Biotechnol 37, 1482–1492 (2019). <a href="https://doi.org/10.1038/s41587-019-0336-3">https://doi.org/10.1038/s41587-019-0336-3</a></p>
+</blockquote>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-12-18</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/posts/scrnaseq-pipeline/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://cb-majorbiolab.work/posts/scrnaseq-pipeline/" data-title="Integrative analyses of single-cell transcriptome and regulome using sc/n-workflow" data-via="https://twitter.com/czheluo" data-hashtags="DEGs,UMI,workflow,scRNAseq"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://cb-majorbiolab.work/posts/scrnaseq-pipeline/" data-hashtag="DEGs"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Linkedin" data-sharer="linkedin" data-url="http://cb-majorbiolab.work/posts/scrnaseq-pipeline/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Hacker News" data-sharer="hackernews" data-url="http://cb-majorbiolab.work/posts/scrnaseq-pipeline/" data-title="Integrative analyses of single-cell transcriptome and regulome using sc/n-workflow"><i class="fab fa-hacker-news fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://cb-majorbiolab.work/posts/scrnaseq-pipeline/" data-title="Integrative analyses of single-cell transcriptome and regulome using sc/n-workflow"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://cb-majorbiolab.work/posts/scrnaseq-pipeline/" data-title="Integrative analyses of single-cell transcriptome and regulome using sc/n-workflow" data-ralateuid="https://weibo.com/2161302013/profile"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/degs/">DEGs</a>,&nbsp;<a href="/tags/umi/">UMI</a>,&nbsp;<a href="/tags/workflow/">workflow</a>,&nbsp;<a href="/tags/scrnaseq/">scRNAseq</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/deseq2-differential-analysis-of-count-data/" class="prev" rel="prev" title="DESeq2差异分析"><i class="fas fa-angle-left fa-fw"></i>DESeq2差异分析</a>
+            <a href="/posts/degseq-differential-analysis-of-count-data/" class="next" rel="next" title="DEGseq 对无重复样本进行差异分析">DEGseq 对无重复样本进行差异分析<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript><div id="fb-root" class="comment"></div>
+            <div
+                class="fb-comments"
+                data-href="http://cb-majorbiolab.work/posts/scrnaseq-pipeline/"
+                data-width="100%"
+                data-numposts="10"
+            ></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://developers.facebook.com/docs/plugins/comments/"></a>Facebook</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">MAJOR Computational Biology Research Lab</div>
+                <div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020-2022, MENG LUO, All rights reserved.</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+                
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="https://connect.facebook.net/zh_CN/sdk.js#xfbml=1&amp;version=v5.0&amp;appId=&amp;autoLogAppEvents=1" defer></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"valine":{"appId":"Noyy9UKaXGwYBIUdvBTt7u76-gzGzoHsz","appKey":"15w6pTF8mFoxnm8muOFx5buM","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"VX4BXOJBC5","algoliaIndex":"majorbio.zh-cn","algoliaSearchKey":"53790f167edb548b217bfe91dd891ac0","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

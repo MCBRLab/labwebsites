@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>转座元件分析 - MAJOR Computational Biology Research Lab</title><meta name="Description" content="基于Dfam数据库转座元件分析"><meta property="og:title" content="转座元件分析" />
+<meta property="og:description" content="基于Dfam数据库转座元件分析" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://cb-majorbiolab.work/posts/repeatmasker-dfam/" />
+<meta property="article:published_time" content="2021-11-18T16:29:59+08:00" />
+<meta property="article:modified_time" content="2021-11-18T16:29:59+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="转座元件分析"/>
+<meta name="twitter:description" content="基于Dfam数据库转座元件分析"/>
+<meta name="application-name" content="MAJOR Computational Biology Research Lab">
+<meta name="apple-mobile-web-app-title" content="MAJOR Computational Biology Research Lab"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/MBIL.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://cb-majorbiolab.work/posts/repeatmasker-dfam/" /><link rel="prev" href="http://cb-majorbiolab.work/posts/dimensionality-reduction-methods-for-rna-seq-analysis/" /><link rel="next" href="http://cb-majorbiolab.work/posts/network-analysis-with-r/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "转座元件分析",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/cb-majorbiolab.work\/posts\/repeatmasker-dfam\/"
+        },"genre": "posts","keywords": "RNAseq, 转座元件, Dfam","wordcount":  1858 ,
+        "url": "http:\/\/cb-majorbiolab.work\/posts\/repeatmasker-dfam\/","datePublished": "2021-11-18T16:29:59+08:00","dateModified": "2021-11-18T16:29:59+08:00","publisher": {
+            "@type": "Organization",
+            "name": "美吉生物信息团队"},"author": {
+                "@type": "Person",
+                "name": "Jiawen Ma"
+            },"description": "基于Dfam数据库转座元件分析"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="MAJOR Computational Biology Research Lab"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/MBIL.svg"
+        data-srcset="/images/MBIL.svg, /images/MBIL.svg 1.5x, /images/MBIL.svg 2x"
+        data-sizes="auto"
+        alt="/images/MBIL.svg"
+        title="/images/MBIL.svg" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="Home"> Home </a><a class="menu-item" href="/workshop/" title=" "> Workshop/Talk </a><a class="menu-item" href="/publication/" title="Publications"> Publications </a><a class="menu-item" href="/team/" title="Team"> Team </a><a class="menu-item" href="/resource/" title="Resource"> Resource </a><a class="menu-item" href="/software/" title="Software"> Software </a><a class="menu-item" href="/ne/" title="News/Events"> News/Events </a><a class="menu-item" href="/joinus/" title="Join/Contact"> Join/Contact </a><a class="menu-item" href="https://github.com/MajorBio" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="MAJOR Computational Biology Research Lab"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/MBIL.svg"
+        data-srcset="/images/MBIL.svg, /images/MBIL.svg 1.5x, /images/MBIL.svg 2x"
+        data-sizes="auto"
+        alt="/images/MBIL.svg"
+        title="/images/MBIL.svg" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="Home">Home</a><a class="menu-item" href="/workshop/" title=" ">Workshop/Talk</a><a class="menu-item" href="/publication/" title="Publications">Publications</a><a class="menu-item" href="/team/" title="Team">Team</a><a class="menu-item" href="/resource/" title="Resource">Resource</a><a class="menu-item" href="/software/" title="Software">Software</a><a class="menu-item" href="/ne/" title="News/Events">News/Events</a><a class="menu-item" href="/joinus/" title="Join/Contact">Join/Contact</a><a class="menu-item" href="https://github.com/MajorBio" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">转座元件分析</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/bystander456" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Jiawen Ma</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/rnaseq/"><i class="far fa-folder fa-fw"></i>RNAseq</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-11-18">2021-11-18</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1858 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;<span id="/posts/repeatmasker-dfam/" class="leancloud_visitors" data-flag-title="转座元件分析">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-概述">1. 概述</a></li>
+    <li><a href="#2-repeatmasker的使用">2. RepeatMasker的使用</a>
+      <ul>
+        <li><a href="#21-使用命令">2.1 使用命令</a></li>
+        <li><a href="#22-结果输出">2.2 结果输出</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="dfam数据库的使用">Dfam数据库的使用</h1>
+<p>The Dfam database is a collection of <strong>Repetitive DNA element</strong> sequence alignments, <strong>hidden Markov models (HMMs)</strong> and <strong>matches lists</strong> for complete Eukaryote genomes.</p>
+<h2 id="1-概述">1. 概述</h2>
+<p><strong>转座元件</strong>是一类能改变其自身在基因组当中的位置的DNA重复序列，它能够使得突变产生，也能“逆转”已有突变，它能改变生物细胞的遗传属性和基因组稳定性。1951年，美国冷泉港著名女性细胞遗传学家Barbara McClintock发表文章“Induction of Instability at Selected Loci in Maize”，首次在玉米种发现这类“跳跃基因”，这一研究成果使其在1983年荣获诺贝尔生理学或医学奖。</p>
+<p>简单来说，转座元件可以分成两类：Class I和Class II。 Class I又被称为Retrotransposon，逆转录转座子，指那些通过“复制-粘贴”机制来实现其在基因组中“跳跃”的转座元件，这种类型的转座元件能不断增加其自身在基因组中的拷贝数。这类转座元件在跳跃的过程中，依赖其中一类元件——LINE1，长散在元件所编码的ORF1p和ORF2p。ORF1p行使RBP的功能，携带转座元件的RNA中间体进入细胞核，在ORF2p（含有一个EN，核酸内切酶和一个RT，逆转录酶）的帮助下，完成基因组的重组。Class II，也叫做DNA转座子，这种类型的转座子主要是通过“剪切-粘贴”的机制进行“跳跃”。不像Class I,它们的转座反应仅依赖部分元件编码的转座酶。在此分类基础上，根据各种元件的结构特征，转座元件还可以被细分为不同的family和subfamily。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211117095504153.png"
+        data-srcset="/posts/repeatmasker-dfam/image-20211117095504153.png, image-20211117095504153.png 1.5x, /posts/repeatmasker-dfam/image-20211117095504153.png 2x"
+        data-sizes="auto"
+        alt="/posts/repeatmasker-dfam/image-20211117095504153.png"
+        title="image-20211117095504153" /></p>
+<p><strong>Dfam</strong>是真核生物TE-centric数据库，这个数据库更正式地定义了转座元件，并且将共有序列一样的转座元件形成一个“集合”，利用隐马尔可夫模型（hidden Markov models）来进行多序列比对（multiple sequence alignments）。</p>
+<p><strong>RepeatMasker</strong>是最常用的TE序列工具，是当前研究在进行TE注释时的金标准，它以RepBase和Dfam两大数据库为支持。</p>
+<h2 id="2-repeatmasker的使用">2. RepeatMasker的使用</h2>
+<p>RepeatMasker is a program that screens DNA sequences for interspersed repeats and low complexity DNA sequences. The output of the program is a detailed annotation of the repeats that are present in the query sequence as well as a modified version of the query sequence in which all the annotated repeats have been masked (default: replaced by Ns). On average, almost 50% of a human genomic DNA sequence currently will be masked by the program. Sequence comparisons in RepeatMasker are performed by the program cross_match, an efficient implementation of the Smith-Waterman-Gotoh algorithm developed by Phil Green.</p>
+<h3 id="21-使用命令">2.1 使用命令</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">RepeatMasker -pa <span class="m">4</span> -species human -poly -html -gff -dir repeat1 gene_t.fa <span class="c1">#gene_t.fa 需要提供作为输入的fa格式的序列文件</span>
+ 
+<span class="c1">#需要注意的地方</span>
+<span class="c1">#-dir 指定的输出结果文件夹</span>
+<span class="c1">#一定要通过 -species 指定物种，否则默认比对的是人类重复序列数据库</span>
+<span class="c1">#如果使用本地的参考库，通过 -lib 指定，替代 -species</span>
+<span class="c1"># -poly，-html -gff等参数输出结果另外的形式（不必须参数）</span>
+<span class="c1">#-s、-q、-qq 等参数可控制序列比对的灵敏度，如果你的目标物种和参考物种不是很近，可能需要提升灵敏度</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="22-结果输出">2.2 结果输出</h3>
+<p>图中红圈的三个文件分别是加了 -poly、-html 、-gff三个参数输出的结果，默认结果只有剩下四个。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211117111227909.png"
+        data-srcset="/posts/repeatmasker-dfam/image-20211117111227909.png, image-20211117111227909.png 1.5x, /posts/repeatmasker-dfam/image-20211117111227909.png 2x"
+        data-sizes="auto"
+        alt="/posts/repeatmasker-dfam/image-20211117111227909.png"
+        title="image-20211117111227909" /></p>
+<p>*<strong>.tbl</strong></p>
+<p>本次RepeatMasker运行的结果报告，该文件默认生成，包含了基因组长度、GC含量、重复区长度以及重复区各类别基本统计信息等。其中，“bases masked”就是重复序列的总长度和在基因组中的占比，视物种而定。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211117111911834.png"
+        data-srcset="/posts/repeatmasker-dfam/image-20211117111911834.png, image-20211117111911834.png 1.5x, /posts/repeatmasker-dfam/image-20211117111911834.png 2x"
+        data-sizes="auto"
+        alt="/posts/repeatmasker-dfam/image-20211117111911834.png"
+        title="image-20211117111911834" /></p>
+<p>*<strong>.cat</strong></p>
+<p>记录了输入的基因组序列和数据库中参考重复序列的比对详情，该文件默认生成。</p>
+<p>会存在个别碱基的差异，其中“i”和“v”分别代表了碱基转换（transitions）和颠换（transversions），“-”表示该位点存在碱基插入/删除。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211117112100610.png"
+        data-srcset="/posts/repeatmasker-dfam/image-20211117112100610.png, image-20211117112100610.png 1.5x, /posts/repeatmasker-dfam/image-20211117112100610.png 2x"
+        data-sizes="auto"
+        alt="/posts/repeatmasker-dfam/image-20211117112100610.png"
+        title="image-20211117112100610" /></p>
+<p>*<strong>.out和*.out.html</strong></p>
+<p>这两个文件中的信息是一致的，将基因组中预测得到的重复序列和参考序列相比的碱基替换频率、插入/删除率，以及重复序列的位置、结构、类型等信息展示出。其中，<em>.out（默认生成）是纯文本样式，</em>.out.html（-html参数生成）以网页列表展示。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211117112853325.png"
+        data-srcset="/posts/repeatmasker-dfam/image-20211117112853325.png, image-20211117112853325.png 1.5x, /posts/repeatmasker-dfam/image-20211117112853325.png 2x"
+        data-sizes="auto"
+        alt="/posts/repeatmasker-dfam/image-20211117112853325.png"
+        title="image-20211117112853325" /></p>
+<p>*<strong>.out.gff</strong></p>
+<p>将*.out中的内容，整理为标准gff文件的结构类型（-gff参数生成）。主要包含重复序列的位置、结构等信息。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211117124044951.png"
+        data-srcset="/posts/repeatmasker-dfam/image-20211117124044951.png, image-20211117124044951.png 1.5x, /posts/repeatmasker-dfam/image-20211117124044951.png 2x"
+        data-sizes="auto"
+        alt="/posts/repeatmasker-dfam/image-20211117124044951.png"
+        title="image-20211117124044951" /></p>
+<p>*<strong>.polyout</strong></p>
+<p>命令行中通过-poly参数，可额外将预测结果*.out中的微卫星注释识别出来，单独整理为一张表，文件结构同*.out。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211117124253999.png"
+        data-srcset="/posts/repeatmasker-dfam/image-20211117124253999.png, image-20211117124253999.png 1.5x, /posts/repeatmasker-dfam/image-20211117124253999.png 2x"
+        data-sizes="auto"
+        alt="/posts/repeatmasker-dfam/image-20211117124253999.png"
+        title="image-20211117124253999" /></p>
+<p><strong>*.masked</strong></p>
+<p>相较于原始输入fasta文件中的序列，..masked中将其中重复序列部分屏蔽为了N碱基，该文件默认生成。
+注意区分，这里有的N碱基是屏蔽的重复序列，而有的N碱基则是原来这个基因组fasta文件中就有的（一般为gap）。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211117124550117.png"
+        data-srcset="/posts/repeatmasker-dfam/image-20211117124550117.png, image-20211117124550117.png 1.5x, /posts/repeatmasker-dfam/image-20211117124550117.png 2x"
+        data-sizes="auto"
+        alt="/posts/repeatmasker-dfam/image-20211117124550117.png"
+        title="image-20211117124550117" /></p>
+<p>那么这个文件有什么作用呢？可以将该文件作为后续基因序列预测的输入文件。这样，基因预测时就不会再考虑这些重复序列区域（因为这些区域的碱基已经屏蔽为了N碱基，不会被识别），缩小了基因组范围，大大减少了资源消耗，提升准确度。</p>
+<p>参考资料：</p>
+<ul>
+<li>
+<p><a href="http://www.repeatmasker.org/webrepeatmaskerhelp.html" target="_blank" rel="noopener noreffer">Repeatmasker</a></p>
+</li>
+<li>
+<p><a href="https://mobilednajournal.biomedcentral.com/articles/10.1186/s13100-020-00230-y" target="_blank" rel="noopener noreffer">The Dfam community resource of transposable element families, sequence models, and genome annotations</a></p>
+</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-11-18</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/posts/repeatmasker-dfam/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://cb-majorbiolab.work/posts/repeatmasker-dfam/" data-title="转座元件分析" data-via="https://twitter.com/czheluo" data-hashtags="RNAseq,转座元件,Dfam"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://cb-majorbiolab.work/posts/repeatmasker-dfam/" data-hashtag="RNAseq"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Linkedin" data-sharer="linkedin" data-url="http://cb-majorbiolab.work/posts/repeatmasker-dfam/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Hacker News" data-sharer="hackernews" data-url="http://cb-majorbiolab.work/posts/repeatmasker-dfam/" data-title="转座元件分析"><i class="fab fa-hacker-news fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://cb-majorbiolab.work/posts/repeatmasker-dfam/" data-title="转座元件分析"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://cb-majorbiolab.work/posts/repeatmasker-dfam/" data-title="转座元件分析" data-ralateuid="https://weibo.com/2161302013/profile"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/rnaseq/">RNAseq</a>,&nbsp;<a href="/tags/%E8%BD%AC%E5%BA%A7%E5%85%83%E4%BB%B6/">转座元件</a>,&nbsp;<a href="/tags/dfam/">Dfam</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/dimensionality-reduction-methods-for-rna-seq-analysis/" class="prev" rel="prev" title="降维分析方法比较"><i class="fas fa-angle-left fa-fw"></i>降维分析方法比较</a>
+            <a href="/posts/network-analysis-with-r/" class="next" rel="next" title="Network Analysis with R">Network Analysis with R<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript><div id="fb-root" class="comment"></div>
+            <div
+                class="fb-comments"
+                data-href="http://cb-majorbiolab.work/posts/repeatmasker-dfam/"
+                data-width="100%"
+                data-numposts="10"
+            ></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://developers.facebook.com/docs/plugins/comments/"></a>Facebook</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">MAJOR Computational Biology Research Lab</div>
+                <div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020-2022, MENG LUO, All rights reserved.</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+                
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="https://connect.facebook.net/zh_CN/sdk.js#xfbml=1&amp;version=v5.0&amp;appId=&amp;autoLogAppEvents=1" defer></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"valine":{"appId":"Noyy9UKaXGwYBIUdvBTt7u76-gzGzoHsz","appKey":"15w6pTF8mFoxnm8muOFx5buM","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"VX4BXOJBC5","algoliaIndex":"majorbio.zh-cn","algoliaSearchKey":"53790f167edb548b217bfe91dd891ac0","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

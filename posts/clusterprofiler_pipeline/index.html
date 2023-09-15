@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>使用clusterProfiler对基因集进行富集分析（任何物种） - MAJOR Computational Biology Research Lab</title><meta name="Description" content="使用clusterProfiler 对差异基因进行富集分析"><meta property="og:title" content="使用clusterProfiler对基因集进行富集分析（任何物种）" />
+<meta property="og:description" content="使用clusterProfiler 对差异基因进行富集分析" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://cb-majorbiolab.work/posts/clusterprofiler_pipeline/" />
+<meta property="article:published_time" content="2021-08-24T16:29:59+08:00" />
+<meta property="article:modified_time" content="2021-08-24T16:29:59+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="使用clusterProfiler对基因集进行富集分析（任何物种）"/>
+<meta name="twitter:description" content="使用clusterProfiler 对差异基因进行富集分析"/>
+<meta name="application-name" content="MAJOR Computational Biology Research Lab">
+<meta name="apple-mobile-web-app-title" content="MAJOR Computational Biology Research Lab"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/MBIL.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://cb-majorbiolab.work/posts/clusterprofiler_pipeline/" /><link rel="prev" href="http://cb-majorbiolab.work/posts/degs-viz/" /><link rel="next" href="http://cb-majorbiolab.work/posts/interactive-three-way-differential-expression-analysis/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "使用clusterProfiler对基因集进行富集分析（任何物种）",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/cb-majorbiolab.work\/posts\/clusterprofiler_pipeline\/"
+        },"genre": "posts","keywords": "RNAseq, 富集分析, clusterProfiler","wordcount":  1855 ,
+        "url": "http:\/\/cb-majorbiolab.work\/posts\/clusterprofiler_pipeline\/","datePublished": "2021-08-24T16:29:59+08:00","dateModified": "2021-08-24T16:29:59+08:00","publisher": {
+            "@type": "Organization",
+            "name": "美吉生物信息团队"},"author": {
+                "@type": "Person",
+                "name": "Jiawen Ma"
+            },"description": "使用clusterProfiler 对差异基因进行富集分析"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="MAJOR Computational Biology Research Lab"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/MBIL.svg"
+        data-srcset="/images/MBIL.svg, /images/MBIL.svg 1.5x, /images/MBIL.svg 2x"
+        data-sizes="auto"
+        alt="/images/MBIL.svg"
+        title="/images/MBIL.svg" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="Home"> Home </a><a class="menu-item" href="/workshop/" title=" "> Workshop/Talk </a><a class="menu-item" href="/publication/" title="Publications"> Publications </a><a class="menu-item" href="/team/" title="Team"> Team </a><a class="menu-item" href="/resource/" title="Resource"> Resource </a><a class="menu-item" href="/software/" title="Software"> Software </a><a class="menu-item" href="/ne/" title="News/Events"> News/Events </a><a class="menu-item" href="/joinus/" title="Join/Contact"> Join/Contact </a><a class="menu-item" href="https://github.com/MajorBio" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="MAJOR Computational Biology Research Lab"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/MBIL.svg"
+        data-srcset="/images/MBIL.svg, /images/MBIL.svg 1.5x, /images/MBIL.svg 2x"
+        data-sizes="auto"
+        alt="/images/MBIL.svg"
+        title="/images/MBIL.svg" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="Home">Home</a><a class="menu-item" href="/workshop/" title=" ">Workshop/Talk</a><a class="menu-item" href="/publication/" title="Publications">Publications</a><a class="menu-item" href="/team/" title="Team">Team</a><a class="menu-item" href="/resource/" title="Resource">Resource</a><a class="menu-item" href="/software/" title="Software">Software</a><a class="menu-item" href="/ne/" title="News/Events">News/Events</a><a class="menu-item" href="/joinus/" title="Join/Contact">Join/Contact</a><a class="menu-item" href="https://github.com/MajorBio" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">使用clusterProfiler对基因集进行富集分析（任何物种）</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/bystander456" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Jiawen Ma</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/rnaseq/"><i class="far fa-folder fa-fw"></i>RNAseq</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-08-24">2021-08-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1855 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;<span id="/posts/clusterprofiler_pipeline/" class="leancloud_visitors" data-flag-title="使用clusterProfiler对基因集进行富集分析（任何物种）">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#构建自己物种的数据库r包">构建自己物种的数据库R包</a></li>
+    <li><a href="#gene_infotxt文件示例">gene_info.txt文件示例：</a></li>
+    <li><a href="#gene_gotxt文件示例">gene_GO.txt文件示例：</a></li>
+    <li><a href="#注意事项-gene_infotxt文件中的基因id不能重复"><strong>注意事项：</strong> gene_info.txt文件中的基因ID不能重复。</a></li>
+    <li><a href="#脚本最后一行有效命名为安装此orgdb">脚本最后一行有效命名为安装此orgdb。</a></li>
+    <li><a href="#构建的orgdb文件为orghsaegdb-hsa-为提供的物种id">构建的orgdb文件为：org.hsa.eg.db, hsa 为提供的物种ID</a></li>
+  </ul>
+
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#路径">路径:</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#以上是物种人的一个分析例子输出的结果目录如下">以上是物种人的一个分析例子，输出的结果目录如下：</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#go-enrichment-analysis">GO enrichment analysis</a></li>
+    <li><a href="#go-over-representation-analysis">GO over-representation analysis</a></li>
+    <li><a href="#go-gene-set-enrichment-analysis">GO Gene Set Enrichment Analysis</a></li>
+    <li><a href="#kegg-enrichment-analysis">KEGG enrichment analysis</a></li>
+    <li><a href="#kegg-pathway-over-representation-analysis">KEGG pathway over-representation analysis</a></li>
+    <li><a href="#kegg-pathway-gene-set-enrichment-analysis">KEGG pathway gene set enrichment analysis</a></li>
+    <li><a href="#reactome-enrichment-analysis">Reactome enrichment analysis</a></li>
+    <li><a href="#reactome-pathway-over-representation-analysis">Reactome pathway over-representation analysis</a></li>
+    <li><a href="#reactome-pathway-gene-set-enrichment-analysis">Reactome pathway gene set enrichment analysis</a></li>
+    <li><a href="#disease-enrichment-analysis">Disease enrichment analysis</a></li>
+    <li><a href="#over-representation-analysis-for-disease-ontology">Over-representation analysis for disease ontology</a>
+      <ul>
+        <li><a href="#边的宽度代表两个富集的term共有的基因数目点大小代表条目内基因数目多少颜色代表padjust值越小越红"><strong>边的宽度代表两个富集的Term共有的基因数目，点大小代表条目内基因数目多少，颜色代表Padjust，值越小越红；</strong></a></li>
+      </ul>
+    </li>
+    <li><a href="#disease-gene-set-enrichment-analysis">Disease gene set enrichment analysis</a></li>
+    <li><a href="#可视化的结果还加上了热图聚类树及upset图">可视化的结果，还加上了热图，聚类树及upset图</a></li>
+    <li><a href="#热图">热图</a></li>
+    <li><a href="#聚类树">聚类树</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><img src="" height="200"/>
+<h1 id="使用clusterprofilerhttpsgithubcomyulab-smuclusterprofiler对基因集进行富集分析">使用<a href="https://github.com/YuLab-SMU/clusterProfiler" target="_blank" rel="noopener noreffer">clusterProfiler</a>对基因集进行富集分析</h1>
+<h1 id="分析内容包括gokegggseado-reactome">分析内容包括GO、KEGG、GSEA、DO Reactome</h1>
+<h2 id="构建自己物种的数据库r包">构建自己物种的数据库R包</h2>
+<blockquote>
+<p>如果分析的物种没有注释信息，需要将基因/转录本与六大数据库（NR、Swiss-Prot、Pfam、EggNOG、GO和KEGG）进行比对，全面获得基因/转录本的注释信息并对各数据库注释情况。但是如果只是做GO或者KEGG富集分析，只需要比对到GO及KEGG获得相应的注释结果即可。</p>
+</blockquote>
+<p><a href="" rel=""><img src="clusterProfiler.png" height="150"/></a>
+<a href="" rel=""><img src="GWAD.png" height="150"/></a></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 如果你有以上的数据结构，可以使用以下脚本进行处理，获得构建数据库的基本数据。</span>
+perl /mnt/ilustre/users/meng.luo/Pipeline/Pipeline/biotools/clusterprofile/database/get.anno.pl -go gene.go.list -anno all_anno_detail.xls -out ./ -kegg gene.kegg.list -ko  pathway_table.xls
+<span class="c1"># 如果有结果是空的，需要再处理</span>
+less gene_info_discription.txt<span class="p">|</span>perl -ne <span class="s1">&#39;chomp;my $nn=376423;my @all=split/\t/,$_;if($all[2] eq &#34;&#34;){print&#34;$all[0]\t$all[1]\t$nn\t$all[3]\n&#34;;$nn++;}else{print &#34;$_\n&#34;}&#39;</span> &gt; gene_info_entrze.txt
+<span class="c1"># 再运行R脚本进行再运行R脚本数据库</span>
+Rscript /mnt/ilustre/users/meng.luo/Pipeline/Pipeline/biotools/clusterprofile/database/build_annotation.R -i gene_info_discription.txt -g gene_GO.txt -s asa -n <span class="m">9666</span> -o ./
+
+参数说明：
+-i：基因ID与其描述信息的文件
+-g：基因ID所对应的GOID的文件
+-s：构建的物种名；例如：asa 
+-n: 物种的num ID；例如：9666 <span class="o">(</span>随机数，没有任何影响<span class="o">)</span>
+-o：输出路径
+
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20210916141753794.png"
+        data-srcset="/posts/clusterprofiler_pipeline/image-20210916141753794.png, image-20210916141753794.png 1.5x, /posts/clusterprofiler_pipeline/image-20210916141753794.png 2x"
+        data-sizes="auto"
+        alt="/posts/clusterprofiler_pipeline/image-20210916141753794.png"
+        title="image-20210916141753794" /></p>
+<h2 id="gene_infotxt文件示例">gene_info.txt文件示例：</h2>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20210916142156631.png"
+        data-srcset="/posts/clusterprofiler_pipeline/image-20210916142156631.png, image-20210916142156631.png 1.5x, /posts/clusterprofiler_pipeline/image-20210916142156631.png 2x"
+        data-sizes="auto"
+        alt="/posts/clusterprofiler_pipeline/image-20210916142156631.png"
+        title="image-20210916142156631" /></p>
+<h2 id="gene_gotxt文件示例">gene_GO.txt文件示例：</h2>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20210916142320228.png"
+        data-srcset="/posts/clusterprofiler_pipeline/image-20210916142320228.png, image-20210916142320228.png 1.5x, /posts/clusterprofiler_pipeline/image-20210916142320228.png 2x"
+        data-sizes="auto"
+        alt="/posts/clusterprofiler_pipeline/image-20210916142320228.png"
+        title="image-20210916142320228" /></p>
+<h2 id="注意事项-gene_infotxt文件中的基因id不能重复"><strong>注意事项：</strong> gene_info.txt文件中的基因ID不能重复。</h2>
+<h2 id="脚本最后一行有效命名为安装此orgdb">脚本最后一行有效命名为安装此orgdb。</h2>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20210916142535443.png"
+        data-srcset="/posts/clusterprofiler_pipeline/image-20210916142535443.png, image-20210916142535443.png 1.5x, /posts/clusterprofiler_pipeline/image-20210916142535443.png 2x"
+        data-sizes="auto"
+        alt="/posts/clusterprofiler_pipeline/image-20210916142535443.png"
+        title="image-20210916142535443" /></p>
+<h2 id="构建的orgdb文件为orghsaegdb-hsa-为提供的物种id">构建的orgdb文件为：org.hsa.eg.db, hsa 为提供的物种ID</h2>
+<h1 id="富集分析">富集分析</h1>
+<h3 id="路径">路径:</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 提供基因list表或者基因及其FC值（如果有FC值则进行富集分析），两列值，不用写表头。其中ko_gene.txt、ko_anno.txt、class.txt都是上面整理好的结果文件，执行脚本如下：</span>
+
+Rscript /mnt/ilustre/users/meng.luo/Pipeline/Pipeline/
+biotools/clusterprofile/clusterProfiler.V3.R -e circrna_host.gene.DE -i ko_gene.txt -m ko_anno.txt -c class.txt -s asa
+
+<span class="c1"># 脚本帮助</span>
+Options:
+	-e DEGFILE, --degfile<span class="o">=</span>DEGFILE
+		Input file of deg file
+	-i KOGENEID, --kogeneID<span class="o">=</span>KOGENEID
+		Input file of koID mapping geneID or transcriptionID or entrezID..
+	-m KODESCRIPTION, --kodescription<span class="o">=</span>KODESCRIPTION
+		Input file of koID and its description
+	-b GSEA, --gsea<span class="o">=</span>GSEA
+		Whether to conduct GSEA analysis<span class="p">;</span> default:FALSE
+	-c CLASS, --class<span class="o">=</span>CLASS
+		Input file of class file<span class="p">;</span>default:class1_description.txt
+	-f FOLDCHANGE, --foldchange<span class="o">=</span>FOLDCHANGE
+		Fold change<span class="p">;</span>default:2
+	-l LAYOUTTYPE, --layouttype<span class="o">=</span>LAYOUTTYPE
+		Setting layout<span class="p">;</span> default:circle
+	-n NODELABEL, --nodelabel<span class="o">=</span>NODELABEL
+		Setting node_label<span class="p">;</span> default:none,it is one of none, all,gene or category
+	-s SPECIES, --species<span class="o">=</span>SPECIES
+		Species in this analysis<span class="p">;</span>default:hsa
+	-a ALL, --all<span class="o">=</span>ALL
+		default:deg gene<span class="p">;</span> input all:genes
+	-g GOENRICH, --GOenrich<span class="o">=</span>GOENRICH
+		Do you need GO analysis<span class="p">;</span>default:TRUE
+	-k KEGGENRICH, --KEGGenrich<span class="o">=</span>KEGGENRICH
+		Do you need KEGG analysis<span class="p">;</span>default:TRUE
+	-d DOENRICH, --DOenrich<span class="o">=</span>DOENRICH
+		Do you need DO analysis<span class="p">;</span>default:FALSE
+	-r REACTOMEENRICH, --Reactomeenrich<span class="o">=</span>REACTOMEENRICH
+		Do you need Reactome analysis<span class="p">;</span>default:FALSE
+	-h, --help
+		Show this <span class="nb">help</span> message and <span class="nb">exit</span>
+
+参数说明：
+-e：表达基因详细文件
+-c：kegg pathway class1与descripti的对应表
+-f：foldchange<span class="p">;</span>默认为2
+-s: 物种名；默认为人
+-a：富集通路图是否包含所有背景基因；默认只为差异表达基因
+-g：是否进行GO分析；默认为TRUE；如不需着传递参数FALSE
+-k：是否进行KEGG分析；默认为TRUE；如不需着传递参数FALSE
+-d：是否进行疾病分析；默认为TRUE；如不需着传递参数FALSE
+-r：是否进行反应组分析；默认为TRUE；如不需着传递参数FALSE
+</code></pre></td></tr></table>
+</div>
+</div><h1 id="分析结果">分析结果</h1>
+<h3 id="以上是物种人的一个分析例子输出的结果目录如下">以上是物种人的一个分析例子，输出的结果目录如下：</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">|-- results/
+        |-- DO_result
+        |-- GO_result 
+        |-- KEGG_result 
+        |-- Reactome_result
+</code></pre></td></tr></table>
+</div>
+</div><h1 id="详细分析原来如下知识点">详细分析原来如下知识点</h1>
+<h2 id="go-enrichment-analysis">GO enrichment analysis</h2>
+<blockquote>
+<p>GO comprises of three orthogonal ontologies, i.e. molecular function (MF), biological process (BP), and cellular component (CC).</p>
+</blockquote>
+<blockquote>
+<p>GO analyses (<code>groupGO()</code>, <code>enrichGO()</code> and <code>gseGO()</code>) support organisms that have an <code>OrgDb</code> object available (see also <a href="https://yulab-smu.top/biomedical-knowledge-mining-book/GOSemSim.html#gosemsim-supported-organisms" target="_blank" rel="noopener noreffer">session 2.2</a>).</p>
+<p>If user have GO annotation data (in data.frame format with first column of gene ID and second column of GO ID), they can use <code>enricher()</code> and <code>gseGO()</code> functions to perform over-representation test and gene set enrichment analysis.</p>
+<p>If genes are annotated by direction annotation, it should also annotated by its ancestor GO nodes (indirect annation). If user only has direct annotation, they can pass their annotation to <code>buildGOmap</code> function, which will infer indirection annotation and generate a <code>data.frame</code> that suitable for both <code>enricher()</code> and <code>gseGO()</code>.</p>
+</blockquote>
+<h2 id="go-over-representation-analysis">GO over-representation analysis</h2>
+<blockquote>
+<p>The <a href="http://bioconductor.org/packages/clusterProfiler" target="_blank" rel="noopener noreffer">clusterProfiler</a> package implemented <code>enrichGO()</code> function for gene ontology over-representation test.</p>
+</blockquote>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20210825151417854.png"
+        data-srcset="/posts/clusterprofiler_pipeline/image-20210825151417854.png, image-20210825151417854.png 1.5x, /posts/clusterprofiler_pipeline/image-20210825151417854.png 2x"
+        data-sizes="auto"
+        alt="/posts/clusterprofiler_pipeline/image-20210825151417854.png"
+        title="image-20210825151417854" /></p>
+<h2 id="go-gene-set-enrichment-analysis">GO Gene Set Enrichment Analysis</h2>
+<blockquote>
+<p>The <a href="http://bioconductor.org/packages/clusterProfiler" target="_blank" rel="noopener noreffer">clusterProfiler</a> package provides <code>gseGO()</code> function for <a href="https://yulab-smu.top/biomedical-knowledge-mining-book/enrichment-overview.html#gsea-algorithm" target="_blank" rel="noopener noreffer">gene set enrichment analysis</a> using gene ontology.</p>
+</blockquote>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20210825151530363.png"
+        data-srcset="/posts/clusterprofiler_pipeline/image-20210825151530363.png, image-20210825151530363.png 1.5x, /posts/clusterprofiler_pipeline/image-20210825151530363.png 2x"
+        data-sizes="auto"
+        alt="/posts/clusterprofiler_pipeline/image-20210825151530363.png"
+        title="image-20210825151530363" /></p>
+<h2 id="kegg-enrichment-analysis">KEGG enrichment analysis</h2>
+<blockquote>
+<p>The KEGG FTP service is not freely available for academic since 2012, and there are many software packages using out-dated KEGG annotation data. The <a href="http://bioconductor.org/packages/clusterProfiler" target="_blank" rel="noopener noreffer">clusterProfiler</a> package supports downloading latest online version of KEGG data using the <a href="https://www.kegg.jp/" target="_blank" rel="noopener noreffer">KEGG website</a>, which is freely available for academic users. Both KEGG pathway and module are supported in <a href="http://bioconductor.org/packages/clusterProfiler" target="_blank" rel="noopener noreffer">clusterProfiler</a>.</p>
+</blockquote>
+<blockquote>
+<p>The <a href="http://bioconductor.org/packages/clusterProfiler" target="_blank" rel="noopener noreffer">clusterProfiler</a> package supports all organisms that have KEGG annotation data available in KEGG database. User should pass abbreviation of academic name to the <code>organism</code> parameter. The full list of KEGG supported organisms can be accessed via <a href="http://www.genome.jp/kegg/catalog/org_list.html">http://www.genome.jp/kegg/catalog/org_list.html</a>. <a href="https://www.genome.jp/kegg/ko.html" target="_blank" rel="noopener noreffer">KEGG Orthology</a> (KO) Database is also supported by specifying <code>organism = &quot;ko&quot;</code>.</p>
+<p>The <a href="http://bioconductor.org/packages/clusterProfiler" target="_blank" rel="noopener noreffer">clusterProfiler</a> package provides <code>search_kegg_organism()</code> function to help searching supported organisms.</p>
+</blockquote>
+<h2 id="kegg-pathway-over-representation-analysis">KEGG pathway over-representation analysis</h2>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20210901130027852.png"
+        data-srcset="/posts/clusterprofiler_pipeline/image-20210901130027852.png, image-20210901130027852.png 1.5x, /posts/clusterprofiler_pipeline/image-20210901130027852.png 2x"
+        data-sizes="auto"
+        alt="/posts/clusterprofiler_pipeline/image-20210901130027852.png"
+        title="image-20210901130027852" /></p>
+<h2 id="kegg-pathway-gene-set-enrichment-analysis">KEGG pathway gene set enrichment analysis</h2>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20210825151910313.png"
+        data-srcset="/posts/clusterprofiler_pipeline/image-20210825151910313.png, image-20210825151910313.png 1.5x, /posts/clusterprofiler_pipeline/image-20210825151910313.png 2x"
+        data-sizes="auto"
+        alt="/posts/clusterprofiler_pipeline/image-20210825151910313.png"
+        title="image-20210825151910313" /></p>
+<h2 id="reactome-enrichment-analysis">Reactome enrichment analysis</h2>
+<blockquote>
+<p><a href="http://bioconductor.org/packages/ReactomePA" target="_blank" rel="noopener noreffer">ReactomePA</a> is designed for reactome pathway based analysis (<a href="https://yulab-smu.top/biomedical-knowledge-mining-book/references.html#ref-yu_reactomepa_2016" target="_blank" rel="noopener noreffer">Yu and He 2016</a>). Reactome is an open-source, open access, manually curated and peer-reviewed pathway database.</p>
+</blockquote>
+<blockquote>
+<p>Currently <a href="http://bioconductor.org/packages/ReactomePA" target="_blank" rel="noopener noreffer">ReactomePA</a> supports several model organisms, including ‘celegans,’ ‘fly,’ ‘human,’ ‘mouse,’ ‘rat,’ ‘yeast’ and ‘zebrafish.’ The input gene ID should be Entrez gene ID. We recommend using <a href="https://yulab-smu.top/biomedical-knowledge-mining-book/useful-utilities.html#bitr" target="_blank" rel="noopener noreffer"><code>clusterProfiler::bitr()</code></a> to convert biological IDs.</p>
+</blockquote>
+<h2 id="reactome-pathway-over-representation-analysis">Reactome pathway over-representation analysis</h2>
+<blockquote>
+<p>Enrichment analysis is a widely used approach to identify biological themes. <a href="http://bioconductor.org/packages/ReactomePA" target="_blank" rel="noopener noreffer">ReactomePA</a> implemented <code>enrichPathway()</code> that uses <a href="https://yulab-smu.top/biomedical-knowledge-mining-book/enrichment-overview.html#ora-algorithm" target="_blank" rel="noopener noreffer">hypergeometric model</a> to assess whether the number of selected genes associated with a reactome pathway is larger than expected.</p>
+</blockquote>
+<p><strong>Pathway Visualization</strong></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20210902111153812.png"
+        data-srcset="/posts/clusterprofiler_pipeline/image-20210902111153812.png, image-20210902111153812.png 1.5x, /posts/clusterprofiler_pipeline/image-20210902111153812.png 2x"
+        data-sizes="auto"
+        alt="/posts/clusterprofiler_pipeline/image-20210902111153812.png"
+        title="image-20210902111153812" /></p>
+<h2 id="reactome-pathway-gene-set-enrichment-analysis">Reactome pathway gene set enrichment analysis</h2>
+<p><strong>Pathway Visualization</strong></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20210902112458852.png"
+        data-srcset="/posts/clusterprofiler_pipeline/image-20210902112458852.png, image-20210902112458852.png 1.5x, /posts/clusterprofiler_pipeline/image-20210902112458852.png 2x"
+        data-sizes="auto"
+        alt="/posts/clusterprofiler_pipeline/image-20210902112458852.png"
+        title="image-20210902112458852" /></p>
+<h2 id="disease-enrichment-analysis">Disease enrichment analysis</h2>
+<blockquote>
+<p>We developed <a href="http://bioconductor.org/packages/DOSE" target="_blank" rel="noopener noreffer">DOSE</a> (<a href="https://yulab-smu.top/biomedical-knowledge-mining-book/references.html#ref-yu_dose_2015" target="_blank" rel="noopener noreffer">Yu et al. 2015</a>) package to promote the investigation of diseases. <a href="http://bioconductor.org/packages/DOSE" target="_blank" rel="noopener noreffer">DOSE</a> provides five methods for <a href="https://yulab-smu.top/biomedical-knowledge-mining-book/DOSE-semantic-similarity.html#DOSE-semantic-similarity" target="_blank" rel="noopener noreffer">measuring semantic similarities among DO terms and gene products</a>, hypergeometric model and gene set enrichment analysis (GSEA) for associating disease with gene list and extracting disease association insight from genome wide expression profiles.</p>
+</blockquote>
+<blockquote>
+<p><a href="http://bioconductor.org/packages/DOSE" target="_blank" rel="noopener noreffer">DOSE</a> supports enrichment analysis of Disease Ontology (DO) (<a href="https://yulab-smu.top/biomedical-knowledge-mining-book/references.html#ref-schriml_disease_2011" target="_blank" rel="noopener noreffer">Schriml et al. 2011</a>), <a href="http://ncg.kcl.ac.uk/" target="_blank" rel="noopener noreffer">Network of Cancer Gene</a> (<a href="https://yulab-smu.top/biomedical-knowledge-mining-book/references.html#ref-omer_ncg" target="_blank" rel="noopener noreffer">A. et al. 2016</a>) and <a href="http://disgenet.org/" target="_blank" rel="noopener noreffer">Disease Gene Network</a> (DisGeNET) (<a href="https://yulab-smu.top/biomedical-knowledge-mining-book/references.html#ref-janet_disgenet" target="_blank" rel="noopener noreffer">Janet et al. 2015</a>). In addition, several visualization methods were provided by <a href="http://bioconductor.org/packages/enrichplot" target="_blank" rel="noopener noreffer">enrichplot</a> to help interpreting semantic and enrichment results.</p>
+</blockquote>
+<h2 id="over-representation-analysis-for-disease-ontology">Over-representation analysis for disease ontology</h2>
+<blockquote>
+<p><strong>Enrichment Map</strong></p>
+<p>选取padjust前30个pathway可视化</p>
+</blockquote>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20210902110100687.png"
+        data-srcset="/posts/clusterprofiler_pipeline/image-20210902110100687.png, image-20210902110100687.png 1.5x, /posts/clusterprofiler_pipeline/image-20210902110100687.png 2x"
+        data-sizes="auto"
+        alt="/posts/clusterprofiler_pipeline/image-20210902110100687.png"
+        title="image-20210902110100687" /></p>
+<h3 id="边的宽度代表两个富集的term共有的基因数目点大小代表条目内基因数目多少颜色代表padjust值越小越红"><strong>边的宽度代表两个富集的Term共有的基因数目，点大小代表条目内基因数目多少，颜色代表Padjust，值越小越红；</strong></h3>
+<blockquote>
+<p><strong>Gene-Concept Network</strong></p>
+<p>选取padjust前5个Category可视化</p>
+</blockquote>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20210902110040120.png"
+        data-srcset="/posts/clusterprofiler_pipeline/image-20210902110040120.png, image-20210902110040120.png 1.5x, /posts/clusterprofiler_pipeline/image-20210902110040120.png 2x"
+        data-sizes="auto"
+        alt="/posts/clusterprofiler_pipeline/image-20210902110040120.png"
+        title="image-20210902110040120" /></p>
+<p><strong>基因与其被注释的条目连线，点的颜色代表表达变化，圈的大小代表对应注释内基因数目多少</strong></p>
+<h2 id="disease-gene-set-enrichment-analysis">Disease gene set enrichment analysis</h2>
+<p><strong>Enrichment Map</strong></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20210902110137394.png"
+        data-srcset="/posts/clusterprofiler_pipeline/image-20210902110137394.png, image-20210902110137394.png 1.5x, /posts/clusterprofiler_pipeline/image-20210902110137394.png 2x"
+        data-sizes="auto"
+        alt="/posts/clusterprofiler_pipeline/image-20210902110137394.png"
+        title="image-20210902110137394" /></p>
+<p><strong>Gene-Concept Network</strong></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20210902110157313.png"
+        data-srcset="/posts/clusterprofiler_pipeline/image-20210902110157313.png, image-20210902110157313.png 1.5x, /posts/clusterprofiler_pipeline/image-20210902110157313.png 2x"
+        data-sizes="auto"
+        alt="/posts/clusterprofiler_pipeline/image-20210902110157313.png"
+        title="image-20210902110157313" /></p>
+<h2 id="可视化的结果还加上了热图聚类树及upset图">可视化的结果，还加上了热图，聚类树及upset图</h2>
+<blockquote>
+<h2 id="热图">热图</h2>
+</blockquote>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="heatmap.jpg"
+        data-srcset="/posts/clusterprofiler_pipeline/heatmap.jpg, heatmap.jpg 1.5x, /posts/clusterprofiler_pipeline/heatmap.jpg 2x"
+        data-sizes="auto"
+        alt="/posts/clusterprofiler_pipeline/heatmap.jpg"
+        title="image-20210902110157313" /></p>
+<blockquote>
+<h2 id="聚类树">聚类树</h2>
+</blockquote>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="tree.jpg"
+        data-srcset="/posts/clusterprofiler_pipeline/tree.jpg, tree.jpg 1.5x, /posts/clusterprofiler_pipeline/tree.jpg 2x"
+        data-sizes="auto"
+        alt="/posts/clusterprofiler_pipeline/tree.jpg"
+        title="image-20210902110157313" /></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-08-24</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/posts/clusterprofiler_pipeline/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://cb-majorbiolab.work/posts/clusterprofiler_pipeline/" data-title="使用clusterProfiler对基因集进行富集分析（任何物种）" data-via="https://twitter.com/czheluo" data-hashtags="RNAseq,富集分析,clusterProfiler"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://cb-majorbiolab.work/posts/clusterprofiler_pipeline/" data-hashtag="RNAseq"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Linkedin" data-sharer="linkedin" data-url="http://cb-majorbiolab.work/posts/clusterprofiler_pipeline/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Hacker News" data-sharer="hackernews" data-url="http://cb-majorbiolab.work/posts/clusterprofiler_pipeline/" data-title="使用clusterProfiler对基因集进行富集分析（任何物种）"><i class="fab fa-hacker-news fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://cb-majorbiolab.work/posts/clusterprofiler_pipeline/" data-title="使用clusterProfiler对基因集进行富集分析（任何物种）"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://cb-majorbiolab.work/posts/clusterprofiler_pipeline/" data-title="使用clusterProfiler对基因集进行富集分析（任何物种）" data-ralateuid="https://weibo.com/2161302013/profile"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/rnaseq/">RNAseq</a>,&nbsp;<a href="/tags/%E5%AF%8C%E9%9B%86%E5%88%86%E6%9E%90/">富集分析</a>,&nbsp;<a href="/tags/clusterprofiler/">clusterProfiler</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/degs-viz/" class="prev" rel="prev" title="差异表达分析结果可视化"><i class="fas fa-angle-left fa-fw"></i>差异表达分析结果可视化</a>
+            <a href="/posts/interactive-three-way-differential-expression-analysis/" class="next" rel="next" title="RNAseq三个差异组比较分析">RNAseq三个差异组比较分析<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript><div id="fb-root" class="comment"></div>
+            <div
+                class="fb-comments"
+                data-href="http://cb-majorbiolab.work/posts/clusterprofiler_pipeline/"
+                data-width="100%"
+                data-numposts="10"
+            ></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://developers.facebook.com/docs/plugins/comments/"></a>Facebook</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">MAJOR Computational Biology Research Lab</div>
+                <div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020-2022, MENG LUO, All rights reserved.</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+                
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="https://connect.facebook.net/zh_CN/sdk.js#xfbml=1&amp;version=v5.0&amp;appId=&amp;autoLogAppEvents=1" defer></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"valine":{"appId":"Noyy9UKaXGwYBIUdvBTt7u76-gzGzoHsz","appKey":"15w6pTF8mFoxnm8muOFx5buM","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"VX4BXOJBC5","algoliaIndex":"majorbio.zh-cn","algoliaSearchKey":"53790f167edb548b217bfe91dd891ac0","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

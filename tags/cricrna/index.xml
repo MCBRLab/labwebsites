@@ -1,0 +1,16 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>cricRNA - 标签 - MAJOR Computational Biology Research Lab</title>
+        <link>http://cb-majorbiolab.work/tags/cricrna/</link>
+        <description>cricRNA - 标签 - MAJOR Computational Biology Research Lab</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 06 Dec 2021 17:29:59 &#43;0800</lastBuildDate><atom:link href="http://cb-majorbiolab.work/tags/cricrna/" rel="self" type="application/rss+xml" /><item>
+    <title>circRNA quantification, differential expression analysis and miRNA target prediction of RNA-Seq data</title>
+    <link>http://cb-majorbiolab.work/posts/circrna-pipeline/</link>
+    <pubDate>Mon, 06 Dec 2021 17:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/circrna-pipeline/</guid>
+    <description><![CDATA[nf-core/circrnaworkflow: Usage It is recommended that first time users run nf-core/circrnaworkflow with the minimal test dataset either locally or on a HPC, referring to the output documentation before running a full analysis.
+1  nextflow run nf-core/circrnaworkflow -profile test   Run the test dataset on a HPC:
+1  nextflow run nf-core/circrnaworkflow -profile test,&lt;docker/singularity/podman/institute&gt;   Running the pipeline A typical command for running the pipeline is as follows:]]></description>
+</item></channel>
+</rss>

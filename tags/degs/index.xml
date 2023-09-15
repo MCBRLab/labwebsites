@@ -1,0 +1,32 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>DEGs - 标签 - MAJOR Computational Biology Research Lab</title>
+        <link>http://cb-majorbiolab.work/tags/degs/</link>
+        <description>DEGs - 标签 - MAJOR Computational Biology Research Lab</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 06 Dec 2021 17:29:59 &#43;0800</lastBuildDate><atom:link href="http://cb-majorbiolab.work/tags/degs/" rel="self" type="application/rss+xml" /><item>
+    <title>circRNA quantification, differential expression analysis and miRNA target prediction of RNA-Seq data</title>
+    <link>http://cb-majorbiolab.work/posts/circrna-pipeline/</link>
+    <pubDate>Mon, 06 Dec 2021 17:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/circrna-pipeline/</guid>
+    <description><![CDATA[nf-core/circrnaworkflow: Usage It is recommended that first time users run nf-core/circrnaworkflow with the minimal test dataset either locally or on a HPC, referring to the output documentation before running a full analysis.
+1  nextflow run nf-core/circrnaworkflow -profile test   Run the test dataset on a HPC:
+1  nextflow run nf-core/circrnaworkflow -profile test,&lt;docker/singularity/podman/institute&gt;   Running the pipeline A typical command for running the pipeline is as follows:]]></description>
+</item><item>
+    <title>Integrative analyses of single-cell transcriptome and regulome using sc/n-workflow</title>
+    <link>http://cb-majorbiolab.work/posts/scrnaseq-pipeline/</link>
+    <pubDate>Thu, 17 Dec 2020 17:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/scrnaseq-pipeline/</guid>
+    <description><![CDATA[SingleCelldataVZ nRNA-seq Schematicsc/nRNA-seq Schematic
+" nRNA-seq Schematic 
+Summarizing single-cell RNA-sequencing data with unified molecular identifiers by scumi scumi  As for &ndash;cell_barcode_whitelist, typically you don&rsquo;t need to set this parameter as you don&rsquo;t know which cell barcodes are from cells. Note, this parameter is different from the candidate cell barcodes for protocols such as 10x or inDrops, which are know and should be used as inputs. Let me know if it&rsquo;s confusion.]]></description>
+</item><item>
+    <title>Bayesian approach to single-cell differential expression analysis</title>
+    <link>http://cb-majorbiolab.work/posts/single-cell-differential-expression/</link>
+    <pubDate>Mon, 14 Dec 2020 16:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/single-cell-differential-expression/</guid>
+    <description><![CDATA[SCDE SCDE官方帮助文档 一. 数据准备 单细胞表达矩阵:行为基因，列为细胞 分组文件（存在批次时，可添加批次信息进行批次处理） 二. Pipeline 1 2 3 4 脚本位置]]></description>
+</item></channel>
+</rss>

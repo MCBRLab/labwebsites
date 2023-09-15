@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>比较不同降维分析方法在RNAseq数据的可视化结果 - MAJOR Computational Biology Research Lab</title><meta name="Description" content="RNAseq降维分析方法比较"><meta property="og:title" content="比较不同降维分析方法在RNAseq数据的可视化结果" />
+<meta property="og:description" content="RNAseq降维分析方法比较" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://cb-majorbiolab.work/posts/dimensionality-reduction-for-dataviz/" />
+<meta property="article:published_time" content="2021-11-26T16:29:59+08:00" />
+<meta property="article:modified_time" content="2021-11-26T16:29:59+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="比较不同降维分析方法在RNAseq数据的可视化结果"/>
+<meta name="twitter:description" content="RNAseq降维分析方法比较"/>
+<meta name="application-name" content="MAJOR Computational Biology Research Lab">
+<meta name="apple-mobile-web-app-title" content="MAJOR Computational Biology Research Lab"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/MBIL.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://cb-majorbiolab.work/posts/dimensionality-reduction-for-dataviz/" /><link rel="prev" href="http://cb-majorbiolab.work/posts/circran-quantification/" /><link rel="next" href="http://cb-majorbiolab.work/posts/visually-combining-expression-data-with-functional-analysis/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "比较不同降维分析方法在RNAseq数据的可视化结果",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/cb-majorbiolab.work\/posts\/dimensionality-reduction-for-dataviz\/"
+        },"genre": "posts","keywords": "RNAseq, MDS, scRNA","wordcount":  5076 ,
+        "url": "http:\/\/cb-majorbiolab.work\/posts\/dimensionality-reduction-for-dataviz\/","datePublished": "2021-11-26T16:29:59+08:00","dateModified": "2021-11-26T16:29:59+08:00","publisher": {
+            "@type": "Organization",
+            "name": "美吉生物信息团队"},"author": {
+                "@type": "Person",
+                "name": "Jiawen Ma"
+            },"description": "RNAseq降维分析方法比较"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="MAJOR Computational Biology Research Lab"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/MBIL.svg"
+        data-srcset="/images/MBIL.svg, /images/MBIL.svg 1.5x, /images/MBIL.svg 2x"
+        data-sizes="auto"
+        alt="/images/MBIL.svg"
+        title="/images/MBIL.svg" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="Home"> Home </a><a class="menu-item" href="/workshop/" title=" "> Workshop/Talk </a><a class="menu-item" href="/publication/" title="Publications"> Publications </a><a class="menu-item" href="/team/" title="Team"> Team </a><a class="menu-item" href="/resource/" title="Resource"> Resource </a><a class="menu-item" href="/software/" title="Software"> Software </a><a class="menu-item" href="/ne/" title="News/Events"> News/Events </a><a class="menu-item" href="/joinus/" title="Join/Contact"> Join/Contact </a><a class="menu-item" href="https://github.com/MajorBio" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="MAJOR Computational Biology Research Lab"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/MBIL.svg"
+        data-srcset="/images/MBIL.svg, /images/MBIL.svg 1.5x, /images/MBIL.svg 2x"
+        data-sizes="auto"
+        alt="/images/MBIL.svg"
+        title="/images/MBIL.svg" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="Home">Home</a><a class="menu-item" href="/workshop/" title=" ">Workshop/Talk</a><a class="menu-item" href="/publication/" title="Publications">Publications</a><a class="menu-item" href="/team/" title="Team">Team</a><a class="menu-item" href="/resource/" title="Resource">Resource</a><a class="menu-item" href="/software/" title="Software">Software</a><a class="menu-item" href="/ne/" title="News/Events">News/Events</a><a class="menu-item" href="/joinus/" title="Join/Contact">Join/Contact</a><a class="menu-item" href="https://github.com/MajorBio" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">比较不同降维分析方法在RNAseq数据的可视化结果</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/bystander456" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Jiawen Ma</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/rnaseq/"><i class="far fa-folder fa-fw"></i>RNAseq</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-11-26">2021-11-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 5076 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 11 分钟&nbsp;<span id="/posts/dimensionality-reduction-for-dataviz/" class="leancloud_visitors" data-flag-title="比较不同降维分析方法在RNAseq数据的可视化结果">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-ica独立成分分析">1. ICA(独立成分分析)</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#11-ica与pca区别">1.1 ICA与PCA区别：</a></li>
+            <li><a href="#12-使用示例">1.2 使用示例：</a></li>
+            <li><a href="#13-结果展示">1.3 结果展示</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#2-lda">2. LDA</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#21-kda与pca区别">2.1 KDA与PCA区别：</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#3-fa-因子分析">3. FA (因子分析)</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#31-fa与pca区别">3.1 FA与PCA区别：</a></li>
+            <li><a href="#32-r实战分析">3.2 R实战分析</a></li>
+            <li><a href="#33-使用示例">3.3 使用示例：</a></li>
+            <li><a href="#34-结果展示">3.4 结果展示</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#4-t-sne">4. t-SNE</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#43-使用示例">4.3 使用示例：</a></li>
+            <li><a href="#44-结果展示">4.4 结果展示</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#5-diffusion-map扩散映射">5. Diffusion Map(扩散映射)</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#51-使用示例">5.1 使用示例：</a></li>
+            <li><a href="#52-结果展示">5.2 结果展示</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#6-glmpca">6. glmpca</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#61-使用示例">6.1 使用示例：</a></li>
+            <li><a href="#62-结果展示">6.2 结果展示</a></li>
+          </ul>
+        </li>
+        <li><a href="#7-isomap等距特征映射">7. ISOMAP(等距特征映射)</a>
+          <ul>
+            <li><a href="#71-使用示例">7.1 使用示例：</a></li>
+            <li><a href="#72-结果展示">7.2 结果展示</a></li>
+          </ul>
+        </li>
+        <li><a href="#8-lle-locally-linear-embedding">8. LLE( Locally linear embedding)</a>
+          <ul>
+            <li><a href="#81-使用示例">8.1 使用示例：</a></li>
+            <li><a href="#82-结果展示">8.2 结果展示</a></li>
+          </ul>
+        </li>
+        <li><a href="#9-ltsalocal-tangent-space-alignment">9. LTSA（Local Tangent Space Alignment）</a>
+          <ul>
+            <li><a href="#91-使用示例">9.1 使用示例：</a></li>
+            <li><a href="#92-结果展示">9.2 结果展示</a></li>
+          </ul>
+        </li>
+        <li><a href="#10-nmf非负矩阵分解">10. NMF（非负矩阵分解）</a>
+          <ul>
+            <li><a href="#101-使用示例">10.1 使用示例：</a></li>
+            <li><a href="#102-结果展示">10.2 结果展示</a></li>
+          </ul>
+        </li>
+        <li><a href="#11zinb-wavezero-inflated-negative-binomial-model-for-rna-seq-data">11.ZINB-WaVE(Zero-Inflated Negative Binomial Model for RNA-Seq Data)</a>
+          <ul>
+            <li><a href="#111-使用示例">11.1 使用示例：</a></li>
+            <li><a href="#112-结果展示">11.2 结果展示</a></li>
+          </ul>
+        </li>
+        <li><a href="#12-pcmf">12. pCMF</a>
+          <ul>
+            <li><a href="#121-使用示例">12.1 使用示例：</a></li>
+            <li><a href="#122-结果展示">12.2 结果展示</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="不同的降维分析方法">不同的降维分析方法</h1>
+<p>​        数据降维就是通过特征选择或者特征变换操作将数据从原始的D维空间投影到新的K维空间，直白的说是把数据的维度降下来，用一个相对低维的向量来表示原始高维度的特征。从理解上讲降维要做的就是学习数据新的表示，这种数据新的表示在形式上更简洁，而且要求能够尽可能多地保存数据原有的信息（或者让其信息变得更好，更清晰更明确）。数据降维方法主要分为特征选择和特征抽取(特征降维)两类。
+特征选择方法：是在所有的特征中通过子集搜索算法寻找和模型最相关的特征子集的过程，简单的说就是在所有特征中选择和目标最相关的一些特征，丢弃掉一些不太重要的特征。
+特征抽取：也被称为特征降维，用的最广泛也最常见的一种特征抽取方法就是PCA。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="1.png"
+        data-srcset="/posts/dimensionality-reduction-for-dataviz/1.png, 1.png 1.5x, /posts/dimensionality-reduction-for-dataviz/1.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-for-dataviz/1.png"
+        title="1" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211119141133820.png"
+        data-srcset="/posts/dimensionality-reduction-for-dataviz/image-20211119141133820.png, image-20211119141133820.png 1.5x, /posts/dimensionality-reduction-for-dataviz/image-20211119141133820.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-for-dataviz/image-20211119141133820.png"
+        title="image-20211119141133820" /></p>
+<h2 id="1-ica独立成分分析">1. ICA(独立成分分析)</h2>
+<p>独立成分分析（ICA），指在只知道混合信号，而不知道源信号、噪声以及混合机制的情况下，分离或近似地分离出源信号的一种分析过程；是盲信号分析领域的一个强有力方法，也是求非高斯分布数据隐含因子的方法</p>
+<h4 id="11-ica与pca区别">1.1 ICA与PCA区别：</h4>
+<p><strong>相同点：</strong></p>
+<ol>
+<li><strong>都不需要对源信号的分布做具体的假设</strong>； 如果观察到的信号为高斯，那么源信号也为高斯，此时PCA和ICA等价。</li>
+<li><strong>都可以实现数据得降维</strong>； PCA是寻找特征值矩阵，ICA是寻找解混矩阵；从线性代数的角度去理解，PCA和ICA都是要找到一组基，这组基张成一个特征空间，数据的处理就都需要映射到新空间中去。</li>
+</ol>
+<p><strong>不同点：</strong></p>
+<p>1）处理数据的类型不同： ICA处理非高斯数据，PCA、FA都是处理高斯数据。
+2）处理目的不同： ICA提取相互独立的属性，而且降维；PCA只做数据的降维。ICA的数据预处理中会用到PCA
+3）求解过程不同：ICA 认为观测信号是若干个统计独立的分量的线性组合，ICA要做的是一个解混过程；而PCA是一个信息提取的过程，4）将原始数据降维，现已成为ICA将数据标准化的预处理步骤；</p>
+<p>PCA和ICA的用途完全不同。 如果只在意数据的能量或方差、假设噪声或不感兴趣的信号都比较微弱，那么用PCA就能把主要信号留下来。在某种意义上，ICA更智能——它不在意信号的能量或方差，只看独立性。所以给定的待分析的混合信号经任意的线性变换都不会影响ICA的输出结果，但会严重影响PCA的结果。简而言之：PCA有助于压缩数据，而ICA有助于分离数据</p>
+<h4 id="12-使用示例">1.2 使用示例：</h4>
+<p><strong>路径:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">脚本：/mnt/ilustre/users/jiawen.ma/script/RNA-seq/DR
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>程序执行：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">Rscript ICA.R -e gene.tpm.matrix.annot.xls  -g group.txt
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">参数说明：
+-e：基因表达矩阵
+-g：分组文件
+-a：算法选择；默认为&#34;par&#34;
+-f：负熵方法的选择；默认为&#34;logcosh&#34;
+-o：输出路径；默认为./
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211111124926653.png"
+        data-srcset="/posts/dimensionality-reduction-for-dataviz/image-20211111124926653.png, image-20211111124926653.png 1.5x, /posts/dimensionality-reduction-for-dataviz/image-20211111124926653.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-for-dataviz/image-20211111124926653.png"
+        title="image-20211111124926653" /></p>
+<h4 id="13-结果展示">1.3 结果展示</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211111130149888.png"
+        data-srcset="/posts/dimensionality-reduction-for-dataviz/image-20211111130149888.png, image-20211111130149888.png 1.5x, /posts/dimensionality-reduction-for-dataviz/image-20211111130149888.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-for-dataviz/image-20211111130149888.png"
+        title="image-20211111130149888" /></p>
+<h2 id="2-lda">2. LDA</h2>
+<h4 id="21-kda与pca区别">2.1 KDA与PCA区别：</h4>
+<p><strong>相同点：</strong></p>
+<p>1）两者均可以对数据进行降维。</p>
+<p>2）两者在降维时均使用了矩阵特征分解的思想。</p>
+<p>3）两者都假设数据符合高斯分布。</p>
+<p><strong>不同点：</strong></p>
+<p>1）LDA是有监督的降维方法，而PCA是无监督的降维方法</p>
+<p>2）LDA降维最多降到类别数k-1的维数，而PCA没有这个限制。</p>
+<p>3）LDA除了可以用于降维，还可以用于分类。</p>
+<p>4）LDA选择分类性能最好的投影方向，而PCA选择样本点投影具有最大方差的方向。</p>
+<h2 id="3-fa-因子分析">3. FA (因子分析)</h2>
+<h4 id="31-fa与pca区别">3.1 FA与PCA区别：</h4>
+<p>**因子分析（Factor analysis）<strong>旨在提出</strong>因子模型（Factor model）**来研究如何用几个公共因子，记作F_{1},&hellip;,F_{m}，通常m&lt;p，来刻画原始变量之间的相关性。</p>
+<p><strong>相同点：</strong></p>
+<ol>
+<li>PCA与FA都是数据降维的重要方法，都对原始数据进行标准化处理，都消除了原始指标的相关性对综合评价所造成的信息重复的影响，都属于因素分析法，都基于统计分析方法；</li>
+<li>二者均应用于高斯分布的数据，非高斯分布的数据采用ICA算法；</li>
+<li>二者构造综合评价时所涉及的权数具有客观性，在原始信息损失不大的前提下，减少了后期数据挖掘和分析的工作量。</li>
+</ol>
+<p>不同点：</p>
+<ol>
+<li>原理不同：PCA仅仅是变量变换，找出原始变量的线性组合；FA是寻找变量内部相关性及潜在的共同因素。</li>
+<li>功能、作用不同：PCA简化原有变量，强调解释数据变异的能力，适合做数据简化；FA解释原有变量之间关系，强调变量之间的相关性，适合检测数据结构。</li>
+<li>有无误差：PCA模型无误差项、不需要旋转；FA模型有误差项，一般需要旋转才能对因子进行命名和解释。</li>
+</ol>
+<h4 id="32-r实战分析">3.2 R实战分析</h4>
+<p>​	与主成分分析相同的是，FA分析需要使用<strong>psych</strong>包中**fa.parallel()**函数绘制碎石图，确定组成分数与因子数。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-R" data-lang="R"><span class="nf">fa.parallel</span><span class="p">(</span><span class="n">cor_data</span><span class="p">,</span> <span class="n">n.obs</span><span class="o">=</span><span class="m">112</span><span class="p">,</span> <span class="n">fa</span><span class="o">=</span><span class="s">&#34;both&#34;</span><span class="p">,</span> <span class="n">n.iter</span><span class="o">=</span><span class="m">100</span><span class="p">)</span> <span class="c1">#fa参数为输出组成分或因子的数。</span>
+<span class="n">Parallel</span> <span class="n">analysis</span> <span class="n">suggests</span> <span class="n">that</span> <span class="n">the</span> <span class="n">number</span> <span class="n">of</span> <span class="n">factors</span> <span class="o">=</span>  <span class="m">4</span>  <span class="n">and</span> <span class="n">the</span> <span class="n">number</span> <span class="n">of</span> <span class="n">components</span> <span class="o">=</span>  <span class="m">3</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211110125418590.png"
+        data-srcset="/posts/dimensionality-reduction-for-dataviz/image-20211110125418590.png, image-20211110125418590.png 1.5x, /posts/dimensionality-reduction-for-dataviz/image-20211110125418590.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-for-dataviz/image-20211110125418590.png"
+        title="image-20211110125418590" /></p>
+<p>结合上图和函数给出的信息得到以下结论：如果使用PCA，我们需要选择三个主成分；如果使用EFA，我们需要选择4个因子。</p>
+<p>使用fa()函数进行因子提取，调用公式如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-R" data-lang="R"><span class="o">&gt;</span> <span class="nf">fa</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">nfactors</span><span class="o">=</span><span class="p">,</span> <span class="n">n.obs</span><span class="o">=</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span class="p">,</span> <span class="n">scores</span><span class="o">=</span><span class="p">,</span> <span class="n">fm</span><span class="o">=</span><span class="p">)</span>
+<span class="c1"># r:相关系数矩阵或原始数据矩阵，</span>
+<span class="c1"># nfactors:设定主提取的因子数（默认为1）</span>
+<span class="c1"># n.obs:观测数（输入相关系数矩阵时需要填写）</span>
+<span class="c1"># rotate:设定旋转的方法（默认互变异数最小法）</span>
+<span class="c1"># scores:设定是否需要计算因子得分（默认不需要）</span>
+<span class="c1"># fm:设定因子化方法（默认极小残差法） </span>
+</code></pre></td></tr></table>
+</div>
+</div><p>与主成分分析不同的是，在因子分析中我们需要指定提取公因子的方法（<strong>fm</strong>），方法包括：</p>
+<ul>
+<li><strong>ml</strong>：最大似然法</li>
+<li><strong>pa</strong>：主轴迭代法</li>
+<li><strong>wls</strong>：加权最小二乘法</li>
+<li><strong>gls</strong>：广义加权最小二乘法</li>
+<li><strong>minres</strong>：最小残差法</li>
+</ul>
+<h4 id="33-使用示例">3.3 使用示例：</h4>
+<p><strong>路径:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">脚本：/mnt/ilustre/users/jiawen.ma/script/RNA-seq/DR
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>程序执行：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">Rscript FA.R -e gene.tpm.matrix.annot.xls  -g group.txt
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">参数说明：
+-e：基因表达矩阵
+-g：分组文件
+-r：设定旋转的方法；默认为<span class="s2">&#34;varimax&#34;</span>
+-f：提取公因子的方法；默认为<span class="s2">&#34;gls&#34;</span>
+-o：输出路径；默认为./
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211110145550479.png"
+        data-srcset="/posts/dimensionality-reduction-for-dataviz/image-20211110145550479.png, image-20211110145550479.png 1.5x, /posts/dimensionality-reduction-for-dataviz/image-20211110145550479.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-for-dataviz/image-20211110145550479.png"
+        title="image-20211110145550479" /></p>
+<h4 id="34-结果展示">3.4 结果展示</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211110145951439.png"
+        data-srcset="/posts/dimensionality-reduction-for-dataviz/image-20211110145951439.png, image-20211110145951439.png 1.5x, /posts/dimensionality-reduction-for-dataviz/image-20211110145951439.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-for-dataviz/image-20211110145951439.png"
+        title="image-20211110145951439" /></p>
+<blockquote>
+<p>gene_FA.pdf: 使用FA方法时，样本在二维坐标的分布图。</p>
+</blockquote>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211110150058482.png"
+        data-srcset="/posts/dimensionality-reduction-for-dataviz/image-20211110150058482.png, image-20211110150058482.png 1.5x, /posts/dimensionality-reduction-for-dataviz/image-20211110150058482.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-for-dataviz/image-20211110150058482.png"
+        title="image-20211110150058482" /></p>
+<blockquote>
+<p>gene_fa_parallel.pdf: 碎石图。</p>
+</blockquote>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211110150904560.png"
+        data-srcset="/posts/dimensionality-reduction-for-dataviz/image-20211110150904560.png, image-20211110150904560.png 1.5x, /posts/dimensionality-reduction-for-dataviz/image-20211110150904560.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-for-dataviz/image-20211110150904560.png"
+        title="image-20211110150904560" /></p>
+<h2 id="4-t-sne">4. t-SNE</h2>
+<p>​	t-SNE将数据点之间的相似度转化为条件概率，原始空间中数据点的相似度由正态分布表示，嵌入空间中数据点的相似度由t分布表示。通过原始空间和嵌入空间的联合概率分布的KL散度（用于评估两个分布的相似度的指标）来评估嵌入效果的好坏。</p>
+<p>​	t-SNE的主要优势在于通过t分布与正态分布的差异，解决了降维后的拥挤问题，使得相似的样本能够聚集在一起，而差异大的样本能够有效地分开，避免了其他降维方法样本分布拥挤、边界不明显的缺点。但它同时也有计算慢、对参数敏感、结果具有随机性等缺陷。在实践中具体采用哪种方法，可以根据情况决定。</p>
+<h4 id="43-使用示例">4.3 使用示例：</h4>
+<p><strong>路径:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">脚本：/mnt/ilustre/users/jiawen.ma/script/RNA-seq/DR
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>程序执行：</strong></p>
+<blockquote>
+<p>**注意事项：**需要使用unique函数去除重复数据</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">Rscript Tsne.R -e gene.tpm.matrix.annot.xls  -g group.txt
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">参数说明：
+-e：基因表达矩阵
+-g：分组文件
+-o：输出路径；默认为./
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211111130607490.png"
+        data-srcset="/posts/dimensionality-reduction-for-dataviz/image-20211111130607490.png, image-20211111130607490.png 1.5x, /posts/dimensionality-reduction-for-dataviz/image-20211111130607490.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-for-dataviz/image-20211111130607490.png"
+        title="image-20211111130607490" /></p>
+<h4 id="44-结果展示">4.4 结果展示</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211111130401966.png"
+        data-srcset="/posts/dimensionality-reduction-for-dataviz/image-20211111130401966.png, image-20211111130401966.png 1.5x, /posts/dimensionality-reduction-for-dataviz/image-20211111130401966.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-for-dataviz/image-20211111130401966.png"
+        title="image-20211111130401966" /></p>
+<h2 id="5-diffusion-map扩散映射">5. Diffusion Map(扩散映射)</h2>
+<p>Diffusion Map又称为扩散映射，其原理是将空间距离转换为一种状态转移的概率，从而确定随机游走的方向，从而确定细胞发育轨迹
+该算法分为确定细胞转移方向（Markov矩阵）和降维（Markov矩阵特征值分解降维）两块</p>
+<ol>
+<li>
+<p>其通过 整合数据的局部几何关系 揭示 数据集在不同尺度的几何结构。</p>
+</li>
+<li>
+<p>与PCA (principal component analysis)、MDS (Multidimensional Scaling) 这些降维方法相比，扩散映射 非线性，聚焦于发现数据集潜在的流形结构。</p>
+</li>
+<li>
+<p>优点：对噪声鲁棒，计算代价较低</p>
+</li>
+</ol>
+<h4 id="51-使用示例">5.1 使用示例：</h4>
+<p><strong>路径:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">脚本：/mnt/ilustre/users/jiawen.ma/script/RNA-seq/DR
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>程序执行：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">Rscript DiffusionMap.R -e gene.tpm.matrix.annot.xls  -g group.txt
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-R" data-lang="R">参数说明：
+<span class="o">-</span><span class="n">e</span>：基因表达矩阵
+<span class="o">-</span><span class="n">g</span>：分组文件
+<span class="o">-</span><span class="n">o</span>：输出路径；默认为<span class="n">./</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211112111845447.png"
+        data-srcset="/posts/dimensionality-reduction-for-dataviz/image-20211112111845447.png, image-20211112111845447.png 1.5x, /posts/dimensionality-reduction-for-dataviz/image-20211112111845447.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-for-dataviz/image-20211112111845447.png"
+        title="image-20211112111845447" /></p>
+<h4 id="52-结果展示">5.2 结果展示</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211112111925218.png"
+        data-srcset="/posts/dimensionality-reduction-for-dataviz/image-20211112111925218.png, image-20211112111925218.png 1.5x, /posts/dimensionality-reduction-for-dataviz/image-20211112111925218.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-for-dataviz/image-20211112111925218.png"
+        title="image-20211112111925218" /></p>
+<h2 id="6-glmpca">6. glmpca</h2>
+<p>实现主成分分析（GLM-PCA）的广义版本，用于非正态分布数据（如计数或二进制矩阵）的降维。</p>
+<h4 id="61-使用示例">6.1 使用示例：</h4>
+<p><strong>路径:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">脚本：/mnt/ilustre/users/jiawen.ma/script/RNA-seq/DR
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>程序执行：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">Rscript Glmpca.R -e gene.tpm.matrix.annot.xls  -g group.txt
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-R" data-lang="R">参数说明：
+<span class="o">-</span><span class="n">e</span>：基因表达矩阵
+<span class="o">-</span><span class="n">g</span>：分组文件
+<span class="o">-</span><span class="n">f</span>：对数据进行似然法，默认为：“<span class="n">poi</span>”；其它参数可为：<span class="s">&#34;nb&#34;</span><span class="p">,</span> <span class="s">&#34;nb2&#34;</span><span class="p">,</span> <span class="s">&#34;binom&#34;</span><span class="p">,</span> <span class="s">&#34;mult&#34;</span><span class="p">,</span> <span class="s">&#34;bern&#34;</span>
+<span class="o">-</span><span class="n">o</span>：输出路径；默认为<span class="n">./</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211112111228994.png"
+        data-srcset="/posts/dimensionality-reduction-for-dataviz/image-20211112111228994.png, image-20211112111228994.png 1.5x, /posts/dimensionality-reduction-for-dataviz/image-20211112111228994.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-for-dataviz/image-20211112111228994.png"
+        title="image-20211112111228994" /></p>
+<h4 id="62-结果展示">6.2 结果展示</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211112111706538.png"
+        data-srcset="/posts/dimensionality-reduction-for-dataviz/image-20211112111706538.png, image-20211112111706538.png 1.5x, /posts/dimensionality-reduction-for-dataviz/image-20211112111706538.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-for-dataviz/image-20211112111706538.png"
+        title="image-20211112111706538" /></p>
+<h3 id="7-isomap等距特征映射">7. ISOMAP(等距特征映射)</h3>
+<p>isomap算法是基于前面所讲的MDS算法，不同之处在于isomap用图中两点的最短路径距离替代了MDS中欧式空间的距离，这样能更好的拟合流行体数据。</p>
+<p>当我们已知数据嵌在一个高维的流行体时候，使用isomap明显会有更好的效果。</p>
+<h4 id="71-使用示例">7.1 使用示例：</h4>
+<p><strong>路径:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">脚本：/mnt/ilustre/users/jiawen.ma/script/RNA-seq/DR
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>程序执行：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">Rscript Isomap.R -e gene.tpm.matrix.annot.xls  -g group.txt
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-R" data-lang="R">参数说明：
+<span class="o">-</span><span class="n">e</span>：基因表达矩阵
+<span class="o">-</span><span class="n">g</span>：分组文件
+<span class="o">-</span><span class="n">o</span>：输出路径；默认为<span class="n">./</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="72-结果展示">7.2 结果展示</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211119095559567.png"
+        data-srcset="/posts/dimensionality-reduction-for-dataviz/image-20211119095559567.png, image-20211119095559567.png 1.5x, /posts/dimensionality-reduction-for-dataviz/image-20211119095559567.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-for-dataviz/image-20211119095559567.png"
+        title="image-20211119095559567" /></p>
+<h3 id="8-lle-locally-linear-embedding">8. LLE( Locally linear embedding)</h3>
+<p>局部线性嵌入(Locally Linear Embedding，以下简称LLE)是非常重要的降维方法。和传统的PCA，LDA等<strong>关注样本方差</strong>的降维方法相比，LLE关注于降维时<strong>保持样本局部的线性特征（保持原有拓扑结构）</strong>，由于LLE在降维时保持了样本的局部特征，它广泛的用于图像识别，高维数据可视化等领域。<strong>LLE是非线性降维技术</strong>，可以说是流形学习方法最经典的算法之一。</p>
+<p>但是LLE在有些情况下也并不适用，<strong>如果数据分布在整个封闭的球面上，LLE则不能将它映射到二维空间，且不能保持原有的数据流形</strong>。那么我们在处理数据中，首先假设数据不是分布在闭合的球面或者椭球面上。</p>
+<p>LLE算法认为每一个数据点都可以由其近邻点的线性加权组合构造得到。算法的主要步骤分为三步：(1)寻找每个样本点的k个近邻点；（2）由每个样本点的近邻点计算出该样本点的局部重建权值矩阵；（3）由该样本点的局部重建权值矩阵和其近邻点计算出该样本点的输出值。</p>
+<h4 id="81-使用示例">8.1 使用示例：</h4>
+<p><strong>路径:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">脚本：/mnt/ilustre/users/jiawen.ma/script/RNA-seq/DR
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>程序执行：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">Rscript LLE.R -e gene.tpm.matrix.annot.xls  -g group.txt
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-R" data-lang="R">参数说明：
+<span class="o">-</span><span class="n">e</span>：基因表达矩阵
+<span class="o">-</span><span class="n">g</span>：分组文件
+<span class="o">-</span><span class="n">o</span>：输出路径；默认为<span class="n">./</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="82-结果展示">8.2 结果展示</h4>
+<p><strong>找出使rho最小的K值</strong></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211119135903189.png"
+        data-srcset="/posts/dimensionality-reduction-for-dataviz/image-20211119135903189.png, image-20211119135903189.png 1.5x, /posts/dimensionality-reduction-for-dataviz/image-20211119135903189.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-for-dataviz/image-20211119135903189.png"
+        title="image-20211119135903189" /></p>
+<p><strong>降维结果图</strong></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211119140035931.png"
+        data-srcset="/posts/dimensionality-reduction-for-dataviz/image-20211119140035931.png, image-20211119140035931.png 1.5x, /posts/dimensionality-reduction-for-dataviz/image-20211119140035931.png 2x"
+        data-sizes="auto"
+        alt="/posts/dimensionality-reduction-for-dataviz/image-20211119140035931.png"
+        title="image-20211119140035931" /></p>
+<h3 id="9-ltsalocal-tangent-space-alignment">9. LTSA（Local Tangent Space Alignment）</h3>
+<p>LTSA的基本思路是用样本点的近邻区域的切空间来表示局部几何结构，然后对局部切空间进行重新排列得到非线性流形的用自然参数刻画的低维表示，是经典的流形学习与降维算法。</p>
+<h4 id="91-使用示例">9.1 使用示例：</h4>
+<p><strong>路径:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">脚本：/mnt/ilustre/users/jiawen.ma/script/RNA-seq/DR
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>程序执行：</strong></p>
+<blockquote>
+<p>**注意事项：**需要使用pca降维的特征值进行后续分析</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">Rscript Ltsa.R -e gene.tpm.matrix.annot.xls  -g group.txt
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-R" data-lang="R">参数说明：
+<span class="o">-</span><span class="n">e</span>：基因表达矩阵
+<span class="o">-</span><span class="n">g</span>：分组文件
+<span class="o">-</span><span class="n">o</span>：输出路径；默认为<span class="n">./</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="92-结果展示">9.2 结果展示</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="D:%5cPipeline%5cR_pipeline%5cDimensionality_Reduction%5cDimensionality_Reduction.assets%5cimage-20211126092935094.png"
+        data-srcset="D:%5cPipeline%5cR_pipeline%5cDimensionality_Reduction%5cDimensionality_Reduction.assets%5cimage-20211126092935094.png, D:%5cPipeline%5cR_pipeline%5cDimensionality_Reduction%5cDimensionality_Reduction.assets%5cimage-20211126092935094.png 1.5x, D:%5cPipeline%5cR_pipeline%5cDimensionality_Reduction%5cDimensionality_Reduction.assets%5cimage-20211126092935094.png 2x"
+        data-sizes="auto"
+        alt="D:\Pipeline\R_pipeline\Dimensionality_Reduction\Dimensionality_Reduction.assets\image-20211126092935094.png"
+        title="image-20211126092935094" /></p>
+<h3 id="10-nmf非负矩阵分解">10. NMF（非负矩阵分解）</h3>
+<p> NMF(Non-negative matrix factorization)，即对于任意给定的一个非负矩阵V，其能够寻找到一个非负矩阵W和一个非负矩阵H，满足条件V=W*H,从而将一个非负的矩阵分解为左右两个非负矩阵的乘积。其中，V矩阵中每一列代表一个观测(observation)，每一行代表一个特征(feature)；W矩阵称为基矩阵，H矩阵称为系数矩阵或权重矩阵。这时用系数矩阵H代替原始矩阵，就可以实现对原始矩阵进行降维，得到数据特征的降维矩阵。</p>
+<h4 id="101-使用示例">10.1 使用示例：</h4>
+<p><strong>路径:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">脚本：/mnt/ilustre/users/jiawen.ma/script/RNA-seq/DR
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>程序执行：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">Rscript NMF.R -e gene.tpm.matrix.annot.xls  -g group.txt
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-R" data-lang="R">参数说明：
+<span class="o">-</span><span class="n">e</span>：基因表达矩阵
+<span class="o">-</span><span class="n">g</span>：分组文件
+<span class="o">-</span><span class="n">o</span>：输出路径；默认为<span class="n">./</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="102-结果展示">10.2 结果展示</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="D:%5cPipeline%5cR_pipeline%5cDimensionality_Reduction%5cDimensionality_Reduction.assets%5cimage-20211126093914798.png"
+        data-srcset="D:%5cPipeline%5cR_pipeline%5cDimensionality_Reduction%5cDimensionality_Reduction.assets%5cimage-20211126093914798.png, D:%5cPipeline%5cR_pipeline%5cDimensionality_Reduction%5cDimensionality_Reduction.assets%5cimage-20211126093914798.png 1.5x, D:%5cPipeline%5cR_pipeline%5cDimensionality_Reduction%5cDimensionality_Reduction.assets%5cimage-20211126093914798.png 2x"
+        data-sizes="auto"
+        alt="D:\Pipeline\R_pipeline\Dimensionality_Reduction\Dimensionality_Reduction.assets\image-20211126093914798.png"
+        title="image-20211126093914798" /></p>
+<h3 id="11zinb-wavezero-inflated-negative-binomial-model-for-rna-seq-data">11.ZINB-WaVE(Zero-Inflated Negative Binomial Model for RNA-Seq Data)</h3>
+<p>Implements a general and flexible zero-inflated negative binomial model that can be used to provide a low-dimensional representations of single-cell RNA-seq data. The model accounts for zero inflation (dropouts), over-dispersion, and the count nature of the data. The model also accounts for the difference in library sizes and optionally for batch effects and/or other covariates, avoiding the need for pre-normalize the data.</p>
+<h4 id="111-使用示例">11.1 使用示例：</h4>
+<p><strong>路径:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">脚本：/mnt/ilustre/users/jiawen.ma/script/RNA-seq/DR
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>程序执行：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">Rscript ZINBWaVE.R -e gene.tpm.matrix.annot.xls  -g group.txt
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-R" data-lang="R">参数说明：
+<span class="o">-</span><span class="n">e</span>：基因表达矩阵
+<span class="o">-</span><span class="n">g</span>：分组文件
+<span class="o">-</span><span class="n">o</span>：输出路径；默认为<span class="n">./</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="112-结果展示">11.2 结果展示</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="D:%5cPipeline%5cR_pipeline%5cDimensionality_Reduction%5cDimensionality_Reduction.assets%5cimage-20211126092645715.png"
+        data-srcset="D:%5cPipeline%5cR_pipeline%5cDimensionality_Reduction%5cDimensionality_Reduction.assets%5cimage-20211126092645715.png, D:%5cPipeline%5cR_pipeline%5cDimensionality_Reduction%5cDimensionality_Reduction.assets%5cimage-20211126092645715.png 1.5x, D:%5cPipeline%5cR_pipeline%5cDimensionality_Reduction%5cDimensionality_Reduction.assets%5cimage-20211126092645715.png 2x"
+        data-sizes="auto"
+        alt="D:\Pipeline\R_pipeline\Dimensionality_Reduction\Dimensionality_Reduction.assets\image-20211126092645715.png"
+        title="image-20211126092645715" /></p>
+<h3 id="12-pcmf">12. pCMF</h3>
+<p>The pCMF package contains mplementation of the probabilistic Count Matrix Factorization (pCMF) method based on the Gamma-Poisson hirerarchical factor model with potential sparisty-inducing priors on factor V. This method is specifically designed to analyze large count matrices with numerous potential drop-out events (also called zero-inflation) such as gene expression profiles from single cells data (scRNA-seq) obtained by high throughput sequencing.</p>
+<h4 id="121-使用示例">12.1 使用示例：</h4>
+<p><strong>路径:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">脚本：/mnt/ilustre/users/jiawen.ma/script/RNA-seq/DR
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>程序执行：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">Rscript ZINBWaVE.R -e gene.tpm.matrix.annot.xls  -g group.txt
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-R" data-lang="R">参数说明：
+<span class="o">-</span><span class="n">e</span>：基因表达矩阵
+<span class="o">-</span><span class="n">g</span>：分组文件
+<span class="o">-</span><span class="n">o</span>：输出路径；默认为<span class="n">./</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="122-结果展示">12.2 结果展示</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="D:%5cPipeline%5cR_pipeline%5cDimensionality_Reduction%5cDimensionality_Reduction.assets%5cimage-20211126092620297.png"
+        data-srcset="D:%5cPipeline%5cR_pipeline%5cDimensionality_Reduction%5cDimensionality_Reduction.assets%5cimage-20211126092620297.png, D:%5cPipeline%5cR_pipeline%5cDimensionality_Reduction%5cDimensionality_Reduction.assets%5cimage-20211126092620297.png 1.5x, D:%5cPipeline%5cR_pipeline%5cDimensionality_Reduction%5cDimensionality_Reduction.assets%5cimage-20211126092620297.png 2x"
+        data-sizes="auto"
+        alt="D:\Pipeline\R_pipeline\Dimensionality_Reduction\Dimensionality_Reduction.assets\image-20211126092620297.png"
+        title="image-20211126092620297" /></p>
+<p><strong>参考资料：</strong></p>
+<ul>
+<li><a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1898-6#Sec21" target="_blank" rel="noopener noreffer">Accuracy, robustness and scalability of dimensionality reduction methods for single-cell RNA-seq analysis</a></li>
+<li>[<a href="https://github.com/xzhoulab/DRComparison" target="_blank" rel="noopener noreffer">DRComparison</a>](<a href="https://github.com/xzhoulab/DRComparison/tree/master/algorithms">https://github.com/xzhoulab/DRComparison/tree/master/algorithms</a>)</li>
+<li><a href="https://distill.pub/2016/misread-tsne/" target="_blank" rel="noopener noreffer">How to Use t-SNE Effectively</a></li>
+<li><a href="https://cran.r-project.org/web/packages/lle/lle.pdf" target="_blank" rel="noopener noreffer">LLE</a></li>
+<li><a href="https://www.bioconductor.org/packages/release/bioc/manuals/zinbwave/man/zinbwave.pdf" target="_blank" rel="noopener noreffer">zinbwave</a></li>
+<li><a href="https://github.com/gdurif/pCMF" target="_blank" rel="noopener noreffer">pCMF-github</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-11-26</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/posts/dimensionality-reduction-for-dataviz/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://cb-majorbiolab.work/posts/dimensionality-reduction-for-dataviz/" data-title="比较不同降维分析方法在RNAseq数据的可视化结果" data-via="https://twitter.com/czheluo" data-hashtags="RNAseq,MDS,scRNA"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://cb-majorbiolab.work/posts/dimensionality-reduction-for-dataviz/" data-hashtag="RNAseq"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Linkedin" data-sharer="linkedin" data-url="http://cb-majorbiolab.work/posts/dimensionality-reduction-for-dataviz/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Hacker News" data-sharer="hackernews" data-url="http://cb-majorbiolab.work/posts/dimensionality-reduction-for-dataviz/" data-title="比较不同降维分析方法在RNAseq数据的可视化结果"><i class="fab fa-hacker-news fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://cb-majorbiolab.work/posts/dimensionality-reduction-for-dataviz/" data-title="比较不同降维分析方法在RNAseq数据的可视化结果"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://cb-majorbiolab.work/posts/dimensionality-reduction-for-dataviz/" data-title="比较不同降维分析方法在RNAseq数据的可视化结果" data-ralateuid="https://weibo.com/2161302013/profile"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/rnaseq/">RNAseq</a>,&nbsp;<a href="/tags/mds/">MDS</a>,&nbsp;<a href="/tags/scrna/">scRNA</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/circran-quantification/" class="prev" rel="prev" title="circRNA定量软件分析比较"><i class="fas fa-angle-left fa-fw"></i>circRNA定量软件分析比较</a>
+            <a href="/posts/visually-combining-expression-data-with-functional-analysis/" class="next" rel="next" title="visually combining expression data with functional analysis">visually combining expression data with functional analysis<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript><div id="fb-root" class="comment"></div>
+            <div
+                class="fb-comments"
+                data-href="http://cb-majorbiolab.work/posts/dimensionality-reduction-for-dataviz/"
+                data-width="100%"
+                data-numposts="10"
+            ></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://developers.facebook.com/docs/plugins/comments/"></a>Facebook</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">MAJOR Computational Biology Research Lab</div>
+                <div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020-2022, MENG LUO, All rights reserved.</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+                
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="https://connect.facebook.net/zh_CN/sdk.js#xfbml=1&amp;version=v5.0&amp;appId=&amp;autoLogAppEvents=1" defer></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"valine":{"appId":"Noyy9UKaXGwYBIUdvBTt7u76-gzGzoHsz","appKey":"15w6pTF8mFoxnm8muOFx5buM","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"VX4BXOJBC5","algoliaIndex":"majorbio.zh-cn","algoliaSearchKey":"53790f167edb548b217bfe91dd891ac0","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

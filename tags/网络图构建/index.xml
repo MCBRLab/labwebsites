@@ -1,0 +1,14 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>网络图构建 - 标签 - MAJOR Computational Biology Research Lab</title>
+        <link>http://cb-majorbiolab.work/tags/%E7%BD%91%E7%BB%9C%E5%9B%BE%E6%9E%84%E5%BB%BA/</link>
+        <description>网络图构建 - 标签 - MAJOR Computational Biology Research Lab</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 22 Nov 2021 16:29:59 &#43;0800</lastBuildDate><atom:link href="http://cb-majorbiolab.work/tags/%E7%BD%91%E7%BB%9C%E5%9B%BE%E6%9E%84%E5%BB%BA/" rel="self" type="application/rss+xml" /><item>
+    <title>Network Analysis with R</title>
+    <link>http://cb-majorbiolab.work/posts/network-analysis-with-r/</link>
+    <pubDate>Mon, 22 Nov 2021 16:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/network-analysis-with-r/</guid>
+    <description><![CDATA[R网络画图 R中的画网络图的方法主要有 igraph/networkD3/sna（network）包主要用来做2基因之间的网络画图 导入计算画图的]]></description>
+</item></channel>
+</rss>

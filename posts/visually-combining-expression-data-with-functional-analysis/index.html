@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>visually combining expression data with functional analysis - MAJOR Computational Biology Research Lab</title><meta name="Description" content="根据富集结果进行GO及KEGG可视化分析"><meta property="og:title" content="visually combining expression data with functional analysis" />
+<meta property="og:description" content="根据富集结果进行GO及KEGG可视化分析" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://cb-majorbiolab.work/posts/visually-combining-expression-data-with-functional-analysis/" />
+<meta property="article:published_time" content="2021-12-03T16:29:59+08:00" />
+<meta property="article:modified_time" content="2021-12-03T16:29:59+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="visually combining expression data with functional analysis"/>
+<meta name="twitter:description" content="根据富集结果进行GO及KEGG可视化分析"/>
+<meta name="application-name" content="MAJOR Computational Biology Research Lab">
+<meta name="apple-mobile-web-app-title" content="MAJOR Computational Biology Research Lab"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/MBIL.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://cb-majorbiolab.work/posts/visually-combining-expression-data-with-functional-analysis/" /><link rel="prev" href="http://cb-majorbiolab.work/posts/dimensionality-reduction-for-dataviz/" /><link rel="next" href="http://cb-majorbiolab.work/posts/circrna-pipeline/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "visually combining expression data with functional analysis",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/cb-majorbiolab.work\/posts\/visually-combining-expression-data-with-functional-analysis\/"
+        },"genre": "posts","keywords": "GO, RNAseq, KEGG, 可视化, Chordal Graph","wordcount":  2311 ,
+        "url": "http:\/\/cb-majorbiolab.work\/posts\/visually-combining-expression-data-with-functional-analysis\/","datePublished": "2021-12-03T16:29:59+08:00","dateModified": "2021-12-03T16:29:59+08:00","publisher": {
+            "@type": "Organization",
+            "name": "美吉生物信息团队"},"author": {
+                "@type": "Person",
+                "name": "Wanyun Yang"
+            },"description": "根据富集结果进行GO及KEGG可视化分析"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="MAJOR Computational Biology Research Lab"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/MBIL.svg"
+        data-srcset="/images/MBIL.svg, /images/MBIL.svg 1.5x, /images/MBIL.svg 2x"
+        data-sizes="auto"
+        alt="/images/MBIL.svg"
+        title="/images/MBIL.svg" /></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="Home"> Home </a><a class="menu-item" href="/workshop/" title=" "> Workshop/Talk </a><a class="menu-item" href="/publication/" title="Publications"> Publications </a><a class="menu-item" href="/team/" title="Team"> Team </a><a class="menu-item" href="/resource/" title="Resource"> Resource </a><a class="menu-item" href="/software/" title="Software"> Software </a><a class="menu-item" href="/ne/" title="News/Events"> News/Events </a><a class="menu-item" href="/joinus/" title="Join/Contact"> Join/Contact </a><a class="menu-item" href="https://github.com/MajorBio" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="MAJOR Computational Biology Research Lab"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/images/MBIL.svg"
+        data-srcset="/images/MBIL.svg, /images/MBIL.svg 1.5x, /images/MBIL.svg 2x"
+        data-sizes="auto"
+        alt="/images/MBIL.svg"
+        title="/images/MBIL.svg" /></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="Home">Home</a><a class="menu-item" href="/workshop/" title=" ">Workshop/Talk</a><a class="menu-item" href="/publication/" title="Publications">Publications</a><a class="menu-item" href="/team/" title="Team">Team</a><a class="menu-item" href="/resource/" title="Resource">Resource</a><a class="menu-item" href="/software/" title="Software">Software</a><a class="menu-item" href="/ne/" title="News/Events">News/Events</a><a class="menu-item" href="/joinus/" title="Join/Contact">Join/Contact</a><a class="menu-item" href="https://github.com/MajorBio" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">visually combining expression data with functional analysis</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/yangwanyun" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Wanyun Yang</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/rnaseq/"><i class="far fa-folder fa-fw"></i>RNAseq</a>&nbsp;<a href="/categories/dataviz/"><i class="far fa-folder fa-fw"></i>DataViz</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-12-03">2021-12-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2311 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;<span id="/posts/visually-combining-expression-data-with-functional-analysis/" class="leancloud_visitors" data-flag-title="visually combining expression data with functional analysis">
+                        <i class="far fa-eye fa-fw"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;次阅读
+                    </span>&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#导入包">导入包</a></li>
+    <li><a href="#参数传递">参数传递</a></li>
+    <li><a href="#r颜色导入">R颜色导入</a></li>
+    <li><a href="#整理go和kegg信息">整理go和kegg信息</a></li>
+    <li><a href="#得到log2fc">得到log2FC</a></li>
+    <li><a href="#得到最终绘制图片所需数据集">得到最终绘制图片所需数据集</a></li>
+    <li><a href="#gochord画图画和弦图">GOChord画图画和弦图</a></li>
+    <li><a href="#gocluster画聚类圈图">GOCluster画聚类圈图</a></li>
+    <li><a href="#gobubble画气泡图">GOBubble画气泡图</a></li>
+    <li><a href="#goheat画热图">GOHeat画热图</a></li>
+    <li><a href="#govenn画韦恩图">GOVenn画韦恩图</a></li>
+    <li><a href="#gocircle画圈图图">GOCircle画圈图图</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="富集和弦图"><strong>富集和弦图</strong></h1>
+<p><strong>功能富集分析</strong>，是指借助各类数据库和分析工具进行统计分析。挖掘在数据库中与我们研究的生物学问题具有显著相关性的功能类别，**期望发现在生物学过程中起关键作用的生物通路,从而揭示和理解生物学过程的基本分子机制。**其中GO富集分析就是重要的一个内容。</p>
+<p>R包<strong>GOplot</strong>基于ggplot2增强图形化展示。它利用任何通用富集分析的输出，并在不同细节层次上产生图像：从总览最富集的类别（条形图、气泡图），到在一套给定类别中展示不同类型分子信息的更详细视图（环形图、弦图、聚类图）。</p>
+<p>参考文献：</p>
+<p>1 . Walter, W., Sánchez-Cabo, F., &amp; Ricote, M. (2015). <em>GOplot: an R package for visually combining expression data with functional analysis: Fig. 1. Bioinformatics, 31(17), 2912–2914.</em> doi:10.1093/bioinformatics/btv300</p>
+<h2 id="导入包">导入包</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">library(GOplot)
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="参数传递">参数传递</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">argv &lt;- arg_parser(&#39;&#39;)
+argv &lt;- add_argument(argv,&#34;--file1&#34;, help=&#34;the enrichment list&#34;)
+argv &lt;- add_argument(argv,&#34;--file2&#34;, help=&#34;the genefc file&#34;)
+argv &lt;- add_argument(argv,&#34;--type&#34;, help=&#34;go or kegg&#34;)
+argv &lt;- parse_args(argv)
+
+file1 &lt;- argv$file1
+file2 &lt;- argv$file2
+type &lt;- argv$type
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<p>file1:导入云平台富集结果，例如：go_enrich_stat.xls  或者 kegg_enrich_stat.xls</p>
+</li>
+<li>
+<p>file2:导入差异分析结果中的“gene_name&quot;和&quot;log2fc&quot;两列，主要是画图需要用到log2fc值，如果没有该值则默认log2fc为0，file2可有可无</p>
+</li>
+<li>
+<p>type:如果是go富集结果, type为go, 如果是kegg富集结果，type为kegg</p>
+</li>
+</ul>
+<h2 id="r颜色导入">R颜色导入</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">color &lt;- grDevices::colors()[grep(&#34;gr(a|e)y&#34;, grDevices::colors(), invert = T)]
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="整理go和kegg信息">整理go和kegg信息</h2>
+<p>导入go或者kegg富集结果后，根据pajd和pvalue排序，然后选取必要的数据构建数据框</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">if (type == &#39;go&#39;){
+    enrich_f &lt;- read.table(file1, sep = &#34;\t&#34;, header = T, check.names = F)  ##导入数据
+    enrich_o &lt;- enrich_f[order(enrich_f$p_corrected, enrich_f$p_uncorrected), ]   ##排序
+    enrich_r &lt;- data.frame(Category = enrich_o$go_type, ID = enrich_o$go_id, Term = enrich_o$discription, Genes = gsub(&#34;;&#34;, &#34;, &#34;, enrich_o$seq_list_name), adj_pval = enrich_o$p_uncorrected)  ##构建数据框
+}
+
+if (type == &#39;kegg&#39;){
+    enrich_f &lt;- read.table(file1, sep = &#34;\t&#34;, header = T, comment.char = &#34;&#34;)  ##导入数据
+    enrich_o &lt;- enrich_f[order(enrich_f$Corrected.P.Value, enrich_f$P.Value), ]  ##排序
+    enrich_r &lt;- data.frame(Category = enrich_o$typeI, ID = enrich_o$ID, Term = enrich_o$Term, Genes = gsub(&#34;\\|&#34;, &#34;, &#34;, enrich_o$Genes_name), adj_pval = enrich_o$Corrected.P.Value)  ##构建数据框
+}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="得到log2fc">得到log2FC</h2>
+<p>如果有file2,gene和log2fc信息则从file2中获取，如果没有file2，gene信息从富集结果中提取，log2f默认为0</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">if (!is.na(file2)){
+    rt2 &lt;- read.table(file2, sep = &#34;\t&#34;, header = T, col.names = c(&#34;gene_name&#34;,&#34;log2fc&#34;))
+    genelist &lt;- data.frame(ID = rt2$gene_name, logFC = rt2$log2fc)
+    row.names(genelist) &lt;- genelist[, 1]
+}else {
+    genes &lt;- unique(unlist(strsplit(as.character(enrich_r$Genes), &#34;, &#34;)))
+    genelist &lt;- data.frame(ID = toupper(genes), logFC = 0 )
+    row.names(genelist) &lt;- genelist[, 1]
+}
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="得到最终绘制图片所需数据集">得到最终绘制图片所需数据集</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">circ &lt;- circle_dat(enrich_r, genelist)
+termNum1 = 10                                     #限定GO数目（仅展示前10）
+termNum1=ifelse(nrow(enrich_r)&lt;termNum1,nrow(enrich_r),termNum1)
+chord1 &lt;- chord_dat(circ, genelist, enrich_r$Term[1:termNum1])
+
+termNum2 = 20                                     #限定GO数目（仅展示前20）
+termNum2=ifelse(nrow(enrich_r)&lt;termNum2,nrow(enrich_r),termNum2)
+chord2 &lt;- chord_dat(circ, genelist, enrich_r$Term[1:termNum2])
+</code></pre></td></tr></table>
+</div>
+</div><p>在后续画图中主要需要用到的两个数据集为<strong>circ</strong> 和 <strong>chord1</strong></p>
+<p><strong>circ</strong>数据集是由GOplot包的<strong>circle_dat</strong>函数构建，circle_dat函数需要输入两个数据框，第一个是go富集相关数据，第二个是提取logfc值的数据框，其中的genes都采用了字母大写处理，函数参数主要部分如下：</p>
+<blockquote>
+<p>circle_dat
+function (terms, genes) 
+colnames(terms) &lt;- tolower(colnames(terms))
+terms$genes &lt;- toupper(terms$genes)
+genes$ID &lt;- toupper(genes$ID)
+tgenes &lt;- strsplit(as.vector(terms$genes), &ldquo;, &ldquo;)</p>
+<p>df &lt;- data.frame(category = rep(as.character(terms$category), 
+count), ID = rep(as.character(terms$id), count), 
+term = rep(as.character(terms$term), count), count = rep(count, 
+count), genes = as.character(unlist(tgenes)), 
+logFC = logFC, adj_pval = rep(terms$adj_pval, count), 
+zscore = rep(zsc, count), stringsAsFactors = FALSE)</p>
+</blockquote>
+<p><strong>circ</strong>数据框中，将所有的富集gene按行排序，具体格式如下：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211126105358057.png"
+        data-srcset="/posts/visually-combining-expression-data-with-functional-analysis/image-20211126105358057.png, image-20211126105358057.png 1.5x, /posts/visually-combining-expression-data-with-functional-analysis/image-20211126105358057.png 2x"
+        data-sizes="auto"
+        alt="/posts/visually-combining-expression-data-with-functional-analysis/image-20211126105358057.png"
+        title="image-20211126105358057" /></p>
+<ul>
+<li>
+<p>count：GO term包含的基因数</p>
+</li>
+<li>
+<p>zscore: 每个GO term下上调(logFC&gt;0)基因数和下调基因数的差与注释到GO term基因数平方根的商，反映该功能所含蛋白的总体表达趋势，大于0为上调，小于0为下调，公式如下：</p>
+</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211125183436584.png"
+        data-srcset="/posts/visually-combining-expression-data-with-functional-analysis/image-20211125183436584.png, image-20211125183436584.png 1.5x, /posts/visually-combining-expression-data-with-functional-analysis/image-20211125183436584.png 2x"
+        data-sizes="auto"
+        alt="/posts/visually-combining-expression-data-with-functional-analysis/image-20211125183436584.png"
+        title="image-20211125183436584" /></p>
+<p><strong>chord1</strong>数据集是由GOplot包的<strong>chord_dat</strong>函数构建，chord_dat函数需要输入3个数据框，函数参数：function (data, genes, process) ，第一个数据框是circle_dat函数得到的circ数据框，第二个数据框是提取logfc的数据框，第三个数据框是筛选term的数据框，整理后的data具体的格式如下：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="image-20211126111218207.png"
+        data-srcset="/posts/visually-combining-expression-data-with-functional-analysis/image-20211126111218207.png, image-20211126111218207.png 1.5x, /posts/visually-combining-expression-data-with-functional-analysis/image-20211126111218207.png 2x"
+        data-sizes="auto"
+        alt="/posts/visually-combining-expression-data-with-functional-analysis/image-20211126111218207.png"
+        title="image-20211126111218207" /></p>
+<p>行名是genename,列名是筛选出来的term名称和logfc</p>
+<h2 id="gochord画图画和弦图">GOChord画图画和弦图</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">p &lt;- GOChord(chord1, 
+          space = 0.001,           #基因之间的间距
+          gene.order = &#39;logFC&#39;,    #排序基因
+          gene.space = 0.25,       #基因离圆圈距离
+          gene.size = 3,           #
+          border.size = 0.1,     
+          process.label = 7,       #GO名称大小
+          lfc.col=c(&#39;firebrick3&#39;, &#39;white&#39;,&#39;royalblue3&#39;),##上调下调颜色设置
+         # ribbon.col=brewer.pal(length(go$Term[1:termNum]), &#39;Set3&#39;),#GO term 颜色设置
+  )  
+</code></pre></td></tr></table>
+</div>
+</div><p>左侧是基因（颜色代表上下调），右侧是不同GO term，连接的带表示某基因在某GO term中</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="chord%e5%9b%be.png"
+        data-srcset="/posts/visually-combining-expression-data-with-functional-analysis/chord%E5%9B%BE.png, chord%e5%9b%be.png 1.5x, /posts/visually-combining-expression-data-with-functional-analysis/chord%E5%9B%BE.png 2x"
+        data-sizes="auto"
+        alt="/posts/visually-combining-expression-data-with-functional-analysis/chord%E5%9B%BE.png"
+        title="img" /></p>
+<h2 id="gocluster画聚类圈图">GOCluster画聚类圈图</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">chord &lt;- chord_dat(circ, genelist, enrich_r$Term[1:termNum1])
+p &lt;- GOCluster(data=circ, 
+          process=as.character(enrich_r[1:termNum1,3]), #选择GO term
+          metric=&#39;euclidean&#39;,                    #选择距离度量方法
+          clust=&#39;average&#39;,                       #选择聚类方法
+          clust.by = &#39;term&#39;,                     #指定是否应该对基因表达模式或功能类别进行聚类。term(default)  or logFC
+          term.width = 2,                        #GO term 宽度
+         # term.col= color[sample(1:length(color), length(color))][1:termNum1], #颜色设置
+          nlfc=FALSE,                            #是否包含多个logFC列
+          lfc.col=c(&#39;firebrick3&#39;, &#39;white&#39;,&#39;royalblue3&#39;) #颜色设置
+            )
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="cluster%e5%9b%be.png"
+        data-srcset="/posts/visually-combining-expression-data-with-functional-analysis/cluster%E5%9B%BE.png, cluster%e5%9b%be.png 1.5x, /posts/visually-combining-expression-data-with-functional-analysis/cluster%E5%9B%BE.png 2x"
+        data-sizes="auto"
+        alt="/posts/visually-combining-expression-data-with-functional-analysis/cluster%E5%9B%BE.png"
+        title="img" /></p>
+<p>从内到外依次为：基因聚类，倍数变化，GO term</p>
+<h2 id="gobubble画气泡图">GOBubble画气泡图</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">GOBubble(circ, title=&#34;GOBubble plot&#34;,##设置标题
+        labels = 3,##-log(adj p-value)&gt;5
+        ID = T,##TRUE显示符合标准的GO term ID，FALSE显示GO term name
+        table.legend = TRUE, table.col = TRUE, ##右侧表格设置                                                                                                                
+        bg.col = FALSE#背景颜色设置
+        )   
+
+GOBubble(circ, display = &#34;single&#34;, labels = 3, table.legend = F)  ##3个分类画一张图里
+GOBubble(circ,title = &#39;Bubble plot&#39;, display = &#39;multiple&#39;, bg.col = T, labels = 3)  ##3个分类分开画图
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="bubble%e5%9b%be.png"
+        data-srcset="/posts/visually-combining-expression-data-with-functional-analysis/bubble%E5%9B%BE.png, bubble%e5%9b%be.png 1.5x, /posts/visually-combining-expression-data-with-functional-analysis/bubble%E5%9B%BE.png 2x"
+        data-sizes="auto"
+        alt="/posts/visually-combining-expression-data-with-functional-analysis/bubble%E5%9B%BE.png"
+        title="img" /></p>
+<p>X轴是z-score，Y轴是adj p。3种颜色代表3大类（BP，CC，MF），一个气泡代表一个GO term，面积代表该GO term中的基因数</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="bubble%e5%9b%be2.png"
+        data-srcset="/posts/visually-combining-expression-data-with-functional-analysis/bubble%E5%9B%BE2.png, bubble%e5%9b%be2.png 1.5x, /posts/visually-combining-expression-data-with-functional-analysis/bubble%E5%9B%BE2.png 2x"
+        data-sizes="auto"
+        alt="/posts/visually-combining-expression-data-with-functional-analysis/bubble%E5%9B%BE2.png"
+        title="img" /></p>
+<h2 id="goheat画热图">GOHeat画热图</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">GOHeat(chord1, nlfc = 1, fill.col =c(&#39;red&#39;, &#39;yellow&#39;, &#39;green&#39;))
+</code></pre></td></tr></table>
+</div>
+</div><p><em>nlfc = 1</em>：颜色对应logFC
+<em>nlfc = 0</em>：颜色对应每个基因注释了到了几个GO Term</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="heat%e5%9b%be.png"
+        data-srcset="/posts/visually-combining-expression-data-with-functional-analysis/heat%E5%9B%BE.png, heat%e5%9b%be.png 1.5x, /posts/visually-combining-expression-data-with-functional-analysis/heat%E5%9B%BE.png 2x"
+        data-sizes="auto"
+        alt="/posts/visually-combining-expression-data-with-functional-analysis/heat%E5%9B%BE.png"
+        title="img" /></p>
+<p>X轴是基因，Y轴是GO term，颜色表示基因的倍数变化（logFC）</p>
+<h2 id="govenn画韦恩图">GOVenn画韦恩图</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">term1 &lt;-  as.character(enrich_r[1,3])
+term2 &lt;-  as.character(enrich_r[2,3])
+term3 &lt;-  as.character(enrich_r[3,3])
+l1 &lt;- subset(circ, term == term1 , c(genes,logFC))
+l2 &lt;- subset(circ, term == term2 , c(genes,logFC))
+l3 &lt;- subset(circ, term == term3 , c(genes,logFC))
+
+GOVenn(l1,l2,l3, label = c(term1, term2, term3))
+
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="venn%e5%9b%be.png"
+        data-srcset="/posts/visually-combining-expression-data-with-functional-analysis/venn%E5%9B%BE.png, venn%e5%9b%be.png 1.5x, /posts/visually-combining-expression-data-with-functional-analysis/venn%E5%9B%BE.png 2x"
+        data-sizes="auto"
+        alt="/posts/visually-combining-expression-data-with-functional-analysis/venn%E5%9B%BE.png"
+        title="preview" /></p>
+<p>3个GO term相关基因的venn图。例如heart development和tissue morphogenesis共有4+13+1+4=22个基因，其中共同上调4+1=5个，共同下调13+4=17个</p>
+<h2 id="gocircle画圈图图">GOCircle画圈图图</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">GOCircle(circ, nsub = 10, label.size = 5, rad1 = 3, rad2 = 4, table.legend = F)
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="%e5%9c%86%e5%9c%88%e5%9b%be.png"
+        data-srcset="/posts/visually-combining-expression-data-with-functional-analysis/%E5%9C%86%E5%9C%88%E5%9B%BE.png, %e5%9c%86%e5%9c%88%e5%9b%be.png 1.5x, /posts/visually-combining-expression-data-with-functional-analysis/%E5%9C%86%E5%9C%88%E5%9B%BE.png 2x"
+        data-sizes="auto"
+        alt="/posts/visually-combining-expression-data-with-functional-analysis/%E5%9C%86%E5%9C%88%E5%9B%BE.png"
+        title="img" /></p>
+<p>从外到内依次为：GO ID；基因上下调（上调红色，下调蓝色）；z-score</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-12-03</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/posts/visually-combining-expression-data-with-functional-analysis/index.md" target="_blank">阅读原始文档</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://cb-majorbiolab.work/posts/visually-combining-expression-data-with-functional-analysis/" data-title="visually combining expression data with functional analysis" data-via="https://twitter.com/czheluo" data-hashtags="GO,RNAseq,KEGG,可视化,Chordal Graph"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://cb-majorbiolab.work/posts/visually-combining-expression-data-with-functional-analysis/" data-hashtag="GO"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Linkedin" data-sharer="linkedin" data-url="http://cb-majorbiolab.work/posts/visually-combining-expression-data-with-functional-analysis/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Hacker News" data-sharer="hackernews" data-url="http://cb-majorbiolab.work/posts/visually-combining-expression-data-with-functional-analysis/" data-title="visually combining expression data with functional analysis"><i class="fab fa-hacker-news fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://cb-majorbiolab.work/posts/visually-combining-expression-data-with-functional-analysis/" data-title="visually combining expression data with functional analysis"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://cb-majorbiolab.work/posts/visually-combining-expression-data-with-functional-analysis/" data-title="visually combining expression data with functional analysis" data-ralateuid="https://weibo.com/2161302013/profile"><i class="fab fa-weibo fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/go/">GO</a>,&nbsp;<a href="/tags/rnaseq/">RNAseq</a>,&nbsp;<a href="/tags/kegg/">KEGG</a>,&nbsp;<a href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/">可视化</a>,&nbsp;<a href="/tags/chordal-graph/">Chordal Graph</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/dimensionality-reduction-for-dataviz/" class="prev" rel="prev" title="比较不同降维分析方法在RNAseq数据的可视化结果"><i class="fas fa-angle-left fa-fw"></i>比较不同降维分析方法在RNAseq数据的可视化结果</a>
+            <a href="/posts/circrna-pipeline/" class="next" rel="next" title="circRNA quantification, differential expression analysis and miRNA target prediction of RNA-Seq data">circRNA quantification, differential expression analysis and miRNA target prediction of RNA-Seq data<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="valine" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://valine.js.org/">Valine</a>.
+            </noscript><div id="fb-root" class="comment"></div>
+            <div
+                class="fb-comments"
+                data-href="http://cb-majorbiolab.work/posts/visually-combining-expression-data-with-functional-analysis/"
+                data-width="100%"
+                data-numposts="10"
+            ></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://developers.facebook.com/docs/plugins/comments/"></a>Facebook</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">MAJOR Computational Biology Research Lab</div>
+                <div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2020-2022, MENG LUO, All rights reserved.</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+                
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/valine/valine.min.css"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/valine/Valine.min.js"></script><script type="text/javascript" src="https://connect.facebook.net/zh_CN/sdk.js#xfbml=1&amp;version=v5.0&amp;appId=&amp;autoLogAppEvents=1" defer></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"valine":{"appId":"Noyy9UKaXGwYBIUdvBTt7u76-gzGzoHsz","appKey":"15w6pTF8mFoxnm8muOFx5buM","avatar":"mp","el":"#valine","emojiCDN":"https://cdn.jsdelivr.net/npm/emoji-datasource-google@5.0.1/img/google/64/","emojiMaps":{"100":"1f4af.png","alien":"1f47d.png","anger":"1f4a2.png","angry":"1f620.png","anguished":"1f627.png","astonished":"1f632.png","black_heart":"1f5a4.png","blue_heart":"1f499.png","blush":"1f60a.png","bomb":"1f4a3.png","boom":"1f4a5.png","broken_heart":"1f494.png","brown_heart":"1f90e.png","clown_face":"1f921.png","cold_face":"1f976.png","cold_sweat":"1f630.png","confounded":"1f616.png","confused":"1f615.png","cry":"1f622.png","crying_cat_face":"1f63f.png","cupid":"1f498.png","dash":"1f4a8.png","disappointed":"1f61e.png","disappointed_relieved":"1f625.png","dizzy":"1f4ab.png","dizzy_face":"1f635.png","drooling_face":"1f924.png","exploding_head":"1f92f.png","expressionless":"1f611.png","face_vomiting":"1f92e.png","face_with_cowboy_hat":"1f920.png","face_with_hand_over_mouth":"1f92d.png","face_with_head_bandage":"1f915.png","face_with_monocle":"1f9d0.png","face_with_raised_eyebrow":"1f928.png","face_with_rolling_eyes":"1f644.png","face_with_symbols_on_mouth":"1f92c.png","face_with_thermometer":"1f912.png","fearful":"1f628.png","flushed":"1f633.png","frowning":"1f626.png","ghost":"1f47b.png","gift_heart":"1f49d.png","green_heart":"1f49a.png","grimacing":"1f62c.png","grin":"1f601.png","grinning":"1f600.png","hankey":"1f4a9.png","hear_no_evil":"1f649.png","heart":"2764-fe0f.png","heart_decoration":"1f49f.png","heart_eyes":"1f60d.png","heart_eyes_cat":"1f63b.png","heartbeat":"1f493.png","heartpulse":"1f497.png","heavy_heart_exclamation_mark_ornament":"2763-fe0f.png","hole":"1f573-fe0f.png","hot_face":"1f975.png","hugging_face":"1f917.png","hushed":"1f62f.png","imp":"1f47f.png","innocent":"1f607.png","japanese_goblin":"1f47a.png","japanese_ogre":"1f479.png","joy":"1f602.png","joy_cat":"1f639.png","kiss":"1f48b.png","kissing":"1f617.png","kissing_cat":"1f63d.png","kissing_closed_eyes":"1f61a.png","kissing_heart":"1f618.png","kissing_smiling_eyes":"1f619.png","laughing":"1f606.png","left_speech_bubble":"1f5e8-fe0f.png","love_letter":"1f48c.png","lying_face":"1f925.png","mask":"1f637.png","money_mouth_face":"1f911.png","nauseated_face":"1f922.png","nerd_face":"1f913.png","neutral_face":"1f610.png","no_mouth":"1f636.png","open_mouth":"1f62e.png","orange_heart":"1f9e1.png","partying_face":"1f973.png","pensive":"1f614.png","persevere":"1f623.png","pleading_face":"1f97a.png","pouting_cat":"1f63e.png","purple_heart":"1f49c.png","rage":"1f621.png","relaxed":"263a-fe0f.png","relieved":"1f60c.png","revolving_hearts":"1f49e.png","right_anger_bubble":"1f5ef-fe0f.png","robot_face":"1f916.png","rolling_on_the_floor_laughing":"1f923.png","scream":"1f631.png","scream_cat":"1f640.png","see_no_evil":"1f648.png","shushing_face":"1f92b.png","skull":"1f480.png","skull_and_crossbones":"2620-fe0f.png","sleeping":"1f634.png","sleepy":"1f62a.png","slightly_frowning_face":"1f641.png","slightly_smiling_face":"1f642.png","smile":"1f604.png","smile_cat":"1f638.png","smiley":"1f603.png","smiley_cat":"1f63a.png","smiling_face_with_3_hearts":"1f970.png","smiling_imp":"1f608.png","smirk":"1f60f.png","smirk_cat":"1f63c.png","sneezing_face":"1f927.png","sob":"1f62d.png","space_invader":"1f47e.png","sparkling_heart":"1f496.png","speak_no_evil":"1f64a.png","speech_balloon":"1f4ac.png","star-struck":"1f929.png","stuck_out_tongue":"1f61b.png","stuck_out_tongue_closed_eyes":"1f61d.png","stuck_out_tongue_winking_eye":"1f61c.png","sunglasses":"1f60e.png","sweat":"1f613.png","sweat_drops":"1f4a6.png","sweat_smile":"1f605.png","thinking_face":"1f914.png","thought_balloon":"1f4ad.png","tired_face":"1f62b.png","triumph":"1f624.png","two_hearts":"1f495.png","unamused":"1f612.png","upside_down_face":"1f643.png","weary":"1f629.png","white_frowning_face":"2639-fe0f.png","white_heart":"1f90d.png","wink":"1f609.png","woozy_face":"1f974.png","worried":"1f61f.png","yawning_face":"1f971.png","yellow_heart":"1f49b.png","yum":"1f60b.png","zany_face":"1f92a.png","zipper_mouth_face":"1f910.png","zzz":"1f4a4.png"},"enableQQ":false,"highlight":true,"lang":"zh-cn","pageSize":10,"placeholder":"你的评论 ...","recordIP":true,"visitor":true}},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"VX4BXOJBC5","algoliaIndex":"majorbio.zh-cn","algoliaSearchKey":"53790f167edb548b217bfe91dd891ac0","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
