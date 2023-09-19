@@ -3,7 +3,51 @@
         <title>所有文章 - MAJOR Computational Biology Research Lab</title>
         <link>http://cb-majorbiolab.work/posts/</link>
         <description>所有文章 | MAJOR Computational Biology Research Lab</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 12 Dec 2021 17:29:59 &#43;0800</lastBuildDate><atom:link href="http://cb-majorbiolab.work/posts/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 19 Jun 2023 17:29:59 &#43;0800</lastBuildDate><atom:link href="http://cb-majorbiolab.work/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>The workflow of hdWGCNA analysis for Single-cell Spatial Transcriptomics data</title>
+    <link>http://cb-majorbiolab.work/posts/sthdwgcna-pipeline/</link>
+    <pubDate>Mon, 19 Jun 2023 17:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/sthdwgcna-pipeline/</guid>
+    <description><![CDATA[The workflow of hdWGCNA analysis for Single-cell Spatial Transcriptomics data RNA-seq Schematicsc/nRNA-seq Schematic " RNA-seq Schematic 空间转录共表达网络分析流程 分析思路：针对数据的不同，分两种情况，当前流程不能进行多个样本分析，如果要分析需要]]></description>
+</item><item>
+    <title>Integrative approaches for large-scale transcriptome-wide association studies</title>
+    <link>http://cb-majorbiolab.work/posts/twas-pipeline/</link>
+    <pubDate>Sat, 20 May 2023 17:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/twas-pipeline/</guid>
+    <description><![CDATA[The workflow of TWAS analysis RNA-seq Schematicsc/nRNA-seq Schematic " RNA-seq Schematic G/TWAS简介 全基因组关联分析(Genome-wide association study, GWAS) 的目的是将复杂性状的研究从候选基因转向全基因组水平，以期]]></description>
+</item><item>
+    <title>The workflow of hdWGCNA analysis for scRNAseq data</title>
+    <link>http://cb-majorbiolab.work/posts/schdwgcna-pipeline/</link>
+    <pubDate>Sat, 20 May 2023 17:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/schdwgcna-pipeline/</guid>
+    <description><![CDATA[The workflow of hdWGCNA analysis for scRNAseq data RNA-seq Schematicsc/nRNA-seq Schematic " RNA-seq Schematic 分析思路：有细胞注释，计算所有的细胞类型，或者提供只计算某个细胞；使用seurat的聚类结果，计算所有的聚类结果]]></description>
+</item><item>
+    <title>Integrative analyses of single-cell transcriptome and regulome using sc/n-workflow</title>
+    <link>http://cb-majorbiolab.work/posts/scrnaseq-pipeline/</link>
+    <pubDate>Sat, 17 Dec 2022 17:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/scrnaseq-pipeline/</guid>
+    <description><![CDATA[SingleCelldataVZ nRNA-seq Schematicsc/nRNA-seq Schematic
+" nRNA-seq Schematic 
+Summarizing single-cell RNA-sequencing data with unified molecular identifiers by scumi scumi  As for &ndash;cell_barcode_whitelist, typically you don&rsquo;t need to set this parameter as you don&rsquo;t know which cell barcodes are from cells. Note, this parameter is different from the candidate cell barcodes for protocols such as 10x or inDrops, which are know and should be used as inputs. Let me know if it&rsquo;s confusion.]]></description>
+</item><item>
+    <title>Bayesian approach to single-cell differential expression analysis</title>
+    <link>http://cb-majorbiolab.work/posts/single-cell-differential-expression/</link>
+    <pubDate>Wed, 14 Dec 2022 16:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/single-cell-differential-expression/</guid>
+    <description><![CDATA[SCDE SCDE官方帮助文档 一. 数据准备 单细胞表达矩阵:行为基因，列为细胞 分组文件（存在批次时，可添加批次信息进行批次处理） 二. Pipeline 1 2 3 4 脚本位置]]></description>
+</item><item>
+    <title>不同scRNAseq批次效应矫正方法计算比较</title>
+    <link>http://cb-majorbiolab.work/posts/scrnaseq-batch-correction/</link>
+    <pubDate>Tue, 14 Dec 2021 16:29:59 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://cb-majorbiolab.work/posts/scrnaseq-batch-correction/</guid>
+    <description><![CDATA[Batch methds 所用数据: 1 /mnt/ilustre/centos7users/xiaolong.he/project/scRNA/new_pipe/04.Step4.combain/Merged.Seurat.rds limma 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 #!/usr/bin/env Rscript3.6.1 suppressMessages(library(&#34;getopt&#34;)) options(bitmapType=&#39;cairo&#39;) spec = matrix(c( &#39;rds&#39;,&#39;r&#39;,1,&#39;character&#39;, &#39;outdir&#39;,&#39;o&#39;,1,&#39;character&#39;, &#39;help&#39;,&#39;h&#39;,0,&#39;logical&#39; ), byrow=TRUE, ncol=4); opt = getopt(spec); print_usage &lt;- function(spec=NULL){ cat(getopt(spec, usage=TRUE)); cat(&#34;Usage example:]]></description>
+</item><item>
     <title>Nanopore demultiplexing, QC, mapping and downstream analysi pipeline</title>
     <link>http://cb-majorbiolab.work/posts/ont-workflow/</link>
     <pubDate>Sun, 12 Dec 2021 17:29:59 &#43;0800</pubDate>
@@ -34,47 +78,5 @@ The pipeline is built using Nextflow, a workflow tool to run tasks across multip
     <author>作者</author>
     <guid>http://cb-majorbiolab.work/posts/dimensionality-reduction-for-dataviz/</guid>
     <description><![CDATA[不同的降维分析方法 ​ 数据降维就是通过特征选择或者特征变换操作将数据从原始的D维空间投影到新的K维空间，直白的说是把数据的维度降下来，用一个相]]></description>
-</item><item>
-    <title>circRNA定量软件分析比较</title>
-    <link>http://cb-majorbiolab.work/posts/circran-quantification/</link>
-    <pubDate>Wed, 24 Nov 2021 16:29:59 &#43;0800</pubDate>
-    <author>作者</author>
-    <guid>http://cb-majorbiolab.work/posts/circran-quantification/</guid>
-    <description><![CDATA[一、CIRI &amp; CIRI2 1. CIRI鉴定circRNA的原理 在最初的环状RNA研究中，认为环状RNA都是由exon通过反向剪切构成的,称之为exoni]]></description>
-</item><item>
-    <title>Network Analysis with R</title>
-    <link>http://cb-majorbiolab.work/posts/network-analysis-with-r/</link>
-    <pubDate>Mon, 22 Nov 2021 16:29:59 &#43;0800</pubDate>
-    <author>作者</author>
-    <guid>http://cb-majorbiolab.work/posts/network-analysis-with-r/</guid>
-    <description><![CDATA[R网络画图 R中的画网络图的方法主要有 igraph/networkD3/sna（network）包主要用来做2基因之间的网络画图 导入计算画图的]]></description>
-</item><item>
-    <title>转座元件分析</title>
-    <link>http://cb-majorbiolab.work/posts/repeatmasker-dfam/</link>
-    <pubDate>Thu, 18 Nov 2021 16:29:59 &#43;0800</pubDate>
-    <author>作者</author>
-    <guid>http://cb-majorbiolab.work/posts/repeatmasker-dfam/</guid>
-    <description><![CDATA[Dfam数据库的使用 The Dfam database is a collection of Repetitive DNA element sequence alignments, hidden Markov models (HMMs) and matches lists for complete Eukaryote genomes. 1. 概述 转座元件是一类能改变其自身在基因组当中的位置的DNA重复序列，它能够]]></description>
-</item><item>
-    <title>降维分析方法比较</title>
-    <link>http://cb-majorbiolab.work/posts/dimensionality-reduction-methods-for-rna-seq-analysis/</link>
-    <pubDate>Tue, 26 Oct 2021 16:29:59 &#43;0800</pubDate>
-    <author>作者</author>
-    <guid>http://cb-majorbiolab.work/posts/dimensionality-reduction-methods-for-rna-seq-analysis/</guid>
-    <description><![CDATA[转录组对定量结果降维分析比较 概述 MDS原理 MDS算法解决的问题是:当n个对象之间的相似性给定，确定这些对象在低维空间中的表示，并使其尽可能与]]></description>
-</item><item>
-    <title>RNAseq定量软件比较</title>
-    <link>http://cb-majorbiolab.work/posts/rnaseq-quantification/</link>
-    <pubDate>Sat, 16 Oct 2021 14:30:59 &#43;0800</pubDate>
-    <author>作者</author>
-    <guid>http://cb-majorbiolab.work/posts/rnaseq-quantification/</guid>
-    <description><![CDATA[一些RNAseq定量软件的简介 RNAseq定量软件的简介 kallisto,salmon,rsem,stringtie,featurecoun]]></description>
-</item><item>
-    <title>circRNA差异表达分析软件</title>
-    <link>http://cb-majorbiolab.work/posts/differential-analysis-of-circrna-count-data-circrna/</link>
-    <pubDate>Thu, 23 Sep 2021 16:29:59 &#43;0800</pubDate>
-    <author>作者</author>
-    <guid>http://cb-majorbiolab.work/posts/differential-analysis-of-circrna-count-data-circrna/</guid>
-    <description><![CDATA[circRNA差异分析 ​ 独特的环状结构使得二代测序较短的读长对其鉴定以及定量被限制，目前仅仅依靠其反向剪切序列；另外，环状RNA的表达总是与]]></description>
 </item></channel>
 </rss>
